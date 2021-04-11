@@ -15,5 +15,9 @@
       "options": { "cacheableOperations": ["build", "lint", "test", "e2e"] }
     }
   },
-  "projects": { "search": { "tags": [] }, "admin": { "tags": [] } }
+  "projects": {
+    "data-access": { "tags": [] },
+    "api-admin": { "tags": [] },
+    "dto": { "tags": [] }
+  }
 }

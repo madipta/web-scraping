@@ -3,69 +3,36 @@
   "cli": {
     "defaultCollection": "@nrwl/nest"
   },
-  "defaultProject": "search",
+  "defaultProject": "public",
   "projects": {
-    "search": {
-      "root": "apps/search",
-      "sourceRoot": "apps/search/src",
-      "projectType": "application",
+    "data-access": {
+      "root": "libs/data-access",
+      "sourceRoot": "libs/data-access/src",
+      "projectType": "library",
       "targets": {
-        "build": {
-          "executor": "@nrwl/node:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
-          "options": {
-            "outputPath": "dist/apps/search",
-            "main": "apps/search/src/main.ts",
-            "tsConfig": "apps/search/tsconfig.app.json",
-            "assets": [
-              "apps/search/src/assets"
-            ]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/search/src/environments/environment.ts",
-                  "with": "apps/search/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "executor": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "search:build"
-          }
-        },
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "apps/search/**/*.ts"
+              "libs/data-access/**/*.ts"
             ]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/apps/search"
+            "coverage/libs/data-access"
           ],
           "options": {
-            "jestConfig": "apps/search/jest.config.js",
+            "jestConfig": "libs/data-access/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
-    "admin": {
-      "root": "apps/admin",
-      "sourceRoot": "apps/admin/src",
+    "api-admin": {
+      "root": "apps/api/admin",
+      "sourceRoot": "apps/api/admin/src",
       "projectType": "application",
       "targets": {
         "build": {
@@ -74,11 +41,11 @@
             "{options.outputPath}"
           ],
           "options": {
-            "outputPath": "dist/apps/admin",
-            "main": "apps/admin/src/main.ts",
-            "tsConfig": "apps/admin/tsconfig.app.json",
+            "outputPath": "dist/apps/api/admin",
+            "main": "apps/api/admin/src/main.ts",
+            "tsConfig": "apps/api/admin/tsconfig.app.json",
             "assets": [
-              "apps/admin/src/assets"
+              "apps/api/admin/src/assets"
             ]
           },
           "configurations": {
@@ -88,8 +55,8 @@
               "inspect": false,
               "fileReplacements": [
                 {
-                  "replace": "apps/admin/src/environments/environment.ts",
-                  "with": "apps/admin/src/environments/environment.prod.ts"
+                  "replace": "apps/api/admin/src/environments/environment.ts",
+                  "with": "apps/api/admin/src/environments/environment.prod.ts"
                 }
               ]
             }
@@ -98,24 +65,49 @@
         "serve": {
           "executor": "@nrwl/node:execute",
           "options": {
-            "buildTarget": "admin:build"
+            "buildTarget": "api-admin:build"
           }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "apps/admin/**/*.ts"
+              "apps/api/admin/**/*.ts"
             ]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/apps/admin"
+            "coverage/apps/api/admin"
           ],
           "options": {
-            "jestConfig": "apps/admin/jest.config.js",
+            "jestConfig": "apps/api/admin/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "dto": {
+      "root": "libs/dto",
+      "sourceRoot": "libs/dto/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/dto/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/dto"
+          ],
+          "options": {
+            "jestConfig": "libs/dto/jest.config.js",
             "passWithNoTests": true
           }
         }
