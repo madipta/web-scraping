@@ -18,6 +18,7 @@
   "projects": {
     "data-access": { "tags": [] },
     "api-admin": { "tags": [] },
-    "dto": { "tags": [] }
+    "dto": { "tags": [] },
+    "scraping": { "tags": [] }
   }
 }

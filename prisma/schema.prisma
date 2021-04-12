@@ -11,28 +11,32 @@ generator client {
 }
 
 model Domain {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique @db.VarChar(250)
-  indexUrl    String?  @map("index_url") @db.VarChar(2048)
-  contentPath String?  @map("content_path") @db.VarChar(250)
-  createdAt   DateTime @default(now()) @map("created_at")
-  updateAt    DateTime @updatedAt @map("update_at")
-  adminEmail  String?  @map("admin_email") @db.VarChar(250)
-  active      Boolean  @default(true)
-  disabled    Boolean  @default(false)
-  links       Link[]
+  id           Int      @id @default(autoincrement())
+  name         String   @unique @db.VarChar(250)
+  indexUrl     String?  @map("index_url") @db.VarChar(2048)
+  contentPath  String?  @map("content_path") @db.VarChar(250)
+  categoryPath String?  @map("category_path") @db.VarChar(250)
+  headerPath   String?  @map("header_path") @db.VarChar(250)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updateAt     DateTime @updatedAt @map("update_at")
+  adminEmail   String?  @map("admin_email") @db.VarChar(250)
+  active       Boolean  @default(true)
+  disabled     Boolean  @default(false)
+  links        Link[]
 }
 
 model Link {
   id          Int      @id @default(autoincrement())
   domainId    Int      @map("domain_id")
   url         String   @db.VarChar(2048)
-  title       String   @db.VarChar(250)
-  description String   @db.VarChar(500)
+  title       String?  @db.VarChar(250)
+  description String?  @db.VarChar(500)
   createdAt   DateTime @default(now()) @map("created_at")
-  active      Boolean  @default(false)
+  active      Boolean  @default(true)
   domain      Domain   @relation(fields: [domainId], references: [id])
   content     Content?
+
+  @@unique([domainId, url], name: "UNIQUE_Link_domainId_url")
 }
 
 model Content {

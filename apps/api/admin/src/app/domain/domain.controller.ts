@@ -1,14 +1,18 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
-import { DomainService } from "@web-scraping/data-access";
+import { DomainService, LinkService } from "@web-scraping/data-access";
 import {
   DomainCreateInput,
+  DomainLinksQuery,
   DomainListQuery,
   DomainUpdateInput,
 } from "@web-scraping/dto";
 
 @Controller("domain")
 export class DomainController {
-  constructor(private readonly domainService: DomainService) {}
+  constructor(
+    private readonly domainService: DomainService,
+    private readonly linkService: LinkService
+  ) {}
 
   @Post("create")
   async create(@Body() dto: DomainCreateInput) {
@@ -36,6 +40,22 @@ export class DomainController {
       orderBy,
       where: {
         name: { contains: search },
+      },
+    });
+  }
+
+  @Get("links")
+  links(@Query() dto: DomainLinksQuery) {
+    const take = 20;
+    const { skip, domainId } = dto;
+    const orderBy = {};
+    orderBy[dto.sortBy] = dto.sortOrder;
+    return this.linkService.findMany({
+      skip,
+      take,
+      orderBy,
+      where: {
+        domainId: +domainId,
       },
     });
   }

@@ -112,6 +112,31 @@
           }
         }
       }
+    },
+    "scraping": {
+      "root": "libs/scraping",
+      "sourceRoot": "libs/scraping/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/scraping/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/scraping"
+          ],
+          "options": {
+            "jestConfig": "libs/scraping/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   }
 }
