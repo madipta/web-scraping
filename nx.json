@@ -19,6 +19,7 @@
     "data-access": { "tags": [] },
     "api-admin": { "tags": [] },
     "dto": { "tags": [] },
-    "scraping": { "tags": [] }
+    "scraping": { "tags": [] },
+    "web-scraper": { "tags": [] }
   }
 }

@@ -5,5 +5,6 @@ module.exports = {
     "<rootDir>/apps/api/admin",
     "<rootDir>/libs/dto",
     "<rootDir>/libs/scraping",
+    "<rootDir>/libs/web-scraper",
   ],
 };

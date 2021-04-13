@@ -17,7 +17,8 @@
     "paths": {
       "@web-scraping/data-access": ["libs/data-access/src/index.ts"],
       "@web-scraping/dto": ["libs/dto/src/index.ts"],
-      "@web-scraping/scraping": ["libs/scraping/src/index.ts"]
+      "@web-scraping/scraping": ["libs/scraping/src/index.ts"],
+      "@web-scraping/web-scraper": ["libs/web-scraper/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

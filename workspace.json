@@ -137,6 +137,31 @@
           }
         }
       }
+    },
+    "web-scraper": {
+      "root": "libs/web-scraper",
+      "sourceRoot": "libs/web-scraper/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/web-scraper/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/web-scraper"
+          ],
+          "options": {
+            "jestConfig": "libs/web-scraper/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   }
 }
