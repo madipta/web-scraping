@@ -1,5 +1,4 @@
 export class ContentUpdateInput {
-  id: number;
+  linkId: number;
   content: string;
-  contentHash: string;
 }

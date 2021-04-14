@@ -10,16 +10,27 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@web-scraping/data-access": ["libs/data-access/src/index.ts"],
-      "@web-scraping/dto": ["libs/dto/src/index.ts"],
-      "@web-scraping/scraping": ["libs/scraping/src/index.ts"],
-      "@web-scraping/web-scraper": ["libs/web-scraper/src/index.ts"]
+      "@web-scraping/data-access": [
+        "libs/data-access/src/index.ts"
+      ],
+      "@web-scraping/dto": [
+        "libs/dto/src/index.ts"
+      ],
+      "@web-scraping/scraper": [
+        "libs/scraper/src/index.ts"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

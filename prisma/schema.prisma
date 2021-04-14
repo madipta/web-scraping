@@ -8,12 +8,14 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  output = "../node_modules/.prisma/client"
 }
 
 model Domain {
   id           Int      @id @default(autoincrement())
-  name         String   @unique @db.VarChar(250)
+  home         String   @unique @db.VarChar(250)
   indexUrl     String?  @map("index_url") @db.VarChar(2048)
+  indexPath    String?  @map("index_path") @db.VarChar(250)
   contentPath  String?  @map("content_path") @db.VarChar(250)
   categoryPath String?  @map("category_path") @db.VarChar(250)
   headerPath   String?  @map("header_path") @db.VarChar(250)
@@ -28,22 +30,17 @@ model Domain {
 model Link {
   id          Int      @id @default(autoincrement())
   domainId    Int      @map("domain_id")
-  url         String   @db.VarChar(2048)
+  url         String   @unique @db.VarChar(2048)
   title       String?  @db.VarChar(250)
-  description String?  @db.VarChar(500)
   createdAt   DateTime @default(now()) @map("created_at")
   active      Boolean  @default(true)
   domain      Domain   @relation(fields: [domainId], references: [id])
   content     Content?
-
-  @@unique([domainId, url], name: "UNIQUE_Link_domainId_url")
 }
 
 model Content {
-  id          Int      @id @default(autoincrement())
-  linkId      Int      @map("link_id")
+  linkId      Int      @id @map("link_id")
   content     String   @db.Text
-  contentHash String   @map("content_hash") @db.Char(128)
   createdAt   DateTime @default(now()) @map("created_at")
   updateAt    DateTime @updatedAt @map("update_at")
   link        Link     @relation(fields: [linkId], references: [id])

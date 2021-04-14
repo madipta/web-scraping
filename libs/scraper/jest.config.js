@@ -11,5 +11,5 @@ module.exports = {
     "^.+\\.[tj]sx?$": "ts-jest",
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
-  coverageDirectory: "../../coverage/libs/web-scraper",
+  coverageDirectory: "../../coverage/libs/scraper",
 };

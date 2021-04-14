@@ -60,6 +60,7 @@
     "puppeteer": "^8.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.6.7",
+    "sanitize-html": "^2.3.3",
     "swagger-ui-express": "^4.1.6",
     "tslib": "^2.0.0"
   },

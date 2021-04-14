@@ -1,5 +1,5 @@
 export class DomainCreateInput {
-  name: string;
+  home: string;
   indexUrl?: string | null;
   contentPath?: string | null;
   categoryPath?: string | null;

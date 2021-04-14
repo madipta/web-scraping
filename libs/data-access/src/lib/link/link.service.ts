@@ -1,6 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { Link, Prisma } from "@prisma/client";
+import { Content, Domain, Link, Prisma } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
+
+export type LinkWithRef = Link & { domain?: Domain, content?: Content };
 
 @Injectable()
 export class LinkService {
@@ -12,9 +14,39 @@ export class LinkService {
     });
   }
 
+  async upsert(data: {
+    url: string;
+    title: string;
+    domainId: number;
+  }): Promise<Link> {
+    const { url, title, domainId } = data;
+    return this.prisma.link.upsert({
+      where: {
+        url,
+      },
+      update: {
+        title,
+      },
+      create: {
+        url,
+        title,
+        domain: {
+          connect: {
+            id: domainId,
+          },
+        },
+      },
+    });
+  }
+
   async findOne(byId: Prisma.LinkWhereUniqueInput): Promise<Link | null> {
     return this.prisma.link.findUnique({
       where: byId,
+      include: {
+        domain: {
+          select: { contentPath: true },
+        },
+      },
     });
   }
 

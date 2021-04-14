@@ -1,23 +1,36 @@
-import { createHash } from "crypto";
 import { Injectable } from "@nestjs/common";
 import { Content, Prisma } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
+import sanitizeHtml from 'sanitize-html';
 
 @Injectable()
 export class ContentService {
   constructor(private prisma: PrismaService) {}
 
-  private createContentHash(content) {
-    if (!content) {
-      return "";
-    }
-    return createHash("sha256").update(content).digest("hex");
+  sanitize(content: string) {
+    return sanitizeHtml(content, { allowedTags: [] }).replace(
+      /[\f\n\r\t\v ]{2,}/g,
+      " "
+    ).trim();
   }
 
-  async create(data: Prisma.ContentCreateInput): Promise<Content> {
-    data.contentHash = this.createContentHash(data.content);
-    return this.prisma.content.create({
-      data,
+  async upsert(linkId: number, content: string): Promise<Content> {
+    content = this.sanitize(content);
+    return this.prisma.content.upsert({
+      where: {
+        linkId: +linkId,
+      },
+      update: {
+        content,
+      },
+      create: {
+        content,
+        link: {
+          connect: {
+            id: linkId,
+          },
+        },
+      },
     });
   }
 
@@ -41,18 +54,6 @@ export class ContentService {
       cursor,
       where,
       orderBy,
-    });
-  }
-
-  async update(params: {
-    where: Prisma.ContentWhereUniqueInput;
-    data: Prisma.ContentUpdateInput;
-  }): Promise<Content> {
-    const { where, data } = params;
-    data.contentHash = this.createContentHash(data.content);
-    return this.prisma.content.update({
-      data,
-      where,
     });
   }
 

@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { IndexService } from './index.service';
+import { WebIndexService } from './web-index.service';
 
-describe('IndexService', () => {
-  let service: IndexService;
+describe('WebIndexService', () => {
+  let service: WebIndexService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [IndexService],
+      providers: [WebIndexService],
     }).compile();
 
-    service = module.get<IndexService>(IndexService);
+    service = module.get<WebIndexService>(WebIndexService);
   });
 
   it('should be defined', () => {

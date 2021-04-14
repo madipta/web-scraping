@@ -39,7 +39,7 @@ export class DomainController {
       take,
       orderBy,
       where: {
-        name: { contains: search },
+        home: { contains: search },
       },
     });
   }
@@ -48,6 +48,7 @@ export class DomainController {
   links(@Query() dto: DomainLinksQuery) {
     const take = 20;
     const { skip, domainId } = dto;
+    console.log(domainId)
     const orderBy = {};
     orderBy[dto.sortBy] = dto.sortOrder;
     return this.linkService.findMany({

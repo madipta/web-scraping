@@ -12,12 +12,11 @@ export class ContentController {
 
   @Post("create")
   async create(@Body() dto: ContentCreateInput) {
-    const { linkId, ...values } = dto;
     return this.contentService.create({
-      ...values,
+      ...dto,
       link: {
         connect: {
-          id: +linkId,
+          id: +dto.linkId,
         },
       },
     });
@@ -25,10 +24,10 @@ export class ContentController {
 
   @Post("update")
   async update(@Body() dto: ContentUpdateInput) {
-    const { id, ...data } = dto;
+    const { linkId: id, ...data } = dto;
     return this.contentService.update({
       data,
-      where: { id: +id },
+      where: { linkId: +id },
     });
   }
 
@@ -49,9 +48,9 @@ export class ContentController {
   }
 
   @Get()
-  getOne(@Query("id") id: number) {
+  getOne(@Query("id") linkId: number) {
     return this.contentService.findOne({
-      id: +id,
+      linkId: +linkId,
     });
   }
 }

@@ -46,7 +46,6 @@ export class LinkController {
         OR: [
           { url: { contains: search } },
           { title: { contains: search } },
-          { description: { contains: search } },
         ],
       },
     });
