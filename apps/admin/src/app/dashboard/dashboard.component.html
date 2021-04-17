@@ -1,0 +1,47 @@
+<nz-layout class="layout">
+  <nz-sider nzCollapsible nzBreakpoint="lg">
+    <div class="logo">Admin</div>
+    <ul nz-menu nzTheme="dark" nzMode="inline" class="sider-menu">
+      <li nz-submenu nzOpen nzTitle="Domain" nzIcon="cloud">
+        <ul>
+          <li nz-menu-item>List</li>
+          <li nz-menu-item>Register</li>
+          <li nz-menu-item>Update</li>
+          <li nz-menu-item>Scrap Link</li>
+        </ul>
+      </li>
+      <li nz-submenu nzOpen nzTitle="Links" nzIcon="link">
+        <ul>
+          <li nz-menu-item>List</li>
+          <li nz-menu-item>Update</li>
+          <li nz-menu-item>Scrap Content</li>
+        </ul>
+      </li>
+      <li nz-menu-item>
+        <i nz-icon nzType="solution"></i>
+        <span>Content</span>
+      </li>
+      <li nz-submenu nzTitle="Setting" nzIcon="setting">
+        <ul>
+          <li nz-menu-item>Jobs</li>
+          <li nz-menu-item>Users</li>
+        </ul>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <ul nz-menu nzMode="horizontal">
+        <li nz-menu-item>nav 1</li>
+        <li nz-menu-item>nav 2</li>
+        <li nz-menu-item>nav 3</li>
+      </ul>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+    <nz-footer>Web Scraper ©2021 Implement By Madipta</nz-footer>
+  </nz-layout>
+</nz-layout>

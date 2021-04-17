@@ -1,35 +1,10 @@
-import { Body, Controller, Get, Post, Query } from "@nestjs/common";
+import { Controller, Get, Query } from "@nestjs/common";
 import { ContentService } from "@web-scraping/data-access";
-import {
-  ContentCreateInput,
-  ContentListQuery,
-  ContentUpdateInput,
-} from "@web-scraping/dto";
+import { ContentListQuery } from "@web-scraping/dto";
 
 @Controller("content")
 export class ContentController {
   constructor(private readonly contentService: ContentService) {}
-
-  @Post("create")
-  async create(@Body() dto: ContentCreateInput) {
-    return this.contentService.create({
-      ...dto,
-      link: {
-        connect: {
-          id: +dto.linkId,
-        },
-      },
-    });
-  }
-
-  @Post("update")
-  async update(@Body() dto: ContentUpdateInput) {
-    const { linkId: id, ...data } = dto;
-    return this.contentService.update({
-      data,
-      where: { linkId: +id },
-    });
-  }
 
   @Get("list")
   list(@Query() dto: ContentListQuery) {
