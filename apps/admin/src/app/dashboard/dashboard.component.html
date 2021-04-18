@@ -4,38 +4,57 @@
     <ul nz-menu nzTheme="dark" nzMode="inline" class="sider-menu">
       <li nz-submenu nzOpen nzTitle="Domain" nzIcon="cloud">
         <ul>
-          <li nz-menu-item>List</li>
-          <li nz-menu-item>Register</li>
-          <li nz-menu-item>Update</li>
-          <li nz-menu-item>Scrap Link</li>
+          <li nz-menu-item>
+            <a routerLink="domain-list">List</a>
+          </li>
+          <li nz-menu-item>
+            <a routerLink="domain-register">Register</a>
+          </li>
+          <li nz-menu-item>
+            <a routerLink="domain-update">Update</a>
+          </li>
+          <li nz-menu-item>
+            <a routerLink="domain-scrap">Scrap Link</a>
+          </li>
         </ul>
       </li>
       <li nz-submenu nzOpen nzTitle="Links" nzIcon="link">
         <ul>
-          <li nz-menu-item>List</li>
-          <li nz-menu-item>Update</li>
-          <li nz-menu-item>Scrap Content</li>
+          <li nz-menu-item>
+            <a routerLink="link-list">List</a>
+          </li>
+          <li nz-menu-item>
+            <a routerLink="link-update">Update</a>
+          </li>
+          <li nz-menu-item>
+            <a routerLink="link-scrap">Scrap Content</a>
+          </li>
         </ul>
       </li>
       <li nz-menu-item>
         <i nz-icon nzType="solution"></i>
-        <span>Content</span>
+        <span><a routerLink="content-list">Content List</a></span>
       </li>
-      <li nz-submenu nzTitle="Setting" nzIcon="setting">
+      <li nz-submenu nzTitle="Jobs" nzIcon="setting">
         <ul>
-          <li nz-menu-item>Jobs</li>
-          <li nz-menu-item>Users</li>
+          <li nz-menu-item>
+            <a routerLink="jobs-list">List</a>
+          </li>
+          <li nz-menu-item>
+            <a routerLink="jobs-settings">Settings</a>
+          </li>
         </ul>
       </li>
     </ul>
   </nz-sider>
   <nz-layout>
     <nz-header>
-      <ul nz-menu nzMode="horizontal">
-        <li nz-menu-item>nav 1</li>
-        <li nz-menu-item>nav 2</li>
-        <li nz-menu-item>nav 3</li>
-      </ul>
+      <div style="display: flex">
+        <div style="flex: 1 1 0%"></div>
+        <ul nz-menu nzMode="horizontal">
+          <li nz-menu-item>Logout</li>
+        </ul>
+      </div>
     </nz-header>
     <nz-content>
       <div class="inner-content">

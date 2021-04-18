@@ -4,15 +4,20 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HttpClientModule } from "@angular/common/http";
 import { RouterModule, Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
+import { AuthGuard } from "./guards/auth.guard";
 
 const appRoutes: Routes = [
   {
     path: "dashboard",
     loadChildren: async () =>
       (await import("./dashboard/dashboard.module")).DashboardModule,
-    // canActivateChild: [AuthGuard],
+    canActivateChild: [AuthGuard],
   },
-  // { path: "login", component: LoginComponent },
+  {
+    path: "login",
+    loadChildren: async () =>
+      (await import("./login/login.module")).LoginModule,
+  },
   { path: "**", redirectTo: "dashboard", pathMatch: "full" },
 ];
 
