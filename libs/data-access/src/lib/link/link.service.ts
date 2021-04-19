@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Content, Domain, Link, Prisma } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 
-export type LinkWithRef = Link & { domain?: Domain, content?: Content };
+export type LinkWithRef = Link & { domain?: Domain; content?: Content };
 
 @Injectable()
 export class LinkService {
@@ -47,6 +47,12 @@ export class LinkService {
           select: { contentPath: true },
         },
       },
+    });
+  }
+
+  async count(where: Prisma.LinkWhereInput): Promise<number> {
+    return this.prisma.link.count({
+      where,
     });
   }
 

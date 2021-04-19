@@ -18,6 +18,10 @@ export class DomainService {
     });
   }
 
+  async count(params: { where?: Prisma.DomainWhereInput }): Promise<number> {
+    return this.prisma.domain.count(params);
+  }
+
   async findMany(params: {
     skip?: number;
     take?: number;

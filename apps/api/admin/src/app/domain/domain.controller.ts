@@ -4,6 +4,7 @@ import {
   DomainCreateInput,
   DomainLinksQuery,
   DomainListQuery,
+  DomainListResult,
   DomainUpdateInput,
 } from "@web-scraping/dto";
 
@@ -28,31 +29,43 @@ export class DomainController {
     });
   }
 
+  refineSortOrderQueryParam(sortBy: string, sortOrder: string) {
+    sortBy = sortBy ?? "home";
+    if (sortOrder && sortOrder.toLowerCase().startsWith("desc")) {
+      sortOrder = "desc";
+    } else {
+      sortOrder = "asc";
+    }
+    const sort = {};
+    sort[sortBy] = sortOrder;
+    return sort;
+  }
+
   @Get("list")
-  list(@Query() dto: DomainListQuery) {
+  async list(@Query() dto: DomainListQuery): Promise<DomainListResult> {
     const take = 20;
-    const { skip, search } = dto;
-    const orderBy = {};
-    orderBy[dto.sortBy] = dto.sortOrder;
-    return this.domainService.findMany({
-      skip,
+    const { skip, search, sortBy, sortOrder } = dto;
+    const orderBy = this.refineSortOrderQueryParam(sortBy, sortOrder);
+    const where = { home: { contains: search } };
+    const rowCount = await this.domainService.count({ where });
+    const pageCount = Math.floor(rowCount / take) + 1;
+    const result = await this.domainService.findMany({
+      skip: +skip,
       take,
       orderBy,
-      where: {
-        home: { contains: search },
-      },
+      where,
     });
+    return { result, pageCount, rowCount };
   }
 
   @Get("links")
   links(@Query() dto: DomainLinksQuery) {
     const take = 20;
     const { skip, domainId } = dto;
-    console.log(domainId)
     const orderBy = {};
     orderBy[dto.sortBy] = dto.sortOrder;
     return this.linkService.findMany({
-      skip,
+      skip: +skip,
       take,
       orderBy,
       where: {

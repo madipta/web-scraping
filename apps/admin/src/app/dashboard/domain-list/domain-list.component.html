@@ -1,1 +1,38 @@
-<p>domain-list works!</p>
+<nz-page-header
+  style="margin-bottom: 40px"
+  nzTitle="Domain List"
+  nzSubtitle="registered web domain"
+>
+</nz-page-header>
+
+<nz-table
+  nzShowSizeChanger
+  [nzData]="domainList"
+  [nzFrontPagination]="false"
+  [nzLoading]="loading"
+  [nzTotal]="total"
+  [nzPageIndex]="pageIndex"
+  [nzShowSizeChanger]="false"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th nzColumnKey="home" [nzSortFn]="true">Domain</th>
+      <th nzColumnKey="indexUrl">Index</th>
+      <th nzColumnKey="contentPath">Content Path</th>
+      <th nzColumnKey="categoryPath">Category Path</th>
+      <th nzColumnKey="headerPath">Header Path</th>
+      <th nzColumnKey="adminEmail">Admin Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of domainList">
+      <td>{{ data.home }}</td>
+      <td>{{ data.indexUrl }}</td>
+      <td>{{ data.contentPath }}</td>
+      <td>{{ data.categoryPath }}</td>
+      <td>{{ data.headerPath }}</td>
+      <td>{{ data.adminEmail }}</td>
+    </tr>
+  </tbody>
+</nz-table>
