@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { DomainListRow } from "@web-scraping/dto";
 import { DomainListService } from "./domain-list.service";
@@ -8,11 +8,13 @@ import { DomainListService } from "./domain-list.service";
   templateUrl: "./domain-list.component.html",
   styleUrls: ["./domain-list.component.scss"],
 })
-export class DomainListComponent implements OnInit {
+export class DomainListComponent {
   total = 1;
   domainList: DomainListRow[] = [];
   loading = true;
   pageIndex = 1;
+
+  constructor(private DomainListService: DomainListService) {}
 
   loadDataFromServer(
     pageIndex: number,
@@ -37,13 +39,6 @@ export class DomainListComponent implements OnInit {
     const sortField = (currentSort && currentSort.key) || "home";
     const sortOrder = (currentSort && currentSort.value) || "asc";
     this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
-  }
-
-  constructor(private DomainListService: DomainListService) {}
-
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-  ngOnInit(): void {
-    // this.loadDataFromServer(this.pageIndex, this.pageSize, null, null, []);
   }
 
   edit(id) {
