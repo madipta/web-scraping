@@ -1,12 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { Routes, RouterModule } from "@angular/router";
-import { NzPageHeaderModule } from "ng-zorro-antd/page-header";
-import { NzFormModule } from "ng-zorro-antd/form";
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzInputModule } from "ng-zorro-antd/input";
-import { NzSelectModule } from "ng-zorro-antd/select";
+import { SharedModule } from "../shared/shared.module";
 import { DomainRegisterComponent } from "./domain-register.component";
 
 const routes: Routes = [
@@ -18,16 +13,6 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [DomainRegisterComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    NzPageHeaderModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NzFormModule,
-    NzButtonModule,
-    NzInputModule,
-    NzSelectModule,
-  ],
+  imports: [CommonModule, RouterModule.forChild(routes), SharedModule],
 })
 export class DomainRegisterModule {}
