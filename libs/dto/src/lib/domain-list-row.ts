@@ -1,4 +1,5 @@
 export class DomainListRow {
+  id: number;
   home: string;
   indexUrl: string;
   contentPath: string;

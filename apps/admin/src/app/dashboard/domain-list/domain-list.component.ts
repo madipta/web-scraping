@@ -45,4 +45,12 @@ export class DomainListComponent implements OnInit {
   ngOnInit(): void {
     // this.loadDataFromServer(this.pageIndex, this.pageSize, null, null, []);
   }
+
+  edit(id) {
+    alert(id);
+  }
+
+  delete(id) {
+    alert(id);
+  }
 }

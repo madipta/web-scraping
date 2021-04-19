@@ -18,21 +18,35 @@
   <thead>
     <tr>
       <th nzColumnKey="home" [nzSortFn]="true">Domain</th>
-      <th nzColumnKey="indexUrl">Index</th>
-      <th nzColumnKey="contentPath">Content Path</th>
-      <th nzColumnKey="categoryPath">Category Path</th>
-      <th nzColumnKey="headerPath">Header Path</th>
-      <th nzColumnKey="adminEmail">Admin Email</th>
+      <th>Index</th>
+      <th>Content Path</th>
+      <th>Category Path</th>
+      <th>Header Path</th>
+      <th>Admin Email</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let data of domainList">
-      <td>{{ data.home }}</td>
-      <td>{{ data.indexUrl }}</td>
+      <td><a [href]="data.home" target="_blank">{{ data.home }}</a></td>
+      <td><a [href]="data.home + data.indexUrl" target="_blank">{{ data.indexUrl }}</a></td>
       <td>{{ data.contentPath }}</td>
       <td>{{ data.categoryPath }}</td>
       <td>{{ data.headerPath }}</td>
       <td>{{ data.adminEmail }}</td>
+      <td>
+        <a (click)="edit(data.id)">Edit</a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a
+          nz-popconfirm
+          nzPopconfirmTitle="Are you sure delete this domain?"
+          nzPopconfirmPlacement="left"
+          nzOkText="Delete"
+          nzCancelText="Cancel"
+          (nzOnConfirm)="delete(data.id)"
+          >Delete</a
+        >
+      </td>
     </tr>
   </tbody>
 </nz-table>
