@@ -1,21 +1,14 @@
 <nz-layout class="layout">
-  <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
+  <nz-sider
+    nzCollapsible
+    [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null"
+    [nzCollapsedWidth]="0"
+  >
     <ul nz-menu nzTheme="dark" nzMode="inline" class="sider-menu">
-      <li nz-submenu nzOpen nzTitle="Domain" nzIcon="cloud">
-        <ul>
-          <li nz-menu-item>
-            <a routerLink="domain-list">List</a>
-          </li>
-          <li nz-menu-item>
-            <a routerLink="domain-register">Register</a>
-          </li>
-          <li nz-menu-item>
-            <a routerLink="domain-update">Update</a>
-          </li>
-          <li nz-menu-item>
-            <a routerLink="domain-scrap">Scrap Link</a>
-          </li>
-        </ul>
+      <li nz-menu-item>
+        <i nz-icon nzType="cloud"></i>
+        <span><a routerLink="domain-list">Domain</a></span>
       </li>
       <li nz-submenu nzOpen nzTitle="Links" nzIcon="link">
         <ul>
@@ -48,7 +41,7 @@
   </nz-sider>
   <nz-layout>
     <nz-header>
-      <div style="display: flex">
+      <div style="display: flex; padding-right: 16px">
         <div style="flex: 1 1 0%">
           <a (click)="isCollapsed = !isCollapsed">
             <i
@@ -59,9 +52,18 @@
           </a>
           <span style="margin-left: 10px">Web Scraper</span>
         </div>
-        <ul nz-menu nzMode="horizontal">
-          <li nz-menu-item>Logout</li>
-        </ul>
+        <a (click)="router.navigate([''])">
+          <span style="color: rgba(0, 0, 0, 0.85); padding-right: 10px"
+            >Signout</span
+          >
+          <i
+            nz-icon
+            nzType="right-square"
+            nzTheme="fill"
+            nz-tooltip
+            nzTooltipTitle="scrap"
+          ></i>
+        </a>
       </div>
     </nz-header>
     <nz-content>

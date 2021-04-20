@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "web-scraping-admin-dashboard",
@@ -7,4 +8,6 @@ import { Component } from "@angular/core";
 })
 export class DashboardComponent {
   isCollapsed = false;
+
+  constructor(public router: Router) {}
 }

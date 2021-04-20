@@ -1,7 +1,6 @@
 export * from "./lib/content-create-input";
 export * from "./lib/content-list-query";
 export * from "./lib/content-update-input";
-export * from "./lib/domain-create-input";
 export * from "./lib/domain-list-query";
 export * from "./lib/domain-list-result";
 export * from "./lib/domain-list-row";

@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { DomainListRow } from "@web-scraping/dto";
 import { DomainListService } from "./domain-list.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "web-scraping-domain-list",
@@ -14,7 +15,10 @@ export class DomainListComponent {
   loading = true;
   pageIndex = 1;
 
-  constructor(private DomainListService: DomainListService) {}
+  constructor(
+    public router: Router,
+    private DomainListService: DomainListService
+  ) {}
 
   loadDataFromServer(
     pageIndex: number,
@@ -24,13 +28,17 @@ export class DomainListComponent {
     filter: Array<{ key: string; value: string[] }>
   ): void {
     this.loading = true;
-    this.DomainListService
-      .fetchDomainList(pageIndex, pageSize, sortField, sortOrder, filter)
-      .subscribe((data) => {
-        this.loading = false;
-        this.total = data.rowCount;
-        this.domainList = data.result;
-      });
+    this.DomainListService.fetchDomainList(
+      pageIndex,
+      pageSize,
+      sortField,
+      sortOrder,
+      filter
+    ).subscribe((data) => {
+      this.loading = false;
+      this.total = data.rowCount;
+      this.domainList = data.result;
+    });
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {

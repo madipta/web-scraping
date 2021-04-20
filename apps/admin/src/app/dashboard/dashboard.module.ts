@@ -1,8 +1,6 @@
 import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
 import { HttpClientModule } from "@angular/common/http";
 import { RouterModule, Routes } from "@angular/router";
-import { NzFormModule } from "ng-zorro-antd/form";
 import { NzLayoutModule } from "ng-zorro-antd/layout";
 import { NzMenuModule } from "ng-zorro-antd/menu";
 import { NzIconModule } from "ng-zorro-antd/icon";
@@ -23,12 +21,6 @@ const routes: Routes = [
         path: "domain-list",
         loadChildren: async () =>
           (await import("./domain-list/domain-list.module")).DomainListModule,
-      },
-      {
-        path: "domain-register",
-        loadChildren: async () =>
-          (await import("./domain-register/domain-register.module"))
-            .DomainRegisterModule,
       },
       {
         path: "domain-scrap",
@@ -75,10 +67,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [DashboardComponent],
   imports: [
-    CommonModule,
     HttpClientModule,
     RouterModule.forChild(routes),
-    NzFormModule,
     NzLayoutModule,
     NzMenuModule,
     NzIconModule,

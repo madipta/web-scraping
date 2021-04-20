@@ -1,10 +1,8 @@
 export class DomainUpdateInput {
-  id: number;
-  name?: string;
+  id?: number;
+  home?: string;
   indexUrl?: string;
   contentPath?: string | null;
-  createdAt?: Date | string;
-  updateAt?: Date | string;
   adminEmail?: string | null;
   active?: boolean;
   disabled?: boolean;

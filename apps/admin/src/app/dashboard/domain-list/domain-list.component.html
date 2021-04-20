@@ -1,8 +1,14 @@
-<nz-page-header
-  style="margin-bottom: 40px"
-  nzTitle="Domain List"
-  nzSubtitle="registered web domain"
->
+<nz-page-header nzTitle="Domain List">
+  <nz-page-header-extra>
+    <a
+      nz-tooltip
+      nzTooltipTitle="prompt text"
+      (click)="router.navigate(['dashboard', 'domain-update'])"
+    >
+      <i nz-icon nzType="plus-circle"></i>
+      <span> New</span>
+    </a>
+  </nz-page-header-extra>
 </nz-page-header>
 
 <nz-table
@@ -19,6 +25,7 @@
     <tr>
       <th nzColumnKey="home" [nzSortFn]="true">Domain</th>
       <th>Index</th>
+      <th>Index Path</th>
       <th>Content Path</th>
       <th>Category Path</th>
       <th>Header Path</th>
@@ -28,24 +35,64 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of domainList">
-      <td><a [href]="data.home" target="_blank">{{ data.home }}</a></td>
-      <td><a [href]="data.home + data.indexUrl" target="_blank">{{ data.indexUrl }}</a></td>
+      <td>
+        <a [href]="data.home" target="_blank">{{ data.home }}</a>
+      </td>
+      <td>
+        <a [href]="data.home + data.indexUrl" target="_blank">{{
+          data.indexUrl
+        }}</a>
+      </td>
+      <td>{{ data.indexPath }}</td>
       <td>{{ data.contentPath }}</td>
       <td>{{ data.categoryPath }}</td>
       <td>{{ data.headerPath }}</td>
       <td>{{ data.adminEmail }}</td>
-      <td>
-        <a (click)="edit(data.id)">Edit</a>
+      <td style="white-space: nowrap;">
+        <a
+          (click)="
+            router.navigate(['dashboard', 'domain-update'], {
+              queryParams: { id: data.id }
+            })
+          "
+        >
+          <i
+            nz-icon
+            nzType="check-circle"
+            nzTheme="fill"
+            nz-tooltip
+            nzTooltipTitle="edit"
+          ></i>
+        </a>
         <nz-divider nzType="vertical"></nz-divider>
         <a
+          nz-tooltip
+          nzTooltipTitle="delete"
           nz-popconfirm
           nzPopconfirmTitle="Are you sure delete this domain?"
           nzPopconfirmPlacement="left"
           nzOkText="Delete"
           nzCancelText="Cancel"
           (nzOnConfirm)="delete(data.id)"
-          >Delete</a
         >
+          <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+        </a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a
+          (click)="
+            router.navigate(['dashboard', 'domain-scrap'], {
+              queryParams: { id: data.id }
+            })
+          "
+        >
+          <i
+            nz-icon
+            nzType="api"
+            nzTheme="fill"
+            nz-tooltip
+            nzTooltipTitle="scrap"
+          ></i>
+        </a>
       </td>
     </tr>
   </tbody>
