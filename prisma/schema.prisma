@@ -8,40 +8,41 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
-  output = "../node_modules/.prisma/client"
+  output   = "../node_modules/.prisma/client"
 }
 
 model Domain {
-  id           Int      @id @default(autoincrement())
-  home         String   @unique @db.VarChar(250)
-  indexUrl     String?  @map("index_url") @db.VarChar(2048)
-  indexPath    String?  @map("index_path") @db.VarChar(250)
-  contentPath  String?  @map("content_path") @db.VarChar(250)
-  categoryPath String?  @map("category_path") @db.VarChar(250)
-  headerPath   String?  @map("header_path") @db.VarChar(250)
-  createdAt    DateTime @default(now()) @map("created_at")
-  updateAt     DateTime @updatedAt @map("update_at")
-  adminEmail   String?  @map("admin_email") @db.VarChar(250)
-  active       Boolean  @default(true)
-  disabled     Boolean  @default(false)
-  links        Link[]
+  id                Int      @id @default(autoincrement())
+  home              String   @unique @db.VarChar(250)
+  indexUrl          String?  @map("index_url") @db.VarChar(2048)
+  indexPath         String?  @map("index_path") @db.VarChar(250)
+  loadmoreIndexPath String?  @map("loadmore_index_path") @db.VarChar(250)
+  contentPath       String?  @map("content_path") @db.VarChar(250)
+  categoryPath      String?  @map("category_path") @db.VarChar(250)
+  headerPath        String?  @map("header_path") @db.VarChar(250)
+  createdAt         DateTime @default(now()) @map("created_at")
+  updateAt          DateTime @updatedAt @map("update_at")
+  adminEmail        String?  @map("admin_email") @db.VarChar(250)
+  active            Boolean  @default(true)
+  disabled          Boolean  @default(false)
+  links             Link[]
 }
 
 model Link {
-  id          Int      @id @default(autoincrement())
-  domainId    Int      @map("domain_id")
-  url         String   @unique @db.VarChar(2048)
-  title       String?  @db.VarChar(250)
-  createdAt   DateTime @default(now()) @map("created_at")
-  active      Boolean  @default(true)
-  domain      Domain   @relation(fields: [domainId], references: [id])
-  content     Content?
+  id        Int      @id @default(autoincrement())
+  domainId  Int      @map("domain_id")
+  url       String   @unique @db.VarChar(2048)
+  title     String?  @db.VarChar(250)
+  createdAt DateTime @default(now()) @map("created_at")
+  active    Boolean  @default(true)
+  domain    Domain   @relation(fields: [domainId], references: [id])
+  content   Content?
 }
 
 model Content {
-  linkId      Int      @id @map("link_id")
-  content     String   @db.Text
-  createdAt   DateTime @default(now()) @map("created_at")
-  updateAt    DateTime @updatedAt @map("update_at")
-  link        Link     @relation(fields: [linkId], references: [id])
+  linkId    Int      @id @map("link_id")
+  content   String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updateAt  DateTime @updatedAt @map("update_at")
+  link      Link     @relation(fields: [linkId], references: [id])
 }
