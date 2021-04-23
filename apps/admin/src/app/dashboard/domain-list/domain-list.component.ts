@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
+import { Router } from "@angular/router";
+import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { DomainListRow } from "@web-scraping/dto";
-import { Router } from "@angular/router";
 import { DomainService } from "../domain.service";
-import { NzMessageService } from "ng-zorro-antd/message";
 
 @Component({
   selector: "web-scraping-domain-list",
