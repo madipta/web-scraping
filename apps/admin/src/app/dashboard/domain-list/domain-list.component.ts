@@ -64,18 +64,19 @@ export class DomainListComponent {
 
   onQueryParamsChange(params: NzTableQueryParams): void {
     const { pageSize, pageIndex, sort, filter } = params;
-    const currentSort = sort.find((item) => item.value !== null);
-    const sortField = (currentSort && currentSort.key) || "home";
-    const sortOrder = (currentSort && currentSort.value) || "asc";
+    const defaultSort = { key: "home", value: "asc" };
+    const currentSort = sort.find((item) => item.value !== null) || defaultSort;
+    const sortField = currentSort.key || defaultSort.key;
+    const sortOrder = currentSort.value || defaultSort.value;
     this.loadData(pageIndex, pageSize, sortField, sortOrder, filter);
   }
 
   async delete(id) {
-    const msgId = this.msg.loading('progress...').messageId;
+    const msgId = this.msg.loading("progress...").messageId;
     const result = await this.DomainService.delete({ id });
     this.msg.remove(msgId);
     if (result.ok) {
-      this.msg.success('Deleted!');
+      this.msg.success("Deleted!");
       this.refreshData();
     }
   }
