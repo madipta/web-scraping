@@ -10,6 +10,7 @@ import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzInputModule } from "ng-zorro-antd/input";
 import { NzCheckboxModule } from "ng-zorro-antd/checkbox";
 import { NzSelectModule } from "ng-zorro-antd/select";
+import { NzMessageModule } from "ng-zorro-antd/message";
 import { NzPopconfirmModule } from "ng-zorro-antd/popconfirm";
 import { NzToolTipModule } from "ng-zorro-antd/tooltip";
 
@@ -26,6 +27,7 @@ const modules = [
   NzInputModule,
   NzCheckboxModule,
   NzSelectModule,
+  NzMessageModule,
   NzPopconfirmModule,
   NzToolTipModule,
 ];

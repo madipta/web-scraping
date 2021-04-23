@@ -4,7 +4,7 @@
   [nzTitle]="selectedId ? 'Domain Update' : 'Domain Register'"
 >
 </nz-page-header>
-<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+<form nz-form [formGroup]="form" (ngSubmit)="submitForm()">
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="home" nzRequired
       >Domain url</nz-form-label
@@ -14,7 +14,7 @@
         nz-input
         id="home"
         formControlName="home"
-        placeholder="https://madipta.github.io/"
+        placeholder="ex: https://madipta.github.io/"
       />
     </nz-form-control>
   </nz-form-item>
@@ -31,7 +31,7 @@
         nz-input
         id="indexUrl"
         formControlName="indexUrl"
-        placeholder="index.html, index.php, index-list etc"
+        placeholder="ex: index.html, index.php, index-list etc"
       />
     </nz-form-control>
   </nz-form-item>
@@ -48,7 +48,7 @@
         nz-input
         id="indexPath"
         formControlName="indexPath"
-        placeholder="main article.index a"
+        placeholder="ex: main article.index a"
       />
     </nz-form-control>
   </nz-form-item>
@@ -65,7 +65,7 @@
         nz-input
         id="contentPath"
         formControlName="contentPath"
-        placeholder="main article.post"
+        placeholder="ex: main article.post"
       />
     </nz-form-control>
   </nz-form-item>
@@ -82,7 +82,7 @@
         nz-input
         id="categoryPath"
         formControlName="categoryPath"
-        placeholder="main article.categories"
+        placeholder="ex: main article.categories"
       />
     </nz-form-control>
   </nz-form-item>
@@ -99,7 +99,7 @@
         nz-input
         id="headerPath"
         formControlName="headerPath"
-        placeholder="main article h1"
+        placeholder="ex: main article h1"
       />
     </nz-form-control>
   </nz-form-item>

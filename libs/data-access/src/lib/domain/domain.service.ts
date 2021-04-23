@@ -50,7 +50,7 @@ export class DomainService {
     });
   }
 
-  async remove(where: Prisma.DomainWhereUniqueInput): Promise<Domain> {
+  async delete(where: Prisma.DomainWhereUniqueInput): Promise<Domain> {
     return this.prisma.domain.delete({
       where,
     });

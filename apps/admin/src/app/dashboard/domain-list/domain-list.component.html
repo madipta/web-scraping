@@ -17,6 +17,7 @@
   [nzFrontPagination]="false"
   [nzLoading]="loading"
   [nzTotal]="total"
+  [nzPageSize]="pageSize"
   [nzPageIndex]="pageIndex"
   [nzShowSizeChanger]="false"
   (nzQueryParams)="onQueryParamsChange($event)"
@@ -36,7 +37,7 @@
   <tbody>
     <tr *ngFor="let data of domainList">
       <td>
-        <a [href]="data.home" target="_blank">{{ data.home }}</a>
+        <a [href]="data.home" target="_blank">{{ data.home | domainName }}</a>
       </td>
       <td>
         <a [href]="data.home + data.indexUrl" target="_blank">{{

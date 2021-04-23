@@ -1,7 +1,9 @@
 import { Component, OnInit } from "@angular/core";
+import { Location } from "@angular/common";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { DomainUpdateService } from "./domain-update.service";
+import { NzMessageService } from "ng-zorro-antd/message";
+import { DomainService } from "../domain.service";
 
 @Component({
   selector: "web-scraping-domain-update",
@@ -10,11 +12,13 @@ import { DomainUpdateService } from "./domain-update.service";
 })
 export class DomainUpdateComponent implements OnInit {
   selectedId = 0;
-  validateForm!: FormGroup;
+  form!: FormGroup;
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private domainUpdateService: DomainUpdateService
+    private location: Location,
+    private msg: NzMessageService,
+    private domainService: DomainService
   ) {}
 
   ngOnInit(): void {
@@ -25,7 +29,7 @@ export class DomainUpdateComponent implements OnInit {
         this.selectedId = 0;
       }
     });
-    this.validateForm = this.fb.group({
+    this.form = this.fb.group({
       home: [null, [Validators.required]],
       indexUrl: [null],
       indexPath: [null],
@@ -37,22 +41,39 @@ export class DomainUpdateComponent implements OnInit {
       disabled: [false],
     });
     if (!this.selectedId) {
-      this.validateForm.controls["active"].setValue(true);
+      this.form.controls["active"].setValue(true);
+    } else {
+      this.getDomain();
     }
   }
 
-  submitForm(): void {
-    for (const i in this.validateForm.controls) {
-      this.validateForm.controls[i].markAsDirty();
-      this.validateForm.controls[i].updateValueAndValidity();
+  async getDomain() {
+    const id = this.msg.loading("loading...").messageId;
+    const domain = await this.domainService.get({ id: this.selectedId });
+    this.form.patchValue(domain["result"]);
+    this.msg.remove(id);
+  }
+
+  async submitForm() {
+    for (const i in this.form.controls) {
+      this.form.controls[i].markAsDirty();
+      this.form.controls[i].updateValueAndValidity();
     }
-    if (!this.validateForm.valid) {
+    if (!this.form.valid) {
       return;
     }
-    const values = this.validateForm.getRawValue();
+    const values = this.form.getRawValue();
     if (this.selectedId) {
       values.id = this.selectedId;
     }
-    this.domainUpdateService.createOrUpdate(values);
+    const id = this.msg.loading("progress...").messageId;
+    const res = await this.domainService.createOrUpdate(values);
+    this.msg.remove(id);
+    if (res["ok"]) {
+      this.msg.success("Success!");
+      this.location.back();
+    } else {
+      this.msg.error("Failed!");
+    }
   }
 }

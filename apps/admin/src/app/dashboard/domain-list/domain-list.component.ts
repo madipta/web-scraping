@@ -1,8 +1,9 @@
 import { Component } from "@angular/core";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { DomainListRow } from "@web-scraping/dto";
-import { DomainListService } from "./domain-list.service";
 import { Router } from "@angular/router";
+import { DomainService } from "../domain.service";
+import { NzMessageService } from "ng-zorro-antd/message";
 
 @Component({
   selector: "web-scraping-domain-list",
@@ -14,13 +15,28 @@ export class DomainListComponent {
   domainList: DomainListRow[] = [];
   loading = true;
   pageIndex = 1;
+  pageSize = 20;
+  sortField: string;
+  sortOrder: string;
+  filter: { key: string; value: string[] }[];
 
   constructor(
     public router: Router,
-    private DomainListService: DomainListService
+    private msg: NzMessageService,
+    private DomainService: DomainService
   ) {}
 
-  loadDataFromServer(
+  refreshData() {
+    this.loadData(
+      this.pageIndex,
+      this.pageSize,
+      this.sortField,
+      this.sortOrder,
+      this.filter
+    );
+  }
+
+  loadData(
     pageIndex: number,
     pageSize: number,
     sortField: string | null,
@@ -28,7 +44,12 @@ export class DomainListComponent {
     filter: Array<{ key: string; value: string[] }>
   ): void {
     this.loading = true;
-    this.DomainListService.fetchDomainList(
+    this.pageIndex = pageIndex;
+    this.pageSize = pageSize;
+    this.sortField = sortField;
+    this.sortOrder = sortOrder;
+    this.filter = filter;
+    this.DomainService.fetchDomainList(
       pageIndex,
       pageSize,
       sortField,
@@ -46,14 +67,16 @@ export class DomainListComponent {
     const currentSort = sort.find((item) => item.value !== null);
     const sortField = (currentSort && currentSort.key) || "home";
     const sortOrder = (currentSort && currentSort.value) || "asc";
-    this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
+    this.loadData(pageIndex, pageSize, sortField, sortOrder, filter);
   }
 
-  edit(id) {
-    alert(id);
-  }
-
-  delete(id) {
-    alert(id);
+  async delete(id) {
+    const msgId = this.msg.loading('progress...').messageId;
+    const result = await this.DomainService.delete({ id });
+    this.msg.remove(msgId);
+    if (result.ok) {
+      this.msg.success('Deleted!');
+      this.refreshData();
+    }
   }
 }

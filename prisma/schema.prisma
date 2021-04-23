@@ -17,14 +17,16 @@ model Domain {
   indexUrl          String?  @map("index_url") @db.VarChar(2048)
   indexPath         String?  @map("index_path") @db.VarChar(250)
   loadmoreIndexPath String?  @map("loadmore_index_path") @db.VarChar(250)
+  scrollMore        Boolean  @default(false)
   contentPath       String?  @map("content_path") @db.VarChar(250)
   categoryPath      String?  @map("category_path") @db.VarChar(250)
   headerPath        String?  @map("header_path") @db.VarChar(250)
-  createdAt         DateTime @default(now()) @map("created_at")
-  updateAt          DateTime @updatedAt @map("update_at")
   adminEmail        String?  @map("admin_email") @db.VarChar(250)
   active            Boolean  @default(true)
   disabled          Boolean  @default(false)
+  broken            Boolean  @default(false)
+  createdAt         DateTime @default(now()) @map("created_at")
+  updateAt          DateTime @updatedAt @map("update_at")
   links             Link[]
 }
 
@@ -33,8 +35,9 @@ model Link {
   domainId  Int      @map("domain_id")
   url       String   @unique @db.VarChar(2048)
   title     String?  @db.VarChar(250)
-  createdAt DateTime @default(now()) @map("created_at")
   active    Boolean  @default(true)
+  broken    Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
   domain    Domain   @relation(fields: [domainId], references: [id])
   content   Content?
 }

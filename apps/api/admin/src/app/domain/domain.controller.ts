@@ -1,8 +1,6 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
-import { DomainService, LinkService } from "@web-scraping/data-access";
+import { DomainService } from "@web-scraping/data-access";
 import {
-  DomainCreateInput,
-  DomainLinksQuery,
   DomainListQuery,
   DomainListResult,
   DomainUpdateInput,
@@ -10,23 +8,51 @@ import {
 
 @Controller("domain")
 export class DomainController {
-  constructor(
-    private readonly domainService: DomainService,
-    private readonly linkService: LinkService
-  ) {}
+  constructor(private readonly domainService: DomainService) {}
+
+  @Get()
+  async get(@Query() dto: { id: number }) {
+    try {
+      const id = +dto.id;
+      const result = await this.domainService.findOne({ id });
+      return { ok: true, result };
+    } catch (error) {
+      return { ok: false, error };
+    }
+  }
 
   @Post("create")
-  async create(@Body() dto: DomainCreateInput) {
-    return this.domainService.create(dto);
+  async create(@Body() dto: Required<DomainUpdateInput>) {
+    try {
+      const result = await this.domainService.create(dto);
+      return { ok: true, result };
+    } catch (error) {
+      return { ok: false, error };
+    }
   }
 
   @Post("update")
-  async update(@Body() dto: DomainUpdateInput) {
+  async update(@Body() dto: Partial<DomainUpdateInput> & { id: number }) {
     const { id, ...data } = dto;
-    return this.domainService.update({
-      data,
-      where: { id },
-    });
+    try {
+      const result = await this.domainService.update({
+        data,
+        where: { id },
+      });
+      return { ok: true, result };
+    } catch (error) {
+      return { ok: false, error };
+    }
+  }
+
+  @Post("delete")
+  async delete(@Body() dto: { id: number }) {
+    try {
+      const result = await this.domainService.delete({ id: +dto.id });
+      return { ok: true, result };
+    } catch (error) {
+      return { ok: false, error };
+    }
   }
 
   refineSortOrderQueryParam(sortBy: string, sortOrder: string) {
@@ -56,22 +82,6 @@ export class DomainController {
       where,
     });
     return { result, pageCount, rowCount };
-  }
-
-  @Get("links")
-  links(@Query() dto: DomainLinksQuery) {
-    const take = 20;
-    const { skip, domainId } = dto;
-    const orderBy = {};
-    orderBy[dto.sortBy] = dto.sortOrder;
-    return this.linkService.findMany({
-      skip: +skip,
-      take,
-      orderBy,
-      where: {
-        domainId: +domainId,
-      },
-    });
   }
 
   @Get()
