@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
-import { DomainListRow } from "@web-scraping/dto";
+import { DomainListRow, NzTableFilter } from "@web-scraping/dto";
 import { DomainService } from "../domain.service";
 
 @Component({
@@ -18,7 +18,7 @@ export class DomainListComponent {
   pageSize = 20;
   sortField: string;
   sortOrder: string;
-  filter: { key: string; value: string[] }[];
+  filter: NzTableFilter;
 
   constructor(
     public router: Router,
@@ -41,7 +41,7 @@ export class DomainListComponent {
     pageSize: number,
     sortField: string | null,
     sortOrder: string | null,
-    filter: Array<{ key: string; value: string[] }>
+    filter: NzTableFilter
   ): void {
     this.loading = true;
     this.pageIndex = pageIndex;

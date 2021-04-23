@@ -1,7 +1,11 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { DomainListResult, DomainUpdateInput } from "@web-scraping/dto";
+import {
+  DomainListResult,
+  DomainUpdateInput,
+  NzTableFilter,
+} from "@web-scraping/dto";
 
 @Injectable({
   providedIn: "root",
@@ -21,24 +25,23 @@ export class DomainService {
     pageSize: number,
     sortField: string | null,
     sortOrder: string | null,
-    filters: Array<{ key: string; value: string[] }>
+    filters: NzTableFilter
   ): Observable<DomainListResult> {
     sortField = sortField ?? "home";
     sortOrder = sortOrder ?? "asc";
-    const skip = (pageIndex * pageSize) - pageSize;
+    const skip = pageIndex * pageSize - pageSize;
     const params = new HttpParams()
       .append("skip", `${skip}`)
       .append("sortBy", `${sortField}`)
       .append("sortOrder", `${sortOrder}`)
       .append("search", filters.length === 0 ? "" : filters[0].value[0]);
-    return this.http.get<DomainListResult>(
-      `${this.domainListUrl}`,
-      { params }
-    );
+    return this.http.get<DomainListResult>(`${this.domainListUrl}`, { params });
   }
 
   async get(dto: { id: number }) {
-    return this.http.get(this.domainGetUrl, { params: { id: `${dto.id}` }}).toPromise();
+    return this.http
+      .get(this.domainGetUrl, { params: { id: `${dto.id}` } })
+      .toPromise();
   }
 
   async createOrUpdate(body: DomainUpdateInput) {
@@ -47,6 +50,8 @@ export class DomainService {
   }
 
   async delete(body: DomainUpdateInput) {
-    return this.http.post<{ ok: boolean }>(this.domainDeleteUrl, body).toPromise();
+    return this.http
+      .post<{ ok: boolean }>(this.domainDeleteUrl, body)
+      .toPromise();
   }
 }
