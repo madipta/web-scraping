@@ -9,3 +9,4 @@ export * from "./lib/domain-update-input";
 export * from "./lib/link-create-input";
 export * from "./lib/link-list-query";
 export * from "./lib/link-update-input";
+export * from "./lib/nz-table-filter";
