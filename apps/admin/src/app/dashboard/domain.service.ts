@@ -7,11 +7,12 @@ import { DomainListResult, DomainUpdateInput } from "@web-scraping/dto";
   providedIn: "root",
 })
 export class DomainService {
-  domainGetUrl = "http://localhost:3333/api/domain";
-  domainListUrl = "http://localhost:3333/api/domain/list";
-  domainCreateUrl = "http://localhost:3333/api/domain/create";
-  domainUpdateUrl = "http://localhost:3333/api/domain/update";
-  domainDeleteUrl = "http://localhost:3333/api/domain/delete";
+  private apiUrl = "http://localhost:3333/api/";
+  private domainGetUrl = this.apiUrl + "domain";
+  private domainListUrl = this.apiUrl + "domain/list";
+  private domainCreateUrl = this.apiUrl + "domain/create";
+  private domainUpdateUrl = this.apiUrl + "domain/update";
+  private domainDeleteUrl = this.apiUrl + "domain/delete";
 
   constructor(private http: HttpClient) {}
 
