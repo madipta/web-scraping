@@ -5,6 +5,9 @@ import { Pipe, PipeTransform } from "@angular/core";
 })
 export class DomainNamePipe implements PipeTransform {
   transform(value: string): string {
+    if (!value) {
+      return "";
+    }
     if (value.indexOf("://") === -1) {
       return value;
     }

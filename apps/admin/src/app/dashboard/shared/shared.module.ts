@@ -13,6 +13,7 @@ import { NzSelectModule } from "ng-zorro-antd/select";
 import { NzMessageModule } from "ng-zorro-antd/message";
 import { NzPopconfirmModule } from "ng-zorro-antd/popconfirm";
 import { NzToolTipModule } from "ng-zorro-antd/tooltip";
+import { DomainNamePipe } from "./domain-name.pipe";
 
 const modules = [
   FormsModule,
@@ -32,8 +33,11 @@ const modules = [
   NzToolTipModule,
 ];
 
+const declarations = [DomainNamePipe];
+
 @NgModule({
+  declarations: [...declarations],
   imports: [...modules],
-  exports: [...modules],
+  exports: [...modules, ...declarations],
 })
 export class SharedModule {}

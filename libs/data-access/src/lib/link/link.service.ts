@@ -44,7 +44,13 @@ export class LinkService {
       where: byId,
       include: {
         domain: {
-          select: { contentPath: true },
+          select: {
+            home: true,
+            indexPath: true,
+            contentPath: true,
+            headerPath: true,
+            categoryPath: true,
+          },
         },
       },
     });
@@ -70,6 +76,11 @@ export class LinkService {
       cursor,
       where,
       orderBy,
+      include: {
+        domain: {
+          select: { home: true },
+        },
+      },
     });
   }
 
@@ -78,15 +89,10 @@ export class LinkService {
     data: Prisma.LinkUpdateInput;
   }): Promise<Link> {
     const { where, data } = params;
-    return this.prisma.link.update({
-      data,
-      where,
-    });
+    return this.prisma.link.update({ data, where });
   }
 
   async remove(where: Prisma.LinkWhereUniqueInput): Promise<Link> {
-    return this.prisma.link.delete({
-      where,
-    });
+    return this.prisma.link.delete({ where });
   }
 }
