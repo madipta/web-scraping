@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Location } from "@angular/common";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { DomainService } from "../domain.service";
@@ -35,7 +35,7 @@ export class DomainScrapComponent implements OnInit {
     this.form = this.fb.group({
       indexUrl: [null],
       indexPath: [null],
-      loadeMoreIndexPath: [null],
+      loadmoreIndexPath: [null],
     });
   }
 
@@ -50,7 +50,14 @@ export class DomainScrapComponent implements OnInit {
     }
   }
 
-  resetForm(): void {
-    this.form.reset();
+  save(): void {
+    const values = this.form.getRawValue();
+    const dto = { ...values, id: this.selectedId };
+    console.log(dto)
+    this.domainService.createOrUpdate(dto);
+  }
+
+  scrap() {
+    console.log("scrap");
   }
 }

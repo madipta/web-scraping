@@ -24,7 +24,13 @@ export class DomainController {
   @Post("create")
   async create(@Body() dto: Required<DomainUpdateInput>) {
     try {
-      const result = await this.domainService.create(dto);
+      let { home } = dto;
+      home = home.toLowerCase();
+      if (home.substr(home.length-1) !== "/") {
+        home = home + "/";
+      }
+      const data = { ...dto, home };
+      const result = await this.domainService.create(data);
       return { ok: true, result };
     } catch (error) {
       return { ok: false, error };
@@ -33,6 +39,14 @@ export class DomainController {
 
   @Post("update")
   async update(@Body() dto: Partial<DomainUpdateInput> & { id: number }) {
+    let { home } = dto;
+    if (home) {
+      home = home.toLowerCase();
+      dto.home = home;
+      if (home.substr(home.length-1) !== "/") {
+        home = home + "/";
+      }
+    }
     const { id, ...data } = dto;
     try {
       const result = await this.domainService.update({
@@ -41,6 +55,7 @@ export class DomainController {
       });
       return { ok: true, result };
     } catch (error) {
+      console.error(error);
       return { ok: false, error };
     }
   }

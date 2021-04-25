@@ -14,55 +14,60 @@
           nzTooltipTitle="Relative index url path (without http/s & domain)"
           >Index page</nz-form-label
         >
-        <div style="display: flex">
-          <input
-            nz-input
-            formControlName="indexUrl"
-            placeholder="ex: index.html, index.php, index-list etc"
-          />
-          <button nz-button  class="btn-test">Test</button>
-        </div>
+        <input
+          nz-input
+          formControlName="indexUrl"
+          placeholder="ex: index.html, index.php, index-list etc"
+        />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item nz-col [nzSpan]="22" [nzPush]="1">
         <nz-form-label
           nzFor="indexPath"
-          nzTooltipTitle="HTML path to index hyperlink"
+          nzTooltipTitle="HTML query selector to hyperlink element"
           >Index path</nz-form-label
         >
-        <div style="display: flex">
-          <input
-            nz-input
-            formControlName="indexPath"
-            placeholder="ex: main article.index a"
-          />
-          <button nz-button class="btn-test">Test</button>
-        </div>
+        <input
+          nz-input
+          formControlName="indexPath"
+          placeholder="ex: main article.index a"
+        />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item nz-col [nzSpan]="22" [nzPush]="1">
         <nz-form-label
-          nzFor="loadeMoreIndexPath"
-          nzTooltipTitle="HTML path to load more link element"
+          nzFor="loadmoreIndexPath"
+          nzTooltipTitle="HTML query selector to more link element"
           >Load More Index Path</nz-form-label
         >
-        <div style="display: flex">
-          <input
-            nz-input
-            formControlName="loadeMoreIndexPath"
-            placeholder="ex: main .more"
-          />
-          <button nz-button class="btn-test">Test</button>
-        </div>
+        <input
+          nz-input
+          formControlName="loadmoreIndexPath"
+          placeholder="ex: main .more"
+        />
       </nz-form-item>
     </div>
   </div>
   <div nz-row style="margin-top: 20px">
     <div nz-col [nzSpan]="22" [nzPush]="1" style="text-align: right">
-      <button nz-button class="btn-test">Test All</button>
-      <button nz-button nzType="primary" style="margin-left: 8px">Scrap</button>
+      <button
+        nz-button
+        nzType="primary"
+        style="margin-left: 8px"
+        (click)="save()"
+      >
+        <i nz-icon nzType="save"></i>Save
+      </button>
+      <button
+        nz-button
+        nzType="default"
+        style="margin-left: 8px"
+        (click)="scrap()"
+      >
+        <i nz-icon nzType="robot"></i>Scrap Now
+      </button>
     </div>
   </div>
 </form>

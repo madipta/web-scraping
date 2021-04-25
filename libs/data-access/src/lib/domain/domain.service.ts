@@ -7,8 +7,23 @@ export class DomainService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: Prisma.DomainCreateInput): Promise<Domain> {
-    return this.prisma.domain.create({
+    return this.prisma.domain.create({ data });
+  }
+
+  async update(params: {
+    where: Prisma.DomainWhereUniqueInput;
+    data: Prisma.DomainUpdateInput;
+  }): Promise<Domain> {
+    const { where, data } = params;
+    return this.prisma.domain.update({
       data,
+      where,
+    });
+  }
+
+  async delete(where: Prisma.DomainWhereUniqueInput): Promise<Domain> {
+    return this.prisma.domain.delete({
+      where,
     });
   }
 
@@ -36,23 +51,6 @@ export class DomainService {
       cursor,
       where,
       orderBy,
-    });
-  }
-
-  async update(params: {
-    where: Prisma.DomainWhereUniqueInput;
-    data: Prisma.DomainUpdateInput;
-  }): Promise<Domain> {
-    const { where, data } = params;
-    return this.prisma.domain.update({
-      data,
-      where,
-    });
-  }
-
-  async delete(where: Prisma.DomainWhereUniqueInput): Promise<Domain> {
-    return this.prisma.domain.delete({
-      where,
     });
   }
 }
