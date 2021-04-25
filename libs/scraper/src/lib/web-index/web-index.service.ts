@@ -2,8 +2,7 @@ import { chromium } from "playwright";
 import { Injectable } from "@nestjs/common";
 import { Domain } from ".prisma/client";
 import { LinkService } from "@web-scraping/data-access";
-
-type HyperlinkData = { title?: string; url: string };
+import { ScrapIndexLink } from "@web-scraping/dto";
 
 @Injectable()
 export class WebIndexService {
@@ -11,7 +10,7 @@ export class WebIndexService {
 
   async getHyperlink(indexPage: string, indexPath: string) {
     const browser = await chromium.launch();
-    let urls: HyperlinkData[];
+    let urls: ScrapIndexLink[];
     try {
       const page = await browser.newPage();
       await page.goto(indexPage);
@@ -39,10 +38,10 @@ export class WebIndexService {
     if (urls && urls.length) {
       this.upsertData(domain.id, urls, home, indexUrl);
     }
-    return urls.length;
+    return urls;
   }
 
-  async upsertData(domainId: number, urls: HyperlinkData[], home: string, indexPage: string) {
+  async upsertData(domainId: number, urls: ScrapIndexLink[], home: string, indexPage: string) {
     const unique = [...new Set(urls)];
     const filtered = unique.filter(
       (a) =>

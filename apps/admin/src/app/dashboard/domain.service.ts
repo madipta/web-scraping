@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import {
+  AjaxResponse,
   DomainListResult,
   DomainUpdateInput,
   NzTableFilter,
@@ -17,6 +18,7 @@ export class DomainService {
   private domainCreateUrl = this.apiUrl + "domain/create";
   private domainUpdateUrl = this.apiUrl + "domain/update";
   private domainDeleteUrl = this.apiUrl + "domain/delete";
+  private domainScrapUrl = this.apiUrl + "scraping/index";
 
   constructor(private http: HttpClient) {}
 
@@ -46,12 +48,18 @@ export class DomainService {
 
   async createOrUpdate(body: DomainUpdateInput) {
     const url = body.id ? this.domainUpdateUrl : this.domainCreateUrl;
-    return this.http.post(url, body).toPromise();
+    return await this.http.post<AjaxResponse>(url, body).toPromise();
   }
 
   async delete(body: DomainUpdateInput) {
     return this.http
-      .post<{ ok: boolean }>(this.domainDeleteUrl, body)
+      .post<AjaxResponse>(this.domainDeleteUrl, body)
+      .toPromise();
+  }
+
+  async scrapIndex(domainId: string) {
+    return await this.http
+      .post<AjaxResponse>(this.domainScrapUrl, { domainId })
       .toPromise();
   }
 }

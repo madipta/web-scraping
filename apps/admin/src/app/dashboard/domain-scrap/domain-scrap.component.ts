@@ -50,14 +50,27 @@ export class DomainScrapComponent implements OnInit {
     }
   }
 
-  save(): void {
+  async save() {
+    const msgId = this.msg.loading("loading").messageId;
     const values = this.form.getRawValue();
     const dto = { ...values, id: this.selectedId };
-    console.log(dto)
-    this.domainService.createOrUpdate(dto);
+    const res = await this.domainService.createOrUpdate(dto);
+    this.msg.remove(msgId);
+    if (res.ok) {
+      this.msg.success(`Saved!`);
+    } else {
+      this.msg.error(`failed! \n\n${res.error}`);
+    }
   }
 
-  scrap() {
-    console.log("scrap");
+  async scrap() {
+    const msgId = this.msg.loading("loading").messageId;
+    const res = await this.domainService.scrapIndex(`${this.selectedId}`);
+    this.msg.remove(msgId);
+    if (res.ok) {
+      this.msg.success(`${res.result} links scraped!`);
+    } else {
+      this.msg.error(`failed! \n\n${res.error}`);
+    }
   }
 }
