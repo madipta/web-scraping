@@ -12,21 +12,21 @@ generator client {
 }
 
 model Domain {
-  id                Int      @id @default(autoincrement())
-  home              String   @unique @db.VarChar(250)
-  indexUrl          String?  @map("index_url") @db.VarChar(2048)
-  indexPath         String?  @map("index_path") @db.VarChar(250)
-  loadmoreIndexPath String?  @map("loadmore_index_path") @db.VarChar(250)
-  scrollMore        Boolean  @default(false)
-  contentPath       String?  @map("content_path") @db.VarChar(250)
-  headerPath        String?  @map("header_path") @db.VarChar(250)
-  categoryPath      String?  @map("category_path") @db.VarChar(250)
-  adminEmail        String?  @map("admin_email") @db.VarChar(250)
-  active            Boolean  @default(true)
-  disabled          Boolean  @default(false)
-  broken            Boolean  @default(false)
-  createdAt         DateTime @default(now()) @map("created_at")
-  updateAt          DateTime @updatedAt @map("update_at")
+  id                Int       @id @default(autoincrement())
+  home              String    @unique @db.VarChar(250)
+  indexUrl          String?   @map("index_url") @db.VarChar(2048)
+  indexPath         String?   @map("index_path") @db.VarChar(250)
+  loadmoreIndexPath String?   @map("loadmore_index_path") @db.VarChar(250)
+  scrollMore        Boolean   @default(false)
+  contentPath       String?   @map("content_path") @db.VarChar(250)
+  headerPath        String?   @map("header_path") @db.VarChar(250)
+  categoryPath      String?   @map("category_path") @db.VarChar(250)
+  adminEmail        String?   @map("admin_email") @db.VarChar(250)
+  active            Boolean   @default(true)
+  disabled          Boolean   @default(false)
+  broken            Boolean   @default(false)
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updateAt          DateTime? @updatedAt @map("update_at")
   links             Link[]
 }
 
@@ -43,9 +43,9 @@ model Link {
 }
 
 model Content {
-  linkId    Int      @id @map("link_id")
-  content   String   @db.Text
-  createdAt DateTime @default(now()) @map("created_at")
-  updateAt  DateTime @updatedAt @map("update_at")
-  link      Link     @relation(fields: [linkId], references: [id])
+  linkId    Int       @id @map("link_id")
+  content   String    @db.Text
+  createdAt DateTime  @default(now()) @map("created_at")
+  updateAt  DateTime? @updatedAt @map("update_at")
+  link      Link      @relation(fields: [linkId], references: [id])
 }
