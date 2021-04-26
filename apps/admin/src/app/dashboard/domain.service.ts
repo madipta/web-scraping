@@ -5,6 +5,7 @@ import {
   AjaxResponse,
   DomainListResult,
   DomainUpdateInput,
+  IdNumber,
   NzTableFilter,
 } from "@web-scraping/dto";
 
@@ -31,9 +32,9 @@ export class DomainService {
   ): Observable<DomainListResult> {
     sortField = sortField ?? "home";
     sortOrder = sortOrder ?? "asc";
-    const skip = pageIndex * pageSize - pageSize;
     const params = new HttpParams()
-      .append("skip", `${skip}`)
+      .append("pageIndex", `${pageIndex}`)
+      .append("pageSize", `${pageSize}`)
       .append("sortBy", `${sortField}`)
       .append("sortOrder", `${sortOrder}`)
       .append("search", filters.length === 0 ? "" : filters[0].value[0]);
@@ -51,10 +52,8 @@ export class DomainService {
     return await this.http.post<AjaxResponse>(url, body).toPromise();
   }
 
-  async delete(body: DomainUpdateInput) {
-    return this.http
-      .post<AjaxResponse>(this.domainDeleteUrl, body)
-      .toPromise();
+  async delete(body: IdNumber) {
+    return this.http.post<AjaxResponse>(this.domainDeleteUrl, body).toPromise();
   }
 
   async scrapIndex(domainId: string) {

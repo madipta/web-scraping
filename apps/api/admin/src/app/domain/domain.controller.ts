@@ -1,9 +1,11 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
 import { DomainService } from "@web-scraping/data-access";
 import {
-  DomainListQuery,
+  DomainCreateInput,
   DomainListResult,
   DomainUpdateInput,
+  IdNumber,
+  PageListQuery,
 } from "@web-scraping/dto";
 
 @Controller("domain")
@@ -11,7 +13,7 @@ export class DomainController {
   constructor(private readonly domainService: DomainService) {}
 
   @Get()
-  async get(@Query() dto: { id: number }) {
+  async get(@Query() dto: IdNumber) {
     try {
       const id = +dto.id;
       const result = await this.domainService.findOne({ id });
@@ -22,11 +24,11 @@ export class DomainController {
   }
 
   @Post("create")
-  async create(@Body() dto: Required<DomainUpdateInput>) {
+  async create(@Body() dto: DomainCreateInput) {
     try {
       let { home } = dto;
       home = home.toLowerCase();
-      if (home.substr(home.length-1) !== "/") {
+      if (home.substr(home.length - 1) !== "/") {
         home = home + "/";
       }
       const data = { ...dto, home };
@@ -38,12 +40,12 @@ export class DomainController {
   }
 
   @Post("update")
-  async update(@Body() dto: Partial<DomainUpdateInput> & { id: number }) {
+  async update(@Body() dto: DomainUpdateInput) {
     let { home } = dto;
     if (home) {
       home = home.toLowerCase();
       dto.home = home;
-      if (home.substr(home.length-1) !== "/") {
+      if (home.substr(home.length - 1) !== "/") {
         home = home + "/";
       }
     }
@@ -61,7 +63,7 @@ export class DomainController {
   }
 
   @Post("delete")
-  async delete(@Body() dto: { id: number }) {
+  async delete(@Body() dto: IdNumber) {
     try {
       const result = await this.domainService.delete({ id: +dto.id });
       return { ok: true, result };
@@ -83,20 +85,19 @@ export class DomainController {
   }
 
   @Get("list")
-  async list(@Query() dto: DomainListQuery): Promise<DomainListResult> {
-    const take = 20;
-    const { skip, search, sortBy, sortOrder } = dto;
+  async list(@Query() dto: PageListQuery): Promise<DomainListResult> {
+    const { pageIndex, pageSize, search, sortBy, sortOrder } = dto;
     const orderBy = this.refineSortOrderQueryParam(sortBy, sortOrder);
     const where = { home: { contains: search } };
-    const rowCount = await this.domainService.count({ where });
-    const pageCount = Math.floor(rowCount / take) + 1;
-    const result = await this.domainService.findMany({
-      skip: +skip,
-      take,
+    const total = await this.domainService.count({ where });
+    const result = await this.domainService.pageList({
+      pageIndex,
+      pageSize,
       orderBy,
       where,
     });
-    return { result, pageCount, rowCount };
+    console.log(result)
+    return { result, total };
   }
 
   @Get()

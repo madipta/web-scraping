@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Post } from "@nestjs/common";
 import {
   DomainService,
   LinkService,
@@ -14,16 +14,6 @@ export class ScrapingController {
     private readonly indexService: WebIndexService,
     private readonly contentService: WebContentService
   ) {}
-
-  @Get()
-  async activeDomains() {
-    const domains = await this.domainService.findMany({
-      where: {
-        active: true,
-      },
-    });
-    return domains;
-  }
 
   @Post("index")
   async domainIndex(@Body() dto: { domainId: number }) {

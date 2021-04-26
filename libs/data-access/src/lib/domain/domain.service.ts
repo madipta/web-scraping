@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Domain, Prisma } from "@prisma/client";
+import { DomainListItem } from '@web-scraping/dto';
 import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()
@@ -37,18 +38,28 @@ export class DomainService {
     return this.prisma.domain.count(params);
   }
 
-  async findMany(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.DomainWhereUniqueInput;
+  async pageList(params: {
+    pageIndex: number;
+    pageSize: number,
     where?: Prisma.DomainWhereInput;
     orderBy?: Prisma.DomainOrderByInput;
-  }): Promise<Domain[]> {
-    const { skip, take, cursor, where, orderBy } = params;
+  }): Promise<DomainListItem[]> {
+    const { pageIndex, pageSize, where, orderBy } = params;
+    const skip = pageIndex * pageSize - pageSize;
     return this.prisma.domain.findMany({
       skip,
-      take,
-      cursor,
+      take: +pageSize,
+      select: {
+        id: true,
+        home: true,
+        indexUrl: true,
+        adminEmail: true,
+        _count: {
+          select: {
+            links: true
+          }
+        }
+      },
       where,
       orderBy,
     });

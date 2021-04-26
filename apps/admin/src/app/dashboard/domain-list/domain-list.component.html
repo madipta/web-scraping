@@ -27,6 +27,7 @@
       <th nzColumnKey="home" [nzSortFn]="true">Domain</th>
       <th>Index</th>
       <th>Admin Email</th>
+      <th>Links</th>
       <th></th>
     </tr>
   </thead>
@@ -41,6 +42,7 @@
         }}</a>
       </td>
       <td>{{ data.adminEmail }}</td>
+      <td>{{ data._count?.links }}</td>
       <td style="white-space: nowrap;">
         <a
           (click)="
@@ -80,7 +82,7 @@
         >
           <i
             nz-icon
-            nzType="api"
+            nzType="robot"
             nzTheme="fill"
             nz-tooltip
             nzTooltipTitle="scrap"

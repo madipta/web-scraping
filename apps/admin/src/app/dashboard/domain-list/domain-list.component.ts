@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
-import { DomainListRow, NzTableFilter } from "@web-scraping/dto";
+import { DomainListItem, NzTableFilter } from "@web-scraping/dto";
 import { DomainService } from "../domain.service";
 
 @Component({
@@ -12,10 +12,10 @@ import { DomainService } from "../domain.service";
 })
 export class DomainListComponent {
   total = 1;
-  domainList: DomainListRow[] = [];
+  domainList: DomainListItem[] = [];
   loading = true;
   pageIndex = 1;
-  pageSize = 20;
+  pageSize = 2;
   sortField: string;
   sortOrder: string;
   filter: NzTableFilter;
@@ -57,7 +57,7 @@ export class DomainListComponent {
       filter
     ).subscribe((data) => {
       this.loading = false;
-      this.total = data.rowCount;
+      this.total = data.total;
       this.domainList = data.result;
     });
   }
