@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import {
-  AjaxResponse,
+  BaseResponse,
   DomainListResult,
   DomainUpdateInput,
   IdNumber,
@@ -49,16 +49,16 @@ export class DomainService {
 
   async createOrUpdate(body: DomainUpdateInput) {
     const url = body.id ? this.domainUpdateUrl : this.domainCreateUrl;
-    return await this.http.post<AjaxResponse>(url, body).toPromise();
+    return await this.http.post<BaseResponse>(url, body).toPromise();
   }
 
   async delete(body: IdNumber) {
-    return this.http.post<AjaxResponse>(this.domainDeleteUrl, body).toPromise();
+    return this.http.post<BaseResponse>(this.domainDeleteUrl, body).toPromise();
   }
 
   async scrapIndex(domainId: string) {
     return await this.http
-      .post<AjaxResponse>(this.domainScrapUrl, { domainId })
+      .post<BaseResponse>(this.domainScrapUrl, { domainId })
       .toPromise();
   }
 }

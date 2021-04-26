@@ -1,19 +1,21 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
 import { DomainService } from "@web-scraping/data-access";
 import {
+  BaseResponse,
   DomainCreateInput,
   DomainListResult,
   DomainUpdateInput,
   IdNumber,
   PageListQuery,
 } from "@web-scraping/dto";
+import { Domain } from "node:domain";
 
 @Controller("domain")
 export class DomainController {
   constructor(private readonly domainService: DomainService) {}
 
   @Get()
-  async get(@Query() dto: IdNumber) {
+  async get(@Query() dto: IdNumber): Promise<BaseResponse<Domain>> {
     try {
       const id = +dto.id;
       const result = await this.domainService.findOne({ id });
@@ -24,7 +26,7 @@ export class DomainController {
   }
 
   @Post("create")
-  async create(@Body() dto: DomainCreateInput) {
+  async create(@Body() dto: DomainCreateInput): Promise<BaseResponse<Domain>> {
     try {
       let { home } = dto;
       home = home.toLowerCase();
@@ -40,7 +42,7 @@ export class DomainController {
   }
 
   @Post("update")
-  async update(@Body() dto: DomainUpdateInput) {
+  async update(@Body() dto: DomainUpdateInput): Promise<BaseResponse<Domain>> {
     let { home } = dto;
     if (home) {
       home = home.toLowerCase();
@@ -63,7 +65,7 @@ export class DomainController {
   }
 
   @Post("delete")
-  async delete(@Body() dto: IdNumber) {
+  async delete(@Body() dto: IdNumber): Promise<BaseResponse<Domain>> {
     try {
       const result = await this.domainService.delete({ id: +dto.id });
       return { ok: true, result };
@@ -96,7 +98,6 @@ export class DomainController {
       orderBy,
       where,
     });
-    console.log(result)
     return { result, total };
   }
 

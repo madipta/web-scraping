@@ -1,4 +1,3 @@
-export * from "./lib/ajax-response";
 export * from "./lib/common";
 export * from "./lib/content-create-input";
 export * from "./lib/content-list-query";

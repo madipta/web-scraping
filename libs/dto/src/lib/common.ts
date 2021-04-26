@@ -17,3 +17,10 @@ export type PageListQuery = {
   sortBy: string;
   sortOrder: string;
 };
+
+export class BaseResponse<T = unknown> {
+  ok: boolean;
+  result?: T | unknown;
+  error?: unknown;
+  msg?: string;
+}
