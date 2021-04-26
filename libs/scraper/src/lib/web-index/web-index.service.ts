@@ -16,7 +16,7 @@ export class WebIndexService {
       await page.goto(indexPage);
       urls = await page.$$eval(indexPath, (els) =>
         els.map((el) => {
-          return { title: el.textContent, url: el.getAttribute("href") };
+          return { title: el.textContent.trim(), url: el.getAttribute("href") };
         })
       );
     } catch (e) {
