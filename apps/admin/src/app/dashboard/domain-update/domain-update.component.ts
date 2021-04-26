@@ -3,7 +3,7 @@ import { Location } from "@angular/common";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
-import { DomainService } from "../domain.service";
+import { DomainService } from "../shared/domain.service";
 
 @Component({
   selector: "web-scraping-domain-update",

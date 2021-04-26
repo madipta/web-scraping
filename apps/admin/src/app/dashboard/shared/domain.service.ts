@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import {
   BaseResponse,
-  DomainListResult,
+  LinkListResult,
   DomainUpdateInput,
   IdNumber,
   NzTableFilter,
@@ -29,7 +29,7 @@ export class DomainService {
     sortField: string | null,
     sortOrder: string | null,
     filters: NzTableFilter
-  ): Observable<DomainListResult> {
+  ): Observable<LinkListResult> {
     sortField = sortField ?? "home";
     sortOrder = sortOrder ?? "asc";
     const params = new HttpParams()
@@ -38,10 +38,10 @@ export class DomainService {
       .append("sortBy", `${sortField}`)
       .append("sortOrder", `${sortOrder}`)
       .append("search", filters.length === 0 ? "" : filters[0].value[0]);
-    return this.http.get<DomainListResult>(`${this.domainListUrl}`, { params });
+    return this.http.get<LinkListResult>(`${this.domainListUrl}`, { params });
   }
 
-  async get(dto: { id: number }) {
+  async get(dto: IdNumber) {
     return this.http
       .get(this.domainGetUrl, { params: { id: `${dto.id}` } })
       .toPromise();

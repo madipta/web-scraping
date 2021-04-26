@@ -18,9 +18,11 @@ export type PageListQuery = {
   sortOrder: string;
 };
 
-export class BaseResponse<T = unknown> {
+export type BaseResponse<T = unknown> = {
   ok: boolean;
   result?: T | unknown;
   error?: unknown;
   msg?: string;
-}
+};
+
+export type PromiseResponse<T> = Promise<BaseResponse<T>>;

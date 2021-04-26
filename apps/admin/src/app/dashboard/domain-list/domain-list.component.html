@@ -42,8 +42,17 @@
         }}</a>
       </td>
       <td>{{ data.adminEmail }}</td>
-      <td>{{ data._count?.links }}</td>
-      <td style="white-space: nowrap;">
+      <td>
+        <a
+          (click)="
+            router.navigate(['dashboard', 'link-list'], {
+              queryParams: { id: data.id }
+            })
+          "
+          >{{ data._count?.links }}</a
+        >
+      </td>
+      <td style="white-space: nowrap">
         <a
           (click)="
             router.navigate(['dashboard', 'domain-update'], {

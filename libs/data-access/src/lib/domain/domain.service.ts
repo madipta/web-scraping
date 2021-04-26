@@ -28,7 +28,7 @@ export class DomainService {
     });
   }
 
-  async findOne(byId: Prisma.DomainWhereUniqueInput): Promise<Domain | null> {
+  async get(byId: Prisma.DomainWhereUniqueInput): Promise<Domain | null> {
     return this.prisma.domain.findUnique({
       where: byId,
     });

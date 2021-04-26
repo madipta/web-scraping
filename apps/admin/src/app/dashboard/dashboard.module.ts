@@ -5,11 +5,6 @@ import { NzLayoutModule } from "ng-zorro-antd/layout";
 import { NzMenuModule } from "ng-zorro-antd/menu";
 import { NzIconModule } from "ng-zorro-antd/icon";
 import { DashboardComponent } from "./dashboard.component";
-import { StoreModule } from "@ngrx/store";
-import { EffectsModule } from "@ngrx/effects";
-import { StoreDevtoolsModule } from "@ngrx/store-devtools";
-import { environment } from "../../environments/environment";
-import { StoreRouterConnectingModule } from "@ngrx/router-store";
 
 const routes: Routes = [
   {
@@ -77,19 +72,6 @@ const routes: Routes = [
     NzLayoutModule,
     NzMenuModule,
     NzIconModule,
-    StoreModule.forRoot(
-      {},
-      {
-        metaReducers: !environment.production ? [] : [],
-        runtimeChecks: {
-          strictActionImmutability: true,
-          strictStateImmutability: true,
-        },
-      }
-    ),
-    EffectsModule.forRoot([]),
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
-    StoreRouterConnectingModule.forRoot(),
   ],
 })
 export class DashboardModule {}

@@ -1,54 +1,38 @@
-import { Body, Controller, Get, Post, Query } from "@nestjs/common";
+import { Controller, Get, Query } from "@nestjs/common";
 import { LinkService } from "@web-scraping/data-access";
-import {
-  LinkCreateInput,
-  LinkListQuery,
-  LinkUpdateInput,
-} from "@web-scraping/dto";
+import { PageListQuery } from "@web-scraping/dto";
 
 @Controller("link")
 export class LinkController {
   constructor(private readonly linkService: LinkService) {}
 
-  @Post("create")
-  async create(@Body() dto: LinkCreateInput) {
-    const { domainId, ...values } = dto;
-    return this.linkService.create({
-      ...values,
-      domain: {
-        connect: {
-          id: +domainId,
-        },
-      },
-    });
-  }
-
-  @Post("update")
-  async update(@Body() dto: LinkUpdateInput) {
-    const { id, ...data } = dto;
-    return this.linkService.update({
-      data,
-      where: { id: +id },
-    });
+  private refineSortOrderQueryParam(sortBy: string, sortOrder: string) {
+    sortBy = sortBy ?? "title";
+    if (sortOrder && sortOrder.toLowerCase().startsWith("desc")) {
+      sortOrder = "desc";
+    } else {
+      sortOrder = "asc";
+    }
+    const sort = {};
+    sort[sortBy] = sortOrder;
+    return sort;
   }
 
   @Get("list")
-  list(@Query() dto: LinkListQuery) {
-    const take = 20;
-    const { skip, search } = dto;
-    const orderBy = {};
-    orderBy[dto.sortBy] = dto.sortOrder;
-    return this.linkService.findMany({
-      skip,
-      take,
+  async list(@Query() dto: PageListQuery) {
+    const { pageIndex, pageSize, search, sortBy, sortOrder } = dto;
+    const orderBy = this.refineSortOrderQueryParam(sortBy, sortOrder);
+    const where = {
+      OR: [{ url: { contains: search } }, { title: { contains: search } }],
+    };
+    const total = await this.linkService.count({ where });
+    const result = await this.linkService.findMany({
+      pageIndex,
+      pageSize,
       orderBy,
-      where: {
-        OR: [
-          { url: { contains: search } },
-          { title: { contains: search } },
-        ],
-      },
+      where,
     });
+    return { result, total };
   }
 
   @Get()

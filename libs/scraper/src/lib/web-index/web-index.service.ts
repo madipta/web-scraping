@@ -1,8 +1,7 @@
 import { chromium } from "playwright";
 import { Injectable } from "@nestjs/common";
-import { Domain } from ".prisma/client";
 import { LinkService } from "@web-scraping/data-access";
-import { ScrapIndexLink } from "@web-scraping/dto";
+import { Domain, ScrapIndexLink } from "@web-scraping/dto";
 
 @Injectable()
 export class WebIndexService {

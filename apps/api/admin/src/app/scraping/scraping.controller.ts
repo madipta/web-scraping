@@ -18,7 +18,7 @@ export class ScrapingController {
   @Post("index")
   async domainIndex(@Body() dto: { domainId: number }) {
     try {
-      const domain = await this.domainService.findOne({ id: +dto.domainId });
+      const domain = await this.domainService.get({ id: +dto.domainId });
       const result = await this.indexService.domainIndexing(domain);
       return { ok: true, result: result.length };
     } catch (error) {
