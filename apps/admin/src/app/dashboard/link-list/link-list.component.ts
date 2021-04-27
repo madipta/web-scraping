@@ -78,18 +78,20 @@ export class LinkListComponent implements OnInit {
     this.sortField = sortField;
     this.sortOrder = sortOrder;
     this.search = search;
-    this.linkService.fetchList(
-      this.domain.id,
-      pageIndex,
-      pageSize,
-      sortField,
-      sortOrder,
-      search
-    ).subscribe((data) => {
-      this.loading = false;
-      this.total = data.total;
-      this.linkList = data.result;
-    });
+    this.linkService
+      .fetchList(
+        this.domain.id,
+        pageIndex,
+        pageSize,
+        sortField,
+        sortOrder,
+        search
+      )
+      .subscribe((data) => {
+        this.loading = false;
+        this.total = data.total;
+        this.linkList = data.result;
+      });
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
@@ -99,6 +101,14 @@ export class LinkListComponent implements OnInit {
     const sortField = currentSort.key || defaultSort.key;
     const sortOrder = currentSort.value || defaultSort.value;
     this.loadData(pageIndex, pageSize, sortField, sortOrder, this.search);
+  }
+
+  async scrapAll() {
+    console.log("scrap all content");
+  }
+
+  async scrapOne(url: string) {
+    console.log(`scrap content ${url}`);
   }
 
   async delete(id) {

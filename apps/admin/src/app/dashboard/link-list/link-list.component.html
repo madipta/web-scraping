@@ -4,13 +4,9 @@
   [nzTitle]="domain?.home | domainName"
 >
   <nz-page-header-extra>
-    <a
-      nz-tooltip
-      nzTooltipTitle="prompt text"
-      (click)="router.navigate(['dashboard', 'domain-update'])"
-    >
+    <a nz-tooltip nzTooltipTitle="prompt text" (click)="scrapAll()">
       <i nz-icon nzType="robot"></i>
-      <span> Scrap all</span>
+      <span> Scrap all content</span>
     </a>
   </nz-page-header-extra>
 </nz-page-header>
@@ -43,19 +39,13 @@
       <td style="text-align: center">{{ data.active }}</td>
       <td style="text-align: center">{{ data.broken }}</td>
       <td style="text-align: center; white-space: nowrap">
-        <a
-          (click)="
-            router.navigate(['dashboard', 'domain-update'], {
-              queryParams: { id: data.id }
-            })
-          "
-        >
+        <a (click)="scrapOne(data.url)">
           <i
             nz-icon
             nzType="robot"
             nzTheme="fill"
             nz-tooltip
-            nzTooltipTitle="update content"
+            nzTooltipTitle="scrap content"
           ></i>
         </a>
         <nz-divider nzType="vertical"></nz-divider>
