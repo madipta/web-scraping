@@ -21,7 +21,7 @@ export class WebIndexService {
           if (end < start) {
             end = url.length;
           }
-          const snug = url.substring(start, end);
+          const snug = decodeURIComponent(url.substring(start, end));
           let title = el.textContent.trim();
           if (title.length - snug.length < -10) {
             title = snug.replace(/-/g, " ");
