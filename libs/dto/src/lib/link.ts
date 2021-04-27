@@ -16,7 +16,7 @@ export type LinkCreateInput = LinkBase;
 export type LinkUpdateInput = IdNumber & Partial<LinkBase>;
 
 export type LinkListItem = IdNumber &
-  Link & {
+  LinkBase & {
     domain: Partial<Domain>;
   };
 

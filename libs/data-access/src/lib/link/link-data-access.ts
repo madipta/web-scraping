@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { Content, Domain, Link, Prisma } from "@prisma/client";
-import { LinkCreateInput } from "@web-scraping/dto";
+import { LinkCreateInput, LinkListItem } from "@web-scraping/dto";
 import { PrismaService } from "../prisma/prisma.service";
 
 export type LinkWithRef = Link & { domain?: Domain; content?: Content };
 
 @Injectable()
-export class LinkService {
+export class LinkDataAccess {
   constructor(private prisma: PrismaService) {}
 
   async create(data: Prisma.LinkCreateInput): Promise<Link> {
@@ -74,7 +74,7 @@ export class LinkService {
     pageSize: number,
     where?: Prisma.LinkWhereInput;
     orderBy?: Prisma.LinkOrderByInput;
-  }): Promise<Link[]> {
+  }): Promise<LinkListItem[]> {
     const { pageIndex, pageSize, where, orderBy } = params;
     const skip = pageIndex * pageSize - pageSize;
     return this.prisma.link.findMany({
@@ -82,7 +82,13 @@ export class LinkService {
       take: +pageSize,
       where,
       orderBy,
-      include: {
+      select: {
+        id: true,
+        domainId: true,
+        title: true,
+        url: true,
+        active: true,
+        broken: true,
         domain: {
           select: { home: true },
         },

@@ -1,5 +1,5 @@
-import { Component, OnInit } from "@angular/core";
 import { Location } from "@angular/common";
+import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
@@ -41,11 +41,11 @@ export class DomainScrapComponent implements OnInit {
 
   async loadDomain() {
     const res = await this.domainService.get({ id: this.selectedId });
-    if (res["ok"]) {
-      this.domain = res["result"];
+    if (res.ok) {
+      this.domain = res.result;
       this.form.patchValue(this.domain);
     } else {
-      this.msg.error(res["error"]);
+      this.msg.error("res.error");
       this.location.back();
     }
   }

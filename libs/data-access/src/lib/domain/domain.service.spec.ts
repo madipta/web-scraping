@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DomainService } from './domain.service';
+import { DomainDataAccess } from './domain-data-access';
 
-describe('DomainService', () => {
-  let service: DomainService;
+describe('DomainDataAccess', () => {
+  let service: DomainDataAccess;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [DomainService],
+      providers: [DomainDataAccess],
     }).compile();
 
-    service = module.get<DomainService>(DomainService);
+    service = module.get<DomainDataAccess>(DomainDataAccess);
   });
 
   it('should be defined', () => {

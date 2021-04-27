@@ -1,11 +1,11 @@
 import { chromium } from "playwright";
 import { Injectable } from "@nestjs/common";
-import { LinkService } from "@web-scraping/data-access";
+import { LinkDataAccess } from "@web-scraping/data-access";
 import { Domain, ScrapIndexLink } from "@web-scraping/dto";
 
 @Injectable()
 export class WebIndexService {
-  constructor(private linkService: LinkService) {}
+  constructor(private linkService: LinkDataAccess) {}
 
   async getHyperlink(indexPage: string, indexPath: string) {
     const browser = await chromium.launch();

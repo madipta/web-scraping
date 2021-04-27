@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { LinkService } from './link.service';
+import { LinkDataAccess } from './link-data-access';
 
-describe('LinkService', () => {
-  let service: LinkService;
+describe('LinkDataAccess', () => {
+  let service: LinkDataAccess;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [LinkService],
+      providers: [LinkDataAccess],
     }).compile();
 
-    service = module.get<LinkService>(LinkService);
+    service = module.get<LinkDataAccess>(LinkDataAccess);
   });
 
   it('should be defined', () => {

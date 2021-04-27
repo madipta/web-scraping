@@ -1,6 +1,67 @@
 <nz-page-header
   nzBackIcon
   style="margin-bottom: 40px"
-  [nzTitle]="title + ' Links'"
+  [nzTitle]="domain?.home | domainName"
 >
 </nz-page-header>
+
+<nz-table
+  nzShowSizeChanger
+  nzSize="middle"
+  [nzData]="linkList"
+  [nzFrontPagination]="false"
+  [nzLoading]="loading"
+  [nzTotal]="total"
+  [nzPageSize]="pageSize"
+  [nzPageIndex]="pageIndex"
+  [nzShowSizeChanger]="false"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th nzColumnKey="title" [nzSortFn]="true">Title</th>
+      <th>Active</th>
+      <th>Broken</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of linkList">
+      <td>
+        <a [href]="data.url" target="_blank">{{ data.title }}</a>
+      </td>
+      <td>{{ data.active }}</td>
+      <td>{{ data.broken }}</td>
+      <td style="text-align: center; white-space: nowrap">
+        <a
+          (click)="
+            router.navigate(['dashboard', 'domain-update'], {
+              queryParams: { id: data.id }
+            })
+          "
+        >
+          <i
+            nz-icon
+            nzType="robot"
+            nzTheme="fill"
+            nz-tooltip
+            nzTooltipTitle="update content"
+          ></i>
+        </a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a
+          nz-tooltip
+          nzTooltipTitle="delete"
+          nz-popconfirm
+          nzPopconfirmTitle="Are you sure delete this link?"
+          nzPopconfirmPlacement="left"
+          nzOkText="Delete"
+          nzCancelText="Cancel"
+          (nzOnConfirm)="delete(data.id)"
+        >
+          <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

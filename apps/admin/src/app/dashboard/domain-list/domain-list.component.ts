@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
-import { DomainListItem, NzTableFilter } from "@web-scraping/dto";
+import { DomainListItem } from "@web-scraping/dto";
 import { DomainService } from "../shared/domain.service";
 
 @Component({
@@ -15,10 +15,10 @@ export class DomainListComponent {
   domainList: DomainListItem[] = [];
   loading = true;
   pageIndex = 1;
-  pageSize = 2;
-  sortField: string;
-  sortOrder: string;
-  filter: NzTableFilter;
+  pageSize = 20;
+  sortField = "home";
+  sortOrder = "asc";
+  search: string;
 
   constructor(
     public router: Router,
@@ -32,7 +32,7 @@ export class DomainListComponent {
       this.pageSize,
       this.sortField,
       this.sortOrder,
-      this.filter
+      this.search
     );
   }
 
@@ -41,20 +41,20 @@ export class DomainListComponent {
     pageSize: number,
     sortField: string | null,
     sortOrder: string | null,
-    filter: NzTableFilter
+    search: string | null
   ): void {
     this.loading = true;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
     this.sortField = sortField;
     this.sortOrder = sortOrder;
-    this.filter = filter;
-    this.DomainService.fetchDomainList(
+    this.search = search;
+    this.DomainService.fetchList(
       pageIndex,
       pageSize,
       sortField,
       sortOrder,
-      filter
+      search
     ).subscribe((data) => {
       this.loading = false;
       this.total = data.total;
@@ -63,12 +63,12 @@ export class DomainListComponent {
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
-    const { pageSize, pageIndex, sort, filter } = params;
-    const defaultSort = { key: "home", value: "asc" };
+    const { pageSize, pageIndex, sort } = params;
+    const defaultSort = { key: this.sortField, value: this.sortOrder };
     const currentSort = sort.find((item) => item.value !== null) || defaultSort;
     const sortField = currentSort.key || defaultSort.key;
     const sortOrder = currentSort.value || defaultSort.value;
-    this.loadData(pageIndex, pageSize, sortField, sortOrder, filter);
+    this.loadData(pageIndex, pageSize, sortField, sortOrder, this.search);
   }
 
   async delete(id) {

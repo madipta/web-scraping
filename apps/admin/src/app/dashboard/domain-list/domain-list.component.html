@@ -13,6 +13,7 @@
 
 <nz-table
   nzShowSizeChanger
+  nzSize="middle"
   [nzData]="domainList"
   [nzFrontPagination]="false"
   [nzLoading]="loading"
@@ -27,7 +28,8 @@
       <th nzColumnKey="home" [nzSortFn]="true">Domain</th>
       <th>Index</th>
       <th>Admin Email</th>
-      <th>Links</th>
+      <th style="text-align: center">Links</th>
+      <th style="text-align: center">Active</th>
       <th></th>
     </tr>
   </thead>
@@ -42,7 +44,7 @@
         }}</a>
       </td>
       <td>{{ data.adminEmail }}</td>
-      <td>
+      <td style="text-align: center">
         <a
           (click)="
             router.navigate(['dashboard', 'link-list'], {
@@ -52,7 +54,8 @@
           >{{ data._count?.links }}</a
         >
       </td>
-      <td style="white-space: nowrap">
+      <td style="text-align: center">{{ data.active }}</td>
+      <td style="text-align: center; white-space: nowrap">
         <a
           (click)="
             router.navigate(['dashboard', 'domain-update'], {

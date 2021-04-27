@@ -3,10 +3,10 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import {
   BaseResponse,
-  LinkListResult,
+  Domain,
+  DomainListResult,
   DomainUpdateInput,
   IdNumber,
-  NzTableFilter,
 } from "@web-scraping/dto";
 
 @Injectable({
@@ -23,37 +23,43 @@ export class DomainService {
 
   constructor(private http: HttpClient) {}
 
-  fetchDomainList(
+  fetchList(
     pageIndex: number,
     pageSize: number,
     sortField: string | null,
     sortOrder: string | null,
-    filters: NzTableFilter
-  ): Observable<LinkListResult> {
+    search: string | null
+  ): Observable<DomainListResult> {
     sortField = sortField ?? "home";
     sortOrder = sortOrder ?? "asc";
     const params = new HttpParams()
       .append("pageIndex", `${pageIndex}`)
       .append("pageSize", `${pageSize}`)
       .append("sortBy", `${sortField}`)
-      .append("sortOrder", `${sortOrder}`)
-      .append("search", filters.length === 0 ? "" : filters[0].value[0]);
-    return this.http.get<LinkListResult>(`${this.domainListUrl}`, { params });
+      .append("sortOrder", `${sortOrder}`);
+    if (search) {
+      params.append("search", search);
+    }
+    return this.http.get<DomainListResult>(`${this.domainListUrl}`, { params });
   }
 
   async get(dto: IdNumber) {
     return this.http
-      .get(this.domainGetUrl, { params: { id: `${dto.id}` } })
+      .get<BaseResponse<Domain>>(this.domainGetUrl, {
+        params: { id: `${dto.id}` },
+      })
       .toPromise();
   }
 
   async createOrUpdate(body: DomainUpdateInput) {
     const url = body.id ? this.domainUpdateUrl : this.domainCreateUrl;
-    return await this.http.post<BaseResponse>(url, body).toPromise();
+    return await this.http.post<BaseResponse<Domain>>(url, body).toPromise();
   }
 
   async delete(body: IdNumber) {
-    return this.http.post<BaseResponse>(this.domainDeleteUrl, body).toPromise();
+    return this.http
+      .post<BaseResponse<Domain>>(this.domainDeleteUrl, body)
+      .toPromise();
   }
 
   async scrapIndex(domainId: string) {

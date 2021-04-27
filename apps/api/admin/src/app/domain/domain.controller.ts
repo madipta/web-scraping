@@ -1,18 +1,18 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
 import { Domain } from "@prisma/client";
-import { DomainService } from "@web-scraping/data-access";
+import { DomainDataAccess } from "@web-scraping/data-access";
 import {
   DomainCreateInput,
-  LinkListResult,
   DomainUpdateInput,
   IdNumber,
   PageListQuery,
   PromiseResponse,
+  DomainListResult,
 } from "@web-scraping/dto";
 
 @Controller("domain")
 export class DomainController {
-  constructor(private readonly domainService: DomainService) {}
+  constructor(private readonly domainService: DomainDataAccess) {}
 
   @Get()
   async get(@Query() dto: IdNumber): PromiseResponse<Domain> {
@@ -87,10 +87,13 @@ export class DomainController {
   }
 
   @Get("list")
-  async list(@Query() dto: PageListQuery): Promise<LinkListResult> {
+  async list(@Query() dto: PageListQuery): Promise<DomainListResult> {
     const { pageIndex, pageSize, search, sortBy, sortOrder } = dto;
     const orderBy = this.refineSortOrderQueryParam(sortBy, sortOrder);
-    const where = { home: { contains: search } };
+    const where = {};
+    if (search) {
+      where["home"] = { contains: search };
+    }
     const total = await this.domainService.count({ where });
     const result = await this.domainService.pageList({
       pageIndex,

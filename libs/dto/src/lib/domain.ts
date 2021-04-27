@@ -25,7 +25,7 @@ export type DomainListItem = Partial<Domain> & {
   _count: { links: number };
 };
 
-export type LinkListResult = {
+export type DomainListResult = {
   result: DomainListItem[];
   total: number;
 }

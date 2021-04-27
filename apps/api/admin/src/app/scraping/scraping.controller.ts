@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import {
-  DomainService,
-  LinkService,
+  DomainDataAccess,
+  LinkDataAccess,
   LinkWithRef,
 } from "@web-scraping/data-access";
 import { WebContentService, WebIndexService } from "@web-scraping/scraper";
@@ -9,8 +9,8 @@ import { WebContentService, WebIndexService } from "@web-scraping/scraper";
 @Controller("scraping")
 export class ScrapingController {
   constructor(
-    private readonly domainService: DomainService,
-    private readonly linkService: LinkService,
+    private readonly domainData: DomainDataAccess,
+    private readonly linkService: LinkDataAccess,
     private readonly indexService: WebIndexService,
     private readonly contentService: WebContentService
   ) {}
@@ -18,7 +18,7 @@ export class ScrapingController {
   @Post("index")
   async domainIndex(@Body() dto: { domainId: number }) {
     try {
-      const domain = await this.domainService.get({ id: +dto.domainId });
+      const domain = await this.domainData.get({ id: +dto.domainId });
       const result = await this.indexService.domainIndexing(domain);
       return { ok: true, result: result.length };
     } catch (error) {

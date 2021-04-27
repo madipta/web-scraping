@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { NzTableFilter, LinkListResult, IdNumber } from "@web-scraping/dto";
+import { LinkListResult, IdNumber } from "@web-scraping/dto";
 
 @Injectable({
   providedIn: "root",
@@ -13,21 +13,25 @@ export class LinkService {
 
   constructor(private http: HttpClient) {}
 
-  fetchLinkList(
+  fetchList(
+    domainId: number,
     pageIndex: number,
     pageSize: number,
-    sortField: string | null,
-    sortOrder: string | null,
-    filters: NzTableFilter
+    sortField: string,
+    sortOrder: string,
+    search: string | null
   ): Observable<LinkListResult> {
     sortField = sortField ?? "title";
     sortOrder = sortOrder ?? "asc";
     const params = new HttpParams()
+      .append("domainId", `${domainId}`)
       .append("pageIndex", `${pageIndex}`)
       .append("pageSize", `${pageSize}`)
       .append("sortBy", `${sortField}`)
-      .append("sortOrder", `${sortOrder}`)
-      .append("search", filters.length === 0 ? "" : filters[0].value[0]);
+      .append("sortOrder", `${sortOrder}`);
+    if (search) {
+      params.append("search", search);
+    }
     return this.http.get<LinkListResult>(`${this.linkListUrl}`, { params });
   }
 

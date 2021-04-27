@@ -4,7 +4,7 @@ import { DomainListItem } from '@web-scraping/dto';
 import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()
-export class DomainService {
+export class DomainDataAccess {
   constructor(private prisma: PrismaService) {}
 
   async create(data: Prisma.DomainCreateInput): Promise<Domain> {
@@ -54,6 +54,7 @@ export class DomainService {
         home: true,
         indexUrl: true,
         adminEmail: true,
+        active: true,
         _count: {
           select: {
             links: true

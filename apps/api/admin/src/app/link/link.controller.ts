@@ -1,10 +1,10 @@
 import { Controller, Get, Query } from "@nestjs/common";
-import { LinkService } from "@web-scraping/data-access";
-import { PageListQuery } from "@web-scraping/dto";
+import { LinkDataAccess } from "@web-scraping/data-access";
+import { LinkListResult, PageListQuery } from "@web-scraping/dto";
 
 @Controller("link")
 export class LinkController {
-  constructor(private readonly linkService: LinkService) {}
+  constructor(private readonly linkService: LinkDataAccess) {}
 
   private refineSortOrderQueryParam(sortBy: string, sortOrder: string) {
     sortBy = sortBy ?? "title";
@@ -19,12 +19,20 @@ export class LinkController {
   }
 
   @Get("list")
-  async list(@Query() dto: PageListQuery) {
+  async list(
+    @Query() dto: { domainId: number } & PageListQuery
+  ): Promise<LinkListResult> {
     const { pageIndex, pageSize, search, sortBy, sortOrder } = dto;
     const orderBy = this.refineSortOrderQueryParam(sortBy, sortOrder);
     const where = {
-      OR: [{ url: { contains: search } }, { title: { contains: search } }],
+      domainId: +dto.domainId,
     };
+    if (search) {
+      where["OR"] = [
+        { url: { contains: search } },
+        { title: { contains: search } },
+      ];
+    }
     const total = await this.linkService.count({ where });
     const result = await this.linkService.findMany({
       pageIndex,

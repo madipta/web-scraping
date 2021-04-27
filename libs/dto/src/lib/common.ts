@@ -20,8 +20,8 @@ export type PageListQuery = {
 
 export type BaseResponse<T = unknown> = {
   ok: boolean;
-  result?: T | unknown;
-  error?: unknown;
+  result?: T;
+  error?: string | unknown;
   msg?: string;
 };
 
