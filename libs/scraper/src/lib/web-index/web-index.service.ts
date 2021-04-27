@@ -23,7 +23,7 @@ export class WebIndexService {
           }
           const snug = url.substring(start, end);
           let title = el.textContent.trim();
-          if (title.length < snug.length) {
+          if (title.length - snug.length < -10) {
             title = snug.replace(/-/g, " ");
           }
           return { title, url };

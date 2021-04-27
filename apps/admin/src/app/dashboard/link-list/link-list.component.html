@@ -3,6 +3,16 @@
   style="margin-bottom: 40px"
   [nzTitle]="domain?.home | domainName"
 >
+  <nz-page-header-extra>
+    <a
+      nz-tooltip
+      nzTooltipTitle="prompt text"
+      (click)="router.navigate(['dashboard', 'domain-update'])"
+    >
+      <i nz-icon nzType="robot"></i>
+      <span> Scrap all</span>
+    </a>
+  </nz-page-header-extra>
 </nz-page-header>
 
 <nz-table
@@ -20,8 +30,8 @@
   <thead>
     <tr>
       <th nzColumnKey="title" [nzSortFn]="true">Title</th>
-      <th style="text-align: center;">Active</th>
-      <th style="text-align: center;">Broken</th>
+      <th style="text-align: center">Active</th>
+      <th style="text-align: center">Broken</th>
       <th></th>
     </tr>
   </thead>
@@ -30,8 +40,8 @@
       <td>
         <a [href]="data.url" target="_blank">{{ data.title }}</a>
       </td>
-      <td style="text-align: center;">{{ data.active }}</td>
-      <td style="text-align: center;">{{ data.broken }}</td>
+      <td style="text-align: center">{{ data.active }}</td>
+      <td style="text-align: center">{{ data.broken }}</td>
       <td style="text-align: center; white-space: nowrap">
         <a
           (click)="
