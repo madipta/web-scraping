@@ -48,10 +48,10 @@ export class DomainUpdateComponent implements OnInit {
   }
 
   async getDomain() {
-    const id = this.msg.loading("loading...").messageId;
+    const msgId = this.msg.loading("loading...", { nzDuration: 0 }).messageId;
     const domain = await this.domainService.get({ id: this.selectedId });
     this.form.patchValue(domain["result"]);
-    this.msg.remove(id);
+    this.msg.remove(msgId);
   }
 
   async submitForm() {
@@ -66,9 +66,9 @@ export class DomainUpdateComponent implements OnInit {
     if (this.selectedId) {
       values.id = this.selectedId;
     }
-    const id = this.msg.loading("progress...").messageId;
+    const msgId = this.msg.loading("progress...", { nzDuration: 0 }).messageId;
     const res = await this.domainService.createOrUpdate(values);
-    this.msg.remove(id);
+    this.msg.remove(msgId);
     if (res["ok"]) {
       this.msg.success("Success!");
       this.location.back();

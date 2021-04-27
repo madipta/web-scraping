@@ -72,7 +72,7 @@ export class DomainListComponent {
   }
 
   async delete(id) {
-    const msgId = this.msg.loading("progress...").messageId;
+    const msgId = this.msg.loading("progress...", { nzDuration: 0 }).messageId;
     const result = await this.DomainService.delete({ id });
     this.msg.remove(msgId);
     if (result.ok) {

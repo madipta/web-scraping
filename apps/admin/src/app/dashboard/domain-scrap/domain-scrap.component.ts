@@ -40,7 +40,9 @@ export class DomainScrapComponent implements OnInit {
   }
 
   async loadDomain() {
+    const msgId = this.msg.loading("loading", { nzDuration: 0 }).messageId;
     const res = await this.domainService.get({ id: this.selectedId });
+    this.msg.remove(msgId);
     if (res.ok) {
       this.domain = res.result;
       this.form.patchValue(this.domain);
@@ -51,7 +53,7 @@ export class DomainScrapComponent implements OnInit {
   }
 
   async save() {
-    const msgId = this.msg.loading("loading").messageId;
+    const msgId = this.msg.loading("loading", { nzDuration: 0 }).messageId;
     const values = this.form.getRawValue();
     const dto = { ...values, id: this.selectedId };
     const res = await this.domainService.createOrUpdate(dto);
@@ -64,7 +66,7 @@ export class DomainScrapComponent implements OnInit {
   }
 
   async scrap() {
-    const msgId = this.msg.loading("loading").messageId;
+    const msgId = this.msg.loading("loading", { nzDuration: 0 }).messageId;
     const res = await this.domainService.scrapIndex(`${this.selectedId}`);
     this.msg.remove(msgId);
     if (res.ok) {
