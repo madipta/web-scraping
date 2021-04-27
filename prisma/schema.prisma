@@ -7,8 +7,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../node_modules/.prisma/client"
+  provider        = "prisma-client-js"
+  output          = "../node_modules/.prisma/client"
   previewFeatures = ["selectRelationCount"]
 }
 
@@ -32,15 +32,16 @@ model Domain {
 }
 
 model Link {
-  id        Int      @id @default(autoincrement())
-  domainId  Int      @map("domain_id")
-  url       String   @unique @db.VarChar(2048)
-  title     String?  @db.VarChar(250)
-  active    Boolean  @default(true)
-  broken    Boolean  @default(false)
-  createdAt DateTime @default(now()) @map("created_at")
-  updateAt     DateTime? @updatedAt @map("update_at")
-  domain    Domain   @relation(fields: [domainId], references: [id])
+  id        Int       @id @default(autoincrement())
+  domainId  Int       @map("domain_id")
+  url       String    @unique @db.VarChar(2048)
+  title     String?   @db.VarChar(250)
+  active    Boolean   @default(true)
+  broken    Boolean   @default(false)
+  scraped   Boolean   @default(false)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updateAt  DateTime? @updatedAt @map("update_at")
+  domain    Domain    @relation(fields: [domainId], references: [id])
   content   Content?
 }
 
