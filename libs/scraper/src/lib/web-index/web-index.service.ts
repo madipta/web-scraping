@@ -15,7 +15,18 @@ export class WebIndexService {
       await page.goto(indexPage);
       urls = await page.$$eval(indexPath, (els) =>
         els.map((el) => {
-          return { title: el.textContent.trim(), url: el.getAttribute("href") };
+          const url = el.getAttribute("href");
+          const start = url.lastIndexOf("/") + 1;
+          let end = url.lastIndexOf(".");
+          if (end < start) {
+            end = url.length;
+          }
+          const snug = url.substring(start, end);
+          let title = el.textContent.trim();
+          if (title.length < snug.length) {
+            title = snug.replace(/-/g, " ");
+          }
+          return { title, url };
         })
       );
     } catch (e) {
@@ -40,7 +51,12 @@ export class WebIndexService {
     return urls;
   }
 
-  async upsertData(domainId: number, urls: ScrapIndexLink[], home: string, indexPage: string) {
+  async upsertData(
+    domainId: number,
+    urls: ScrapIndexLink[],
+    home: string,
+    indexPage: string
+  ) {
     const unique = [...new Set(urls)];
     const filtered = unique.filter(
       (a) =>

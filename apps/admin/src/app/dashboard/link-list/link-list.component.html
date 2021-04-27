@@ -20,8 +20,8 @@
   <thead>
     <tr>
       <th nzColumnKey="title" [nzSortFn]="true">Title</th>
-      <th>Active</th>
-      <th>Broken</th>
+      <th style="text-align: center;">Active</th>
+      <th style="text-align: center;">Broken</th>
       <th></th>
     </tr>
   </thead>
@@ -30,8 +30,8 @@
       <td>
         <a [href]="data.url" target="_blank">{{ data.title }}</a>
       </td>
-      <td>{{ data.active }}</td>
-      <td>{{ data.broken }}</td>
+      <td style="text-align: center;">{{ data.active }}</td>
+      <td style="text-align: center;">{{ data.broken }}</td>
       <td style="text-align: center; white-space: nowrap">
         <a
           (click)="
