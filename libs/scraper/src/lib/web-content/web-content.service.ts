@@ -1,4 +1,4 @@
-import { chromium } from "playwright";
+import { Browser, chromium, Response } from "playwright";
 import { Injectable } from "@nestjs/common";
 import {
   ContentService,
@@ -13,16 +13,15 @@ export class WebContentService {
     private linkDb: LinkDataAccess
   ) {}
 
-  async scrapContent(link: LinkWithRef) {
+  async scrap(browser: Browser, link: LinkWithRef) {
     const contentPath = link.domain.contentPath;
-    const browser = await chromium.launch();
+    let pageResponse: Response;
     try {
       const page = await browser.newPage();
-      const pageResponse = await page.goto(link.url, {
+      pageResponse = await page.goto(link.url, {
         waitUntil: "domcontentloaded",
       });
       if (!pageResponse.ok) {
-        this.linkDb.update({ where: { id: link.id }, data: { broken: true } });
         throw new Error(pageResponse.statusText());
       }
       this.linkDb.update({ where: { id: link.id }, data: { broken: false } });
@@ -42,9 +41,18 @@ export class WebContentService {
       throw new Error("No content!");
     } catch (error) {
       console.error(error);
+      if (!pageResponse) {
+        this.linkDb.update({ where: { id: link.id }, data: { broken: true } });
+        return { ok: false, error: "Broken link or server not connected!" };
+      }
       return { ok: false, error };
-    } finally {
-      await browser.close();
     }
+  }
+
+  async scrapContent(link: LinkWithRef) {
+      const browser = await chromium.launch();
+      const res = await this.scrap(browser, link);
+      await browser.close();
+      return res;
   }
 }

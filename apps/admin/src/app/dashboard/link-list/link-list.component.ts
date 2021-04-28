@@ -111,11 +111,11 @@ export class LinkListComponent implements OnInit {
     const msgId = this.msg.loading("progress...", { nzDuration: 0 }).messageId;
     const result = await this.linkService.scrapContent(linkId);
     this.msg.remove(msgId);
-    if (!result.ok) {
+    if (result.ok) {
+      this.msg.success("Scraped success!");
+    } else {
       this.msg.error("Scraped failed!");
-      return;
     }
-    this.msg.success("Scraped success!");
     this.refreshData();
   }
 
