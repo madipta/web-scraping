@@ -1,27 +1,44 @@
 import { chromium } from "playwright";
 import { Injectable } from "@nestjs/common";
-import { ContentService, LinkWithRef } from "@web-scraping/data-access";
+import {
+  ContentService,
+  LinkDataAccess,
+  LinkWithRef,
+} from "@web-scraping/data-access";
 
 @Injectable()
 export class WebContentService {
-  constructor(private contentService: ContentService) {}
+  constructor(
+    private contentDb: ContentService,
+    private linkDb: LinkDataAccess
+  ) {}
 
-  async linkContent(link: LinkWithRef) {
+  async scrapContent(link: LinkWithRef) {
     const contentPath = link.domain.contentPath;
     const browser = await chromium.launch();
-    let content = "";
     try {
       const page = await browser.newPage();
-      await page.goto(link.url);
-      content = await page.$eval(contentPath, (tc) => (tc ? tc.textContent : ""));
+      const pageResponse = await page.goto(link.url);
+      if (!pageResponse.ok) {
+        this.linkDb.update({ where: { id: link.id }, data: { broken: true } });
+        return false;
+      }
+      this.linkDb.update({ where: { id: link.id }, data: { broken: false } });
+      const pageContent = await page.$eval(contentPath, (tc) =>
+        tc ? tc.textContent : ""
+      );
+      if (pageContent) {
+        await Promise.all([
+          this.contentDb.upsert(link.id, pageContent),
+          this.linkDb.update({ where: { id: link.id }, data: { scraped: true } })
+        ]);
+        return true;
+      }
     } catch (e) {
       console.error(e);
     } finally {
       await browser.close();
     }
-    if (content) {
-      this.contentService.upsert(link.id, content);
-    }
-    return link;
+    return false;
   }
 }
