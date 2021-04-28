@@ -12,7 +12,7 @@ export class WebIndexService {
     let urls: ScrapIndexLink[];
     try {
       const page = await browser.newPage();
-      await page.goto(indexPage);
+      await page.goto(indexPage, { waitUntil: "domcontentloaded" });
       urls = await page.$$eval(indexPath, (els) =>
         els.map((el) => {
           const url = el.getAttribute("href");

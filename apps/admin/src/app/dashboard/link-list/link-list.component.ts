@@ -107,8 +107,16 @@ export class LinkListComponent implements OnInit {
     console.log("scrap all content");
   }
 
-  async scrapOne(url: string) {
-    console.log(`scrap content ${url}`);
+  async scrapOne(linkId: number) {
+    const msgId = this.msg.loading("progress...", { nzDuration: 0 }).messageId;
+    const result = await this.linkService.scrapContent(linkId);
+    this.msg.remove(msgId);
+    if (!result.ok) {
+      this.msg.error("Scraped failed!");
+      return;
+    }
+    this.msg.success("Scraped success!");
+    this.refreshData();
   }
 
   async delete(id) {

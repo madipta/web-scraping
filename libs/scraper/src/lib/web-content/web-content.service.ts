@@ -18,10 +18,12 @@ export class WebContentService {
     const browser = await chromium.launch();
     try {
       const page = await browser.newPage();
-      const pageResponse = await page.goto(link.url);
+      const pageResponse = await page.goto(link.url, {
+        waitUntil: "domcontentloaded",
+      });
       if (!pageResponse.ok) {
         this.linkDb.update({ where: { id: link.id }, data: { broken: true } });
-        return false;
+        throw new Error(pageResponse.statusText());
       }
       this.linkDb.update({ where: { id: link.id }, data: { broken: false } });
       const pageContent = await page.$eval(contentPath, (tc) =>
@@ -29,16 +31,20 @@ export class WebContentService {
       );
       if (pageContent) {
         await Promise.all([
-          this.contentDb.upsert(link.id, pageContent),
-          this.linkDb.update({ where: { id: link.id }, data: { scraped: true } })
+          this.contentDb.upsert(link.id, pageContent.replace(/\s\s+/g, " ")),
+          this.linkDb.update({
+            where: { id: link.id },
+            data: { scraped: true },
+          }),
         ]);
-        return true;
+        return { ok: true, result: pageContent };
       }
-    } catch (e) {
-      console.error(e);
+      throw new Error("No content!");
+    } catch (error) {
+      console.error(error);
+      return { ok: false, error };
     } finally {
       await browser.close();
     }
-    return false;
   }
 }

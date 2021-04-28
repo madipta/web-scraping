@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { LinkListResult, IdNumber } from "@web-scraping/dto";
+import { LinkListResult, IdNumber, BaseResponse } from "@web-scraping/dto";
 
 @Injectable({
   providedIn: "root",
@@ -10,6 +10,7 @@ export class LinkService {
   private apiUrl = "http://localhost:3333/api/";
   private linkGetUrl = this.apiUrl + "link";
   private linkListUrl = this.apiUrl + "link/list";
+  private linkScrapUrl = this.apiUrl + "scraping/content";
 
   constructor(private http: HttpClient) {}
 
@@ -38,6 +39,12 @@ export class LinkService {
   async get(dto: IdNumber) {
     return this.http
       .get(this.linkGetUrl, { params: { id: `${dto.id}` } })
+      .toPromise();
+  }
+
+  async scrapContent(linkId: number) {
+    return await this.http
+      .post<BaseResponse>(this.linkScrapUrl, { linkId })
       .toPromise();
   }
 }
