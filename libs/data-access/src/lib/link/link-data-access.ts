@@ -87,7 +87,7 @@ export class LinkDataAccess {
         domainId: true,
         title: true,
         url: true,
-        active: true,
+        scraped: true,
         broken: true,
         domain: {
           select: { home: true },

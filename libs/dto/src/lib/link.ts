@@ -5,7 +5,7 @@ export type LinkBase = {
   domainId: number;
   url: string;
   title?: string | null;
-  active?: boolean;
+  scraped?: boolean;
   broken?: boolean;
 };
 
