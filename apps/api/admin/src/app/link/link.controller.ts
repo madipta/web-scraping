@@ -34,7 +34,7 @@ export class LinkController {
       ];
     }
     const total = await this.linkService.count({ where });
-    const result = await this.linkService.findMany({
+    const result = await this.linkService.pageList({
       pageIndex,
       pageSize,
       orderBy,

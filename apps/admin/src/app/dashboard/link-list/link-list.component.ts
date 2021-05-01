@@ -3,7 +3,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
-import { Domain, LinkListItem } from "@web-scraping/dto";
+import { Domain, LinkWithRef } from "@web-scraping/dto";
 import { DomainService } from "../shared/domain.service";
 import { LinkService } from "../shared/link.service";
 
@@ -15,7 +15,7 @@ import { LinkService } from "../shared/link.service";
 export class LinkListComponent implements OnInit {
   domain: Domain;
   total = 1;
-  linkList: LinkListItem[] = [];
+  linkList: LinkWithRef[] = [];
   loading = true;
   pageIndex = 1;
   pageSize = 20;
@@ -104,7 +104,16 @@ export class LinkListComponent implements OnInit {
   }
 
   async scrapAll() {
-    console.log("scrap all content");
+    const msgId = this.msg.loading("progress...", { nzDuration: 0 }).messageId;
+    const result = await this.linkService.scrapAllContent(this.domain.id);
+    this.msg.remove(msgId);
+    console.log(result)
+    // if (result.ok) {
+    //   this.msg.success("Scraped success!");
+    // } else {
+    //   this.msg.error("Scraped failed!");
+    // }
+    this.refreshData();
   }
 
   async scrapOne(linkId: number) {

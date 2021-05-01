@@ -5,17 +5,22 @@ import { Component, Input, OnInit } from "@angular/core";
   template: `<i
     nz-icon
     [nzType]="icon"
-    [ngClass]="{ checked: value, uncheked: !value }"
+    [ngStyle]="{ color: value ? trueColor : falseColor }"
   ></i>`,
-  styles: [".checked { color: green; }", ".uncheked { color: red; }"],
 })
 export class ChecklistComponent implements OnInit {
   @Input() value: boolean = null;
-  icon = "close";
+  @Input() trueColor = "green";
+  @Input() falseColor = "red";
+  @Input() trueIcon = "check";
+  @Input() falseIcon = "close";
+  icon = this.falseIcon;
 
   ngOnInit(): void {
     if (this.value === true) {
-      this.icon = "check";
+      this.icon = this.trueIcon;
+    } else {
+      this.icon = this.falseIcon;
     }
   }
 }

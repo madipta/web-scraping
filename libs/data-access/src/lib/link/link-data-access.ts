@@ -1,9 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { Content, Domain, Link, Prisma } from "@prisma/client";
-import { LinkCreateInput, LinkListItem } from "@web-scraping/dto";
+import { Prisma } from "@prisma/client";
+import { Link, LinkCreateInput, LinkWithRef } from "@web-scraping/dto";
 import { PrismaService } from "../prisma/prisma.service";
-
-export type LinkWithRef = Link & { domain?: Domain; content?: Content };
 
 @Injectable()
 export class LinkDataAccess {
@@ -48,7 +46,9 @@ export class LinkDataAccess {
     return this.prisma.link.delete({ where });
   }
 
-  async findOne(byId: Prisma.LinkWhereUniqueInput): Promise<Link | null> {
+  async findOne(
+    byId: Prisma.LinkWhereUniqueInput
+  ): Promise<LinkWithRef | null> {
     return this.prisma.link.findUnique({
       where: byId,
       include: {
@@ -69,12 +69,12 @@ export class LinkDataAccess {
     return this.prisma.link.count(params);
   }
 
-  async findMany(params: {
+  async pageList(params: {
     pageIndex: number;
-    pageSize: number,
+    pageSize: number;
     where?: Prisma.LinkWhereInput;
     orderBy?: Prisma.LinkOrderByInput;
-  }): Promise<LinkListItem[]> {
+  }): Promise<LinkWithRef[]> {
     const { pageIndex, pageSize, where, orderBy } = params;
     const skip = pageIndex * pageSize - pageSize;
     return this.prisma.link.findMany({
@@ -92,6 +92,24 @@ export class LinkDataAccess {
         domain: {
           select: { home: true },
         },
+      },
+    });
+  }
+
+  async unscrapedDomainLinks(params: {
+    domainId: number;
+  }): Promise<LinkWithRef[]> {
+    const { domainId } = params;
+    return this.prisma.link.findMany({
+      where: {
+        AND: { domainId, scraped: false },
+      },
+      select: {
+        id: true,
+        title: true,
+        url: true,
+        broken: true,
+        domain: true,
       },
     });
   }

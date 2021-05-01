@@ -15,12 +15,13 @@ export type LinkCreateInput = LinkBase;
 
 export type LinkUpdateInput = IdNumber & Partial<LinkBase>;
 
-export type LinkListItem = IdNumber &
-  LinkBase & {
-    domain: Partial<Domain>;
-  };
+export type LinkWithId = IdNumber & Partial<LinkBase>;
+
+export type LinkWithRef = LinkWithId & {
+  domain: Partial<Domain>;
+};
 
 export class LinkListResult {
-  result: LinkListItem[];
+  result: LinkWithRef[];
   total: number;
 }

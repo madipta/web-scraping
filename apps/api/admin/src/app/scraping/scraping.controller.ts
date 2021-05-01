@@ -1,9 +1,5 @@
 import { Body, Controller, Post } from "@nestjs/common";
-import {
-  DomainDataAccess,
-  LinkDataAccess,
-  LinkWithRef,
-} from "@web-scraping/data-access";
+import { DomainDataAccess, LinkDataAccess } from "@web-scraping/data-access";
 import { WebContentService, WebIndexService } from "@web-scraping/scraper";
 
 @Controller("scraping")
@@ -29,17 +25,14 @@ export class ScrapingController {
 
   @Post("content")
   async pageContent(@Body() dto: { linkId: number }) {
-    const link = (await this.linkDb.findOne({
+    const link = await this.linkDb.findOne({
       id: +dto.linkId,
-    })) as LinkWithRef;
+    });
     return await this.contentService.scrapContent(link);
   }
 
   @Post("all-content")
-  async allContent(@Body() dto: { linkId: number }) {
-    const link = (await this.linkDb.findOne({
-      id: +dto.linkId,
-    })) as LinkWithRef;
-    return await this.contentService.scrapContent(link);
+  async allContent(@Body() dto: { domainId: number }) {
+    return await this.contentService.scrapAllContent(+dto.domainId);
   }
 }
