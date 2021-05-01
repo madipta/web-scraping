@@ -1,12 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import {
-  BaseResponse,
-  Content,
-  ContentLinkId,
-  ContentListResult,
-} from "@web-scraping/dto";
+import { Content, ContentLinkId, ContentListResult } from "@web-scraping/dto";
 
 @Injectable({
   providedIn: "root",
