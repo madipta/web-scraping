@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { DomainListItem } from "@web-scraping/dto";
-import { DomainService } from "../shared/domain.service";
+import { DomainService } from "../shared/services/domain.service";
 
 @Component({
   selector: "web-scraping-domain-list",

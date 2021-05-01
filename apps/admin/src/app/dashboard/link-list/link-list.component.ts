@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { Domain, LinkWithRef } from "@web-scraping/dto";
-import { DomainService } from "../shared/domain.service";
-import { LinkService } from "../shared/link.service";
+import { DomainService } from "../shared/services/domain.service";
+import { LinkService } from "../shared/services/link.service";
 
 @Component({
   selector: "web-scraping-link-list",

@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Content, Prisma } from "@prisma/client";
-import { PrismaService } from "../prisma/prisma.service";
 import sanitizeHtml from 'sanitize-html';
+import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()
 export class ContentService {
@@ -40,18 +40,22 @@ export class ContentService {
     });
   }
 
-  async findMany(params: {
-    skip?: number;
-    take?: number;
+  async count(params: { where?: Prisma.ContentWhereInput }): Promise<number> {
+    return this.prisma.content.count(params);
+  }
+
+  async pageList(params: {
+    pageIndex: number;
+    pageSize: number,
     cursor?: Prisma.ContentWhereUniqueInput;
     where?: Prisma.ContentWhereInput;
     orderBy?: Prisma.ContentOrderByInput;
   }): Promise<Content[]> {
-    const { skip, take, cursor, where, orderBy } = params;
+    const { pageIndex, pageSize, where, orderBy } = params;
+    const skip = pageIndex * pageSize - pageSize;
     return this.prisma.content.findMany({
       skip,
-      take,
-      cursor,
+      take: +pageSize,
       where,
       orderBy,
     });

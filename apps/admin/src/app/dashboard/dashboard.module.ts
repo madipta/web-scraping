@@ -18,6 +18,11 @@ const routes: Routes = [
             .ContentListModule,
       },
       {
+        path: "content",
+        loadChildren: async () =>
+          (await import("./content/content.module")).ContentModule,
+      },
+      {
         path: "domain-list",
         loadChildren: async () =>
           (await import("./domain-list/domain-list.module")).DomainListModule,
@@ -38,16 +43,6 @@ const routes: Routes = [
         path: "link-list",
         loadChildren: async () =>
           (await import("./link-list/link-list.module")).LinkListModule,
-      },
-      {
-        path: "link-update",
-        loadChildren: async () =>
-          (await import("./link-update/link-update.module")).LinkUpdateModule,
-      },
-      {
-        path: "link-scrap",
-        loadChildren: async () =>
-          (await import("./link-scrap/link-scrap.module")).LinkScrapModule,
       },
       {
         path: "jobs-list",

@@ -3,7 +3,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
-import { DomainService } from "../shared/domain.service";
+import { DomainService } from "../shared/services/domain.service";
 
 @Component({
   selector: "web-scraping-domain-scrap",

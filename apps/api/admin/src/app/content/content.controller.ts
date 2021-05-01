@@ -1,29 +1,43 @@
 import { Controller, Get, Query } from "@nestjs/common";
 import { ContentService } from "@web-scraping/data-access";
-import { ContentListQuery } from "@web-scraping/dto";
+import { ContentListResult, PageListQuery } from "@web-scraping/dto";
 
 @Controller("content")
 export class ContentController {
   constructor(private readonly contentService: ContentService) {}
 
+  private refineSortOrderQueryParam(sortBy: string, sortOrder: string) {
+    sortBy = sortBy ?? "home";
+    if (sortOrder && sortOrder.toLowerCase().startsWith("desc")) {
+      sortOrder = "desc";
+    } else {
+      sortOrder = "asc";
+    }
+    const sort = {};
+    sort[sortBy] = sortOrder;
+    return sort;
+  }
+
   @Get("list")
-  list(@Query() dto: ContentListQuery) {
-    const take = 20;
-    const { skip, search } = dto;
-    const orderBy = {};
-    orderBy[dto.sortBy] = dto.sortOrder;
-    return this.contentService.findMany({
-      skip,
-      take,
+  async list(@Query() dto: PageListQuery): Promise<ContentListResult> {
+    const { pageIndex, pageSize, search, sortBy, sortOrder } = dto;
+    const orderBy = this.refineSortOrderQueryParam(sortBy, sortOrder);
+    const where = {};
+    if (search) {
+      where["content"] = { contains: search };
+    }
+    const total = await this.contentService.count({ where });
+    const result = await this.contentService.pageList({
+      pageIndex,
+      pageSize,
       orderBy,
-      where: {
-        content: { contains: search },
-      },
+      where,
     });
+    return { result, total };
   }
 
   @Get()
-  getOne(@Query("id") linkId: number) {
+  getOne(@Query("linkId") linkId: number) {
     return this.contentService.findOne({
       linkId: +linkId,
     });

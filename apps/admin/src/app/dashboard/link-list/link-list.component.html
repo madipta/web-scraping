@@ -37,7 +37,17 @@
         <a [href]="data.url" target="_blank">{{ data.title }}</a>
       </td>
       <td style="text-align: center">
-        <web-scraping-checklist [value]="data.scraped"></web-scraping-checklist>
+        <a
+          (click)="
+            router.navigate(['dashboard', 'content'], {
+              queryParams: { linkId: data.id }
+            })
+          "
+        >
+          <web-scraping-checklist
+            [value]="data.scraped"
+          ></web-scraping-checklist>
+        </a>
       </td>
       <td style="text-align: center">
         <web-scraping-checklist
