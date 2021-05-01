@@ -1,7 +1,11 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { Content, ContentLinkId, ContentListResult } from "@web-scraping/dto";
+import {
+  ContentLinkId,
+  ContentListResult,
+  ContentWithRef,
+} from "@web-scraping/dto";
 
 @Injectable({
   providedIn: "root",
@@ -37,7 +41,7 @@ export class ContentService {
 
   async get(dto: ContentLinkId) {
     return this.http
-      .get<Content>(this.contentGetUrl, {
+      .get<ContentWithRef>(this.contentGetUrl, {
         params: { linkId: `${dto.linkId}` },
       })
       .toPromise();

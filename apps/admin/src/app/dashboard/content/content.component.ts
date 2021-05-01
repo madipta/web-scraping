@@ -11,6 +11,8 @@ import { ContentService } from "../shared/services/content.service";
 })
 export class ContentComponent implements OnInit {
   content: string;
+  home: string;
+  url: string;
   constructor(
     private route: ActivatedRoute,
     private location: Location,
@@ -33,6 +35,8 @@ export class ContentComponent implements OnInit {
     const res = await this.contentService.get({ linkId });
     this.msg.remove(msgId);
     if (res) {
+      this.home = res.link.domain.home;
+      this.url = res.link.url;
       this.content = res.content.replace(/\.\s/g, '.\n\n');
     } else {
       this.msg.error("Content failed to open!");

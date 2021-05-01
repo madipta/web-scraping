@@ -1,10 +1,11 @@
 import { Injectable } from "@nestjs/common";
-import { Content, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
+import { Content, ContentWithRef } from "@web-scraping/dto";
 import sanitizeHtml from 'sanitize-html';
 import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()
-export class ContentService {
+export class ContentDataAccess {
   constructor(private prisma: PrismaService) {}
 
   sanitize(content: string) {
@@ -34,9 +35,23 @@ export class ContentService {
     });
   }
 
-  async findOne(byId: Prisma.ContentWhereUniqueInput): Promise<Content | null> {
+  async get(byId: Prisma.ContentWhereUniqueInput): Promise<ContentWithRef | null> {
     return this.prisma.content.findUnique({
       where: byId,
+      select: {
+        linkId: true,
+        content: true,
+        link: {
+          select: {
+            url: true,
+            domain: {
+              select: {
+                home: true
+              }
+            }
+          }
+        }
+      }
     });
   }
 

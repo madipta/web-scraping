@@ -1,10 +1,10 @@
 import { Controller, Get, Query } from "@nestjs/common";
-import { ContentService } from "@web-scraping/data-access";
+import { ContentDataAccess } from "@web-scraping/data-access";
 import { ContentListResult, PageListQuery } from "@web-scraping/dto";
 
 @Controller("content")
 export class ContentController {
-  constructor(private readonly contentService: ContentService) {}
+  constructor(private readonly contentService: ContentDataAccess) {}
 
   private refineSortOrderQueryParam(sortBy: string, sortOrder: string) {
     sortBy = sortBy ?? "home";
@@ -38,7 +38,7 @@ export class ContentController {
 
   @Get()
   getOne(@Query("linkId") linkId: number) {
-    return this.contentService.findOne({
+    return this.contentService.get({
       linkId: +linkId,
     });
   }

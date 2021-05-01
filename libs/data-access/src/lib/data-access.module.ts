@@ -2,10 +2,15 @@ import { Module } from "@nestjs/common";
 import { PrismaService } from "./prisma/prisma.service";
 import { DomainDataAccess } from "./domain/domain-data-access";
 import { LinkDataAccess } from "./link/link-data-access";
-import { ContentService } from "./content/content.service";
+import { ContentDataAccess } from "./content/content-data-access";
 
 @Module({
-  providers: [PrismaService, DomainDataAccess, LinkDataAccess, ContentService],
-  exports: [DomainDataAccess, LinkDataAccess, ContentService],
+  providers: [
+    PrismaService,
+    DomainDataAccess,
+    LinkDataAccess,
+    ContentDataAccess,
+  ],
+  exports: [DomainDataAccess, LinkDataAccess, ContentDataAccess],
 })
 export class DataAccessModule {}

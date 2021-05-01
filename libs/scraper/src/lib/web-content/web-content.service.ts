@@ -1,12 +1,12 @@
 import { Browser, chromium, Response } from "playwright";
 import { Injectable } from "@nestjs/common";
-import { ContentService, LinkDataAccess } from "@web-scraping/data-access";
+import { ContentDataAccess, LinkDataAccess } from "@web-scraping/data-access";
 import { LinkWithRef } from "@web-scraping/dto";
 
 @Injectable()
 export class WebContentService {
   constructor(
-    private contentDb: ContentService,
+    private contentDb: ContentDataAccess,
     private linkDb: LinkDataAccess
   ) {}
 
