@@ -1,1 +1,39 @@
-<p>content-list works!</p>
+<nz-page-header nzTitle="Content List" style="margin-bottom: 40px">
+</nz-page-header>
+
+<nz-table
+  nzShowSizeChanger
+  nzSize="middle"
+  [nzData]="contentList"
+  [nzFrontPagination]="false"
+  [nzLoading]="loading"
+  [nzTotal]="total"
+  [nzPageSize]="pageSize"
+  [nzPageIndex]="pageIndex"
+  [nzShowSizeChanger]="false"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th>Link Id</th>
+      <th nzColumnKey="link.title" [nzSortFn]="true">Title</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of contentList">
+      <td>
+        <a [href]="data.link.url" target="_blank">{{ data.linkId }}</a>
+      </td>
+      <td>
+        <a
+          (click)="
+            router.navigate(['dashboard', 'content'], {
+              queryParams: { linkId: data.linkId }
+            })
+          "
+          >{{ data.link.title }}</a
+        >
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

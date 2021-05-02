@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
 import { Content, ContentWithRef } from "@web-scraping/dto";
-import sanitizeHtml from 'sanitize-html';
+import sanitizeHtml from "sanitize-html";
 import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()
@@ -9,10 +9,9 @@ export class ContentDataAccess {
   constructor(private prisma: PrismaService) {}
 
   sanitize(content: string) {
-    return sanitizeHtml(content, { allowedTags: [] }).replace(
-      /[\f\n\r\t\v ]{2,}/g,
-      " "
-    ).trim();
+    return sanitizeHtml(content, { allowedTags: [] })
+      .replace(/[\f\n\r\t\v ]{2,}/g, " ")
+      .trim();
   }
 
   async upsert(linkId: number, content: string): Promise<Content> {
@@ -35,7 +34,9 @@ export class ContentDataAccess {
     });
   }
 
-  async get(byId: Prisma.ContentWhereUniqueInput): Promise<ContentWithRef | null> {
+  async get(
+    byId: Prisma.ContentWhereUniqueInput
+  ): Promise<ContentWithRef | null> {
     return this.prisma.content.findUnique({
       where: byId,
       select: {
@@ -46,12 +47,12 @@ export class ContentDataAccess {
             url: true,
             domain: {
               select: {
-                home: true
-              }
-            }
-          }
-        }
-      }
+                home: true,
+              },
+            },
+          },
+        },
+      },
     });
   }
 
@@ -61,11 +62,11 @@ export class ContentDataAccess {
 
   async pageList(params: {
     pageIndex: number;
-    pageSize: number,
+    pageSize: number;
     cursor?: Prisma.ContentWhereUniqueInput;
     where?: Prisma.ContentWhereInput;
     orderBy?: Prisma.ContentOrderByInput;
-  }): Promise<Content[]> {
+  }): Promise<ContentWithRef[]> {
     const { pageIndex, pageSize, where, orderBy } = params;
     const skip = pageIndex * pageSize - pageSize;
     return this.prisma.content.findMany({
@@ -73,6 +74,15 @@ export class ContentDataAccess {
       take: +pageSize,
       where,
       orderBy,
+      select: {
+        linkId: true,
+        link: {
+          select: {
+            url: true,
+            title: true
+          },
+        },
+      },
     });
   }
 

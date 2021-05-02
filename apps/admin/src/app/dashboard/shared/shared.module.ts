@@ -16,6 +16,7 @@ import { NzToolTipModule } from "ng-zorro-antd/tooltip";
 import { DomainNamePipe } from "./pipes/domain-name.pipe";
 import { ChecklistComponent } from "./components/checklist/checklist.component";
 import { CommonModule } from "@angular/common";
+import { UrlPathPipe } from "./pipes/url-path.pipe";
 
 const modules = [
   CommonModule,
@@ -36,7 +37,7 @@ const modules = [
   NzToolTipModule,
 ];
 
-const declarations = [DomainNamePipe, ChecklistComponent];
+const declarations = [DomainNamePipe, ChecklistComponent, UrlPathPipe];
 
 @NgModule({
   declarations: [...declarations],

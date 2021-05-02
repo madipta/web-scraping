@@ -14,10 +14,10 @@ export type ContentCreateInput = ContentBase;
 export type ContentUpdateInput = ContentLinkId & Partial<ContentBase>;
 
 export type ContentWithRef = Partial<Content> & {
-  link: Partial<LinkWithRef>
+  link?: Partial<LinkWithRef>
 };
 
 export type ContentListResult = {
-  result: Content[];
+  result: ContentWithRef[];
   total: number;
 };
