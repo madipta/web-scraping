@@ -12,6 +12,7 @@ export class DomainNamePipe implements PipeTransform {
       return value;
     }
     const name = value.split("://")[1];
-    return name.substr(0, name.length - 1);
+    const lastIndex = name.indexOf('/');
+    return name.substr(0, lastIndex || name.length - 1);
   }
 }
