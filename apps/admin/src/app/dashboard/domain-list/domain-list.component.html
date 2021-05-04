@@ -11,6 +11,22 @@
   </nz-page-header-extra>
 </nz-page-header>
 
+<div style="display: flex; margin-bottom: 10px">
+  <div style="flex: 1 1 0%"></div>
+  <div style="display: flex;">
+    <nz-input-group nzPrefixIcon="filter">
+      <input nz-input placeholder="filter by domain name" #txtSearch />
+    </nz-input-group>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="search = txtSearch.value; refreshData()"
+    >
+      <i nz-icon nzType="search" nzTheme="outline"></i>Filter
+    </button>
+  </div>
+</div>
+
 <nz-table
   nzShowSizeChanger
   nzSize="middle"

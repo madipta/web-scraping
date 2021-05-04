@@ -18,7 +18,7 @@ export class DomainListComponent {
   pageSize = 20;
   sortField = "home";
   sortOrder = "asc";
-  search: string;
+  search = "";
 
   constructor(
     public router: Router,
