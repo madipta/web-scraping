@@ -1,10 +1,13 @@
-import { Controller, Get, Query } from "@nestjs/common";
-import { LinkDataAccess } from "@web-scraping/data-access";
-import { LinkListResult, PageListQuery } from "@web-scraping/dto";
+import { Controller, Get, Post, Query } from "@nestjs/common";
+import { ContentDataAccess, LinkDataAccess } from "@web-scraping/data-access";
+import { IdNumber, LinkListResult, PageListQuery } from "@web-scraping/dto";
 
 @Controller("link")
 export class LinkController {
-  constructor(private readonly linkService: LinkDataAccess) {}
+  constructor(
+    private readonly linkDb: LinkDataAccess,
+    private readonly contentDb: ContentDataAccess
+  ) {}
 
   private refineSortOrderQueryParam(sortBy: string, sortOrder: string) {
     sortBy = sortBy ?? "title";
@@ -33,8 +36,8 @@ export class LinkController {
         { title: { contains: search } },
       ];
     }
-    const total = await this.linkService.count({ where });
-    const result = await this.linkService.pageList({
+    const total = await this.linkDb.count({ where });
+    const result = await this.linkDb.pageList({
       pageIndex,
       pageSize,
       orderBy,
@@ -45,8 +48,21 @@ export class LinkController {
 
   @Get()
   getOne(@Query("id") id: number) {
-    return this.linkService.findOne({
+    return this.linkDb.findOne({
       id: +id,
     });
+  }
+
+  @Post("delete")
+  async delete(dto: IdNumber) {
+    try {
+      await this.contentDb.remove({ linkId: +dto.id});
+      const result = await this.linkDb.remove(dto);
+      if (result) {
+        return { ok: true, result };
+      }
+    } catch (error) {
+      return { ok: false, error };
+    }
   }
 }

@@ -10,6 +10,7 @@ export class LinkService {
   private apiUrl = "http://localhost:3333/api/";
   private linkGetUrl = this.apiUrl + "link";
   private linkListUrl = this.apiUrl + "link/list";
+  private linkDeleteUrl = this.apiUrl + "link/delete";
   private linkScrapUrl = this.apiUrl + "scraping/content";
   private linkScrapAllUrl = this.apiUrl + "scraping/all-content";
 
@@ -30,10 +31,8 @@ export class LinkService {
       .append("pageIndex", `${pageIndex}`)
       .append("pageSize", `${pageSize}`)
       .append("sortBy", `${sortField}`)
-      .append("sortOrder", `${sortOrder}`);
-    if (search) {
-      params.append("search", search);
-    }
+      .append("sortOrder", `${sortOrder}`)
+      .append("search", search);
     return this.http.get<LinkListResult>(`${this.linkListUrl}`, { params });
   }
 
@@ -46,6 +45,12 @@ export class LinkService {
   async scrapContent(linkId: number) {
     return await this.http
       .post<BaseResponse>(this.linkScrapUrl, { linkId })
+      .toPromise();
+  }
+
+  async delete(id: number) {
+    return await this.http
+      .post(this.linkDeleteUrl, { id: `${id}` })
       .toPromise();
   }
 

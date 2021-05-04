@@ -3,6 +3,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
+import { filter } from "rxjs/operators";
 import { Domain, LinkWithRef } from "@web-scraping/dto";
 import { DomainService } from "../shared/services/domain.service";
 import { LinkService } from "../shared/services/link.service";
@@ -21,7 +22,7 @@ export class LinkListComponent implements OnInit {
   pageSize = 20;
   sortField = "title";
   sortOrder = "asc";
-  search: string;
+  search = "";
 
   constructor(
     private route: ActivatedRoute,
@@ -33,16 +34,18 @@ export class LinkListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(async (params) => {
-      if (!params?.id) {
-        this.location.back();
-        return;
-      }
-      this.domain = await this.getDomain(+params.id);
-      if (this.domain) {
-        this.refreshData();
-      }
-    });
+    this.route.queryParams
+      .pipe(filter((params) => params.id))
+      .subscribe(async (params) => {
+        if (!params?.id) {
+          this.location.back();
+          return;
+        }
+        this.domain = await this.getDomain(+params.id);
+        if (this.domain) {
+          // this.refreshData();
+        }
+      });
   }
 
   async getDomain(id: number) {
@@ -107,7 +110,7 @@ export class LinkListComponent implements OnInit {
     const msgId = this.msg.loading("progress...", { nzDuration: 0 }).messageId;
     const result = await this.linkService.scrapAllContent(this.domain.id);
     this.msg.remove(msgId);
-    console.log(result)
+    console.log(result);
     // if (result.ok) {
     //   this.msg.success("Scraped success!");
     // } else {
@@ -129,12 +132,6 @@ export class LinkListComponent implements OnInit {
   }
 
   async delete(id) {
-    // const msgId = this.msg.loading("progress...").messageId;
-    // const result = await this.linkService.delete({ id });
-    // this.msg.remove(msgId);
-    // if (result.ok) {
-    //   this.msg.success("Deleted!");
-    //   this.refreshData();
-    // }
+    this.linkService.delete(id);
   }
 }
