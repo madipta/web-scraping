@@ -1,6 +1,22 @@
 <nz-page-header nzTitle="Content List" style="margin-bottom: 40px">
 </nz-page-header>
 
+<div style="display: flex; margin-bottom: 10px">
+  <div style="flex: 1 1 0%"></div>
+  <div style="display: flex">
+    <nz-input-group nzPrefixIcon="filter">
+      <input nz-input placeholder="filter by title" #txtSearch />
+    </nz-input-group>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="search = txtSearch.value; refreshData()"
+    >
+      <i nz-icon nzType="search" nzTheme="outline"></i>Filter
+    </button>
+  </div>
+</div>
+
 <nz-table
   nzShowSizeChanger
   nzSize="middle"
@@ -15,7 +31,8 @@
 >
   <thead>
     <tr>
-      <th>Link Id</th>
+      <th>Id</th>
+      <th>Domain</th>
       <th nzColumnKey="link.title" [nzSortFn]="true">Title</th>
     </tr>
   </thead>
@@ -23,6 +40,9 @@
     <tr *ngFor="let data of contentList">
       <td>
         <a [href]="data.link.url" target="_blank">{{ data.linkId }}</a>
+      </td>
+      <td>
+        {{ data.link.url | domainName }}
       </td>
       <td>
         <a

@@ -30,10 +30,8 @@ export class ContentService {
       .append("pageIndex", `${pageIndex}`)
       .append("pageSize", `${pageSize}`)
       .append("sortBy", `${sortField}`)
-      .append("sortOrder", `${sortOrder}`);
-    if (search) {
-      params.append("search", search);
-    }
+      .append("sortOrder", `${sortOrder}`)
+      .append("search", search);
     return this.http.get<ContentListResult>(`${this.contentListUrl}`, {
       params,
     });

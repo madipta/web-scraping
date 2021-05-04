@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { ContentWithRef } from "@web-scraping/dto";
 import { ContentService } from "../shared/services/content.service";
@@ -18,11 +17,10 @@ export class ContentListComponent {
   pageSize = 20;
   sortField = "content";
   sortOrder = "asc";
-  search: string;
+  search = "";
 
   constructor(
     public router: Router,
-    private msg: NzMessageService,
     private contentService: ContentService
   ) {}
 
