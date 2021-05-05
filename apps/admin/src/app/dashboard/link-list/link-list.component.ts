@@ -108,14 +108,8 @@ export class LinkListComponent implements OnInit {
 
   async scrapAll() {
     const msgId = this.msg.loading("progress...", { nzDuration: 0 }).messageId;
-    const result = await this.linkService.scrapAllContent(this.domain.id);
+    await this.linkService.scrapAllContent(this.domain.id);
     this.msg.remove(msgId);
-    console.log(result);
-    // if (result.ok) {
-    //   this.msg.success("Scraped success!");
-    // } else {
-    //   this.msg.error("Scraped failed!");
-    // }
     this.refreshData();
   }
 
@@ -133,5 +127,15 @@ export class LinkListComponent implements OnInit {
 
   async delete(id) {
     this.linkService.delete(id);
+  }
+
+  gotoContent(data: LinkWithRef) {
+    if (!data.scraped) {
+      this.msg.error("Not scraped yet!");
+      return;
+    }
+    this.router.navigate(["dashboard", "content"], {
+      queryParams: { linkId: data.id },
+    });
   }
 }

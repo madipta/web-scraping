@@ -13,7 +13,7 @@
 
 <div style="display: flex; margin-bottom: 10px">
   <div style="flex: 1 1 0%"></div>
-  <div style="display: flex;">
+  <div style="display: flex">
     <nz-input-group nzPrefixIcon="filter">
       <input nz-input placeholder="filter by title" #txtSearch />
     </nz-input-group>
@@ -53,13 +53,7 @@
         <a [href]="data.url" target="_blank">{{ data.title }}</a>
       </td>
       <td style="text-align: center">
-        <a
-          (click)="
-            router.navigate(['dashboard', 'content'], {
-              queryParams: { linkId: data.id }
-            })
-          "
-        >
+        <a (click)="gotoContent(data)">
           <web-scraping-checklist
             [value]="data.scraped"
           ></web-scraping-checklist>

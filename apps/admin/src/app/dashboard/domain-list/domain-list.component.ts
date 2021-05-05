@@ -80,4 +80,14 @@ export class DomainListComponent {
       this.refreshData();
     }
   }
+
+  gotoLinks(data: DomainListItem) {
+    if (!data._count.links) {
+      this.msg.error("Links not scraped yet!");
+      return;
+    }
+    this.router.navigate(["dashboard", "link-list"], {
+      queryParams: { id: data.id },
+    });
+  }
 }

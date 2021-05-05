@@ -13,7 +13,7 @@
 
 <div style="display: flex; margin-bottom: 10px">
   <div style="flex: 1 1 0%"></div>
-  <div style="display: flex;">
+  <div style="display: flex">
     <nz-input-group nzPrefixIcon="filter">
       <input nz-input placeholder="filter by domain name" #txtSearch />
     </nz-input-group>
@@ -61,14 +61,7 @@
       </td>
       <td>{{ data.adminEmail }}</td>
       <td style="text-align: center">
-        <a
-          (click)="
-            router.navigate(['dashboard', 'link-list'], {
-              queryParams: { id: data.id }
-            })
-          "
-          >{{ data._count?.links }}</a
-        >
+        <a (click)="gotoLinks(data)">{{ data._count?.links }}</a>
       </td>
       <td style="text-align: center">{{ data.active }}</td>
       <td style="text-align: center; white-space: nowrap">
