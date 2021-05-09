@@ -24,7 +24,7 @@ export class ContentController {
     const orderBy = this.refineSortOrderQueryParam(sortBy, sortOrder);
     const where = { NOT: { content: undefined } };
     if (search) {
-      where["content"] = { contains: search };
+      where["content"] = { contains: search, mode: "insensitive" };
     }
     const total = await this.contentDb.count({ where });
     const result = await this.contentDb.pageList({

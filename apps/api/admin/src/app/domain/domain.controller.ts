@@ -92,7 +92,7 @@ export class DomainController {
     const orderBy = this.refineSortOrderQueryParam(sortBy, sortOrder);
     const where = {};
     if (search) {
-      where["home"] = { contains: search };
+      where["home"] = { contains: search, mode: "insensitive" };
     }
     const total = await this.domainService.count({ where });
     const result = await this.domainService.pageList({

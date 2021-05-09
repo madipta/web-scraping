@@ -32,8 +32,8 @@ export class LinkController {
     };
     if (search) {
       where["OR"] = [
-        { url: { contains: search } },
-        { title: { contains: search } },
+        { url: { contains: search, mode: "insensitive" } },
+        { title: { contains: search, mode: "insensitive" } },
       ];
     }
     const total = await this.linkDb.count({ where });
@@ -56,7 +56,7 @@ export class LinkController {
   @Post("delete")
   async delete(dto: IdNumber) {
     try {
-      await this.contentDb.remove({ linkId: +dto.id});
+      await this.contentDb.remove({ linkId: +dto.id });
       const result = await this.linkDb.remove(dto);
       if (result) {
         return { ok: true, result };

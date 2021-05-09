@@ -28,7 +28,7 @@ export class DomainListComponent {
 
   refreshData() {
     this.loadData(
-      this.pageIndex,
+      1,
       this.pageSize,
       this.sortField,
       this.sortOrder,
