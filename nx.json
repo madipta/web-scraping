@@ -48,6 +48,9 @@
       "implicitDependencies": [
         "admin"
       ]
+    },
+    "orm": {
+      "tags": []
     }
   }
 }

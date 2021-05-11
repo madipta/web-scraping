@@ -26,6 +26,9 @@
       ],
       "@web-scraping/scraper": [
         "libs/scraper/src/index.ts"
+      ],
+      "@web-scraping/orm": [
+        "libs/orm/src/index.ts"
       ]
     }
   },

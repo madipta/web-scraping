@@ -1,21 +1,28 @@
 import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { Content, Domain, Link, OrmModule } from "@web-scraping/orm";
 import { DataAccessModule } from "@web-scraping/data-access";
-import { WebScraperModule } from "@web-scraping/scraper";
+// import { WebScraperModule } from "@web-scraping/scraper";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { DomainController } from "./domain/domain.controller";
-import { LinkController } from "./link/link.controller";
-import { ContentController } from "./content/content.controller";
-import { ScrapingController } from "./scraping/scraping.controller";
+// import { LinkController } from "./link/link.controller";
+// import { ContentController } from "./content/content.controller";
+// import { ScrapingController } from "./scraping/scraping.controller";
 
 @Module({
-  imports: [DataAccessModule, WebScraperModule],
+  imports: [
+    OrmModule,
+    TypeOrmModule.forFeature([Domain, Link, Content]),
+    DataAccessModule,
+    // WebScraperModule,
+  ],
   controllers: [
     AppController,
     DomainController,
-    LinkController,
-    ContentController,
-    ScrapingController,
+    // LinkController,
+    // ContentController,
+    // ScrapingController,
   ],
   providers: [AppService],
 })

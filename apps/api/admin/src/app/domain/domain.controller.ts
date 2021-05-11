@@ -1,40 +1,30 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
-import { Domain } from "@prisma/client";
-import { DomainDataAccess } from "@web-scraping/data-access";
-import {
+import { InjectRepository } from "@nestjs/typeorm";
+import { ILike, Repository } from "typeorm";
+import type {
   DomainCreateInput,
   DomainUpdateInput,
   IdNumber,
   PageListQuery,
+  PageListResponse,
   PromiseResponse,
-  DomainListResult,
 } from "@web-scraping/dto";
+import { Domain } from "@web-scraping/orm";
 
 @Controller("domain")
 export class DomainController {
-  constructor(private readonly domainService: DomainDataAccess) {}
-
-  @Get()
-  async get(@Query() dto: IdNumber): PromiseResponse<Domain> {
-    try {
-      const id = +dto.id;
-      const result = await this.domainService.get({ id });
-      return { ok: true, result };
-    } catch (error) {
-      return { ok: false, error };
-    }
-  }
+  constructor(
+    @InjectRepository(Domain)
+    private readonly domainRepo: Repository<Domain>
+  ) {}
 
   @Post("create")
   async create(@Body() dto: DomainCreateInput): PromiseResponse<Domain> {
     try {
       let { home } = dto;
       home = home.toLowerCase();
-      if (home.substr(home.length - 1) !== "/") {
-        home = home + "/";
-      }
       const data = { ...dto, home };
-      const result = await this.domainService.create(data);
+      const result = await this.domainRepo.save(data);
       return { ok: true, result };
     } catch (error) {
       return { ok: false, error };
@@ -42,7 +32,7 @@ export class DomainController {
   }
 
   @Post("update")
-  async update(@Body() dto: DomainUpdateInput): PromiseResponse<Domain> {
+  async update(@Body() dto: DomainUpdateInput): PromiseResponse {
     let { home } = dto;
     if (home) {
       home = home.toLowerCase();
@@ -53,11 +43,8 @@ export class DomainController {
     }
     const { id, ...data } = dto;
     try {
-      const result = await this.domainService.update({
-        data,
-        where: { id },
-      });
-      return { ok: true, result };
+      await this.domainRepo.update({ id }, { ...data });
+      return { ok: true };
     } catch (error) {
       console.error(error);
       return { ok: false, error };
@@ -65,11 +52,13 @@ export class DomainController {
   }
 
   @Post("delete")
-  async delete(@Body() dto: IdNumber): PromiseResponse<Domain> {
+  async delete(@Body() dto: IdNumber): PromiseResponse {
     try {
-      const result = await this.domainService.delete({ id: +dto.id });
-      return { ok: true, result };
+      const { id } = dto;
+      await this.domainRepo.delete({ id });
+      return { ok: true };
     } catch (error) {
+      console.error(error);
       return { ok: false, error };
     }
   }
@@ -77,9 +66,9 @@ export class DomainController {
   private refineSortOrderQueryParam(sortBy: string, sortOrder: string) {
     sortBy = sortBy ?? "home";
     if (sortOrder && sortOrder.toLowerCase().startsWith("desc")) {
-      sortOrder = "desc";
+      sortOrder = "DESC";
     } else {
-      sortOrder = "asc";
+      sortOrder = "ASC";
     }
     const sort = {};
     sort[sortBy] = sortOrder;
@@ -87,27 +76,36 @@ export class DomainController {
   }
 
   @Get("list")
-  async list(@Query() dto: PageListQuery): Promise<DomainListResult> {
+  async list(@Query() dto: PageListQuery): PageListResponse<Domain[]> {
     const { pageIndex, pageSize, search, sortBy, sortOrder } = dto;
     const orderBy = this.refineSortOrderQueryParam(sortBy, sortOrder);
     const where = {};
     if (search) {
-      where["home"] = { contains: search, mode: "insensitive" };
+      where["home"] = ILike(`%${search}%`);
     }
-    const total = await this.domainService.count({ where });
-    const result = await this.domainService.pageList({
-      pageIndex,
-      pageSize,
-      orderBy,
-      where,
-    });
-    return { result, total };
+    try {
+      const total = await this.domainRepo.count(where);
+      const result = await this.domainRepo.find({
+        take: pageSize,
+        skip: (pageIndex - 1) * pageSize,
+        order: orderBy,
+        where,
+      });
+      return { ok: true, result, total };
+    } catch (error) {
+      console.error(error);
+      return { ok: false, error };
+    }
   }
 
   @Get()
-  getOne(@Query("id") id: number) {
-    return this.domainService.get({
-      id: +id,
-    });
+  async getOne(@Query("id") id: number): PromiseResponse<Domain> {
+    try {
+      const result = await this.domainRepo.findOne({ id });
+      return { ok: true, result };
+    } catch (error) {
+      console.error(error);
+      return { ok: false, error };
+    }
   }
 }
