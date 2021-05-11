@@ -82,7 +82,7 @@ export class DomainListComponent {
   }
 
   gotoLinks(data: DomainListItem) {
-    if (!data._count.links) {
+    if (!+data.links_count) {
       this.msg.error("Links not scraped yet!");
       return;
     }

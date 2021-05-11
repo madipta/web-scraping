@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -76,6 +77,6 @@ export class Domain implements IDomain {
   updatedAt: Date;
 
   @Field(() => [Link])
-  @OneToMany("Link", "domain")
+  @OneToMany(() => Link, (link) => link.domain)
   links: ILink[];
 }

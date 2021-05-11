@@ -7,7 +7,7 @@ import { Link } from "./link.entity";
 @Entity()
 export class Content implements IContent {
   @Field(() => Number)
-  @PrimaryColumn()
+  @PrimaryColumn({ name: "link_id" })
   linkId: number;
 
   @Field(() => String)
@@ -16,7 +16,7 @@ export class Content implements IContent {
 
   @OneToOne(() => Link)
   @JoinColumn({
-    name: "linkId",
+    name: "link_id",
     referencedColumnName: "id",
   })
   link: ILink;

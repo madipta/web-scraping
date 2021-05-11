@@ -22,7 +22,7 @@ export type DomainCreateInput = DomainBase;
 export type DomainUpdateInput = IdNumber & Partial<DomainBase>;
 
 export type DomainListItem = Partial<Domain> & {
-  _count: { links: number };
+  links_count: number;
 };
 
 export type DomainListResult = {

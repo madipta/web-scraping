@@ -14,14 +14,16 @@ import { Content } from "./content.entity";
 import { Domain } from "./domain.entity";
 
 @ObjectType()
-@Entity()
+@Entity({
+  name: "Link",
+})
 export class Link implements ILink {
   @Field(() => Number)
   @PrimaryGeneratedColumn()
   id: number;
 
   @Field(() => Number)
-  @Column()
+  @Column({ name: "domain_id" })
   domainId: number;
 
   @Field(() => String)
@@ -29,30 +31,27 @@ export class Link implements ILink {
   url: string;
 
   @Field(() => String, { nullable: true })
-  @Column()
+  @Column({ nullable: true })
   title?: string | null;
 
   @Field(() => Boolean, { nullable: true })
-  @Column()
+  @Column({ nullable: true })
   scraped?: boolean;
 
   @Field(() => Boolean, { nullable: true })
-  @Column()
+  @Column({ nullable: true })
   broken?: boolean;
 
   @Field(() => Date)
-  @CreateDateColumn()
+  @CreateDateColumn({ name: "created_at" })
   createdAt: Date;
 
   @Field(() => Date)
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: "updated_at" })
   updatedAt: Date;
 
-  @ManyToOne(() => Domain)
-  @JoinColumn({
-    name: "domainId",
-    referencedColumnName: "id",
-  })
+  @ManyToOne(() => Domain, (domain) => domain.links)
+  @JoinColumn({ name: "domain_id" })
   domain: IDomain;
 
   @OneToOne(() => Content)

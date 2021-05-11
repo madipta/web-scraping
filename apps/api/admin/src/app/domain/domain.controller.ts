@@ -85,12 +85,20 @@ export class DomainController {
     }
     try {
       const total = await this.domainRepo.count(where);
-      const result = await this.domainRepo.find({
-        take: pageSize,
-        skip: (pageIndex - 1) * pageSize,
-        order: orderBy,
-        where,
-      });
+      const result = await this.domainRepo.createQueryBuilder("Domain")
+      .leftJoin("Domain.links", "Link")
+      .select("Domain.id", "id")
+      .addSelect("Domain.home", "home")
+      .addSelect("Domain.index_url", "indexUrl")
+      .addSelect("Domain.admin_email", "adminEmail")
+      .addSelect("Domain.active", "active")
+      .addSelect("COUNT(Link.id) as links_count")
+      .where(where)
+      .groupBy("Domain.id")
+      .orderBy(orderBy)
+      .take(pageSize)
+      .skip((pageIndex - 1) * pageSize)
+      .getRawMany();
       return { ok: true, result, total };
     } catch (error) {
       console.error(error);
