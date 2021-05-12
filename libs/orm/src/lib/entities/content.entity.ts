@@ -4,7 +4,9 @@ import type { IContent, ILink } from "../interfaces";
 import { Link } from "./link.entity";
 
 @ObjectType()
-@Entity()
+@Entity({
+  name: "Content"
+})
 export class Content implements IContent {
   @Field(() => Number)
   @PrimaryColumn({ name: "link_id" })

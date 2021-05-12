@@ -1,12 +1,16 @@
 import { Body, Controller, Post } from "@nestjs/common";
-import { DomainDataAccess, LinkDataAccess } from "@web-scraping/data-access";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Domain, Link } from "@web-scraping/orm";
 import { WebContentService, WebIndexService } from "@web-scraping/scraper";
 
 @Controller("scraping")
 export class ScrapingController {
   constructor(
-    private readonly domainDb: DomainDataAccess,
-    private readonly linkDb: LinkDataAccess,
+    @InjectRepository(Link)
+    private readonly linkRepo: Repository<Link>,
+    @InjectRepository(Domain)
+    private readonly domainRepo: Repository<Domain>,
     private readonly indexService: WebIndexService,
     private readonly contentService: WebContentService
   ) {}
@@ -14,7 +18,7 @@ export class ScrapingController {
   @Post("index")
   async pageIndex(@Body() dto: { domainId: number }) {
     try {
-      const domain = await this.domainDb.get({ id: +dto.domainId });
+      const domain = await this.domainRepo.findOne({ id: +dto.domainId });
       const result = await this.indexService.domainIndexing(domain);
       return { ok: true, result: result.length };
     } catch (error) {
@@ -25,9 +29,10 @@ export class ScrapingController {
 
   @Post("content")
   async pageContent(@Body() dto: { linkId: number }) {
-    const link = await this.linkDb.findOne({
-      id: +dto.linkId,
-    });
+    const link = await this.linkRepo.findOne(
+      { id: dto.linkId },
+      { relations: ["domain"] }
+    );
     return await this.contentService.scrapContent(link);
   }
 

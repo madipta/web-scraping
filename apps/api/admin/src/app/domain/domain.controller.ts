@@ -79,10 +79,6 @@ export class DomainController {
   async list(@Query() dto: PageListQuery): PageListResponse<Domain[]> {
     const { pageIndex, pageSize, search, sortBy, sortOrder } = dto;
     const orderBy = this.refineSortOrderQueryParam(sortBy, sortOrder);
-    const where = {};
-    if (search) {
-      where["home"] = ILike(`%${search}%`);
-    }
     const queryBuilder = () => {
       const builder = this.domainRepo
         .createQueryBuilder("Domain")
@@ -105,8 +101,8 @@ export class DomainController {
         .addSelect("COUNT(Link.id) as links_count")
         .groupBy("Domain.id")
         .orderBy(orderBy)
-        .take(pageSize)
-        .skip((pageIndex - 1) * pageSize);
+        .offset((pageIndex - 1) * pageSize)
+        .limit(pageSize);
       const result = await resultBuilder.getRawMany();
       return { ok: true, result, total };
     } catch (error) {

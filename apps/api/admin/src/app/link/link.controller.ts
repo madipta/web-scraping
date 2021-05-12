@@ -61,8 +61,8 @@ export class LinkController {
         .addSelect("Link.title", "title")
         .addSelect("Link.scraped", "scraped")
         .addSelect("Link.broken", "broken")
-        .take(pageSize)
-        .skip((pageIndex - 1) * pageSize)
+        .limit(pageSize)
+        .offset((pageIndex - 1) * pageSize)
         .orderBy(orderBy)
         .getRawMany();
       return { ok: true, result, total };

@@ -34,10 +34,11 @@ export class ContentComponent implements OnInit {
     const msgId = this.msg.loading("loading...", { nzDuration: 0 }).messageId;
     const res = await this.contentService.get({ linkId });
     this.msg.remove(msgId);
-    if (res) {
-      this.home = res.link.domain.home;
-      this.url = res.link.url;
-      this.content = res.content.replace(/\.\s/g, '.\n\n');
+    if (res.ok) {
+      const result = res.result as any;
+      this.content = result.content.replace(/\.\s/g, '.\n\n');
+      this.home = result.domainHome;
+      this.url = result.linkUrl;
     } else {
       this.msg.error("Content failed to open!");
       this.location.back();

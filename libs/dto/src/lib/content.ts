@@ -14,7 +14,9 @@ export type ContentCreateInput = ContentBase;
 export type ContentUpdateInput = ContentLinkId & Partial<ContentBase>;
 
 export type ContentWithRef = Partial<Content> & {
-  link?: Partial<LinkWithRef>
+  link?: Partial<LinkWithRef>;
+  linkUrl?: string;
+  linkTitle?: string;
 };
 
 export type ContentListResult = {

@@ -16,6 +16,9 @@ export class WebIndexService {
       urls = await page.$$eval(indexPath, (els) =>
         els.map((el) => {
           const url = el.getAttribute("href");
+          if (!url) {
+            return null;
+          }
           const start = url.lastIndexOf("/") + 1;
           let end = url.lastIndexOf(".");
           if (end < start) {
@@ -60,6 +63,7 @@ export class WebIndexService {
     const unique = [...new Set(urls)];
     const filtered = unique.filter(
       (a) =>
+        a &&
         a.url &&
         a.url !== home &&
         !a.url.startsWith(home + "#") &&

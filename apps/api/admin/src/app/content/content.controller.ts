@@ -1,17 +1,26 @@
 import { Controller, Get, Query } from "@nestjs/common";
-import { ContentDataAccess } from "@web-scraping/data-access";
-import { ContentListResult, PageListQuery } from "@web-scraping/dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { ILike, Repository } from "typeorm";
+import {
+  PageListQuery,
+  PageListResponse,
+  PromiseResponse,
+} from "@web-scraping/dto";
+import { Content } from "@web-scraping/orm";
 
 @Controller("content")
 export class ContentController {
-  constructor(private readonly contentDb: ContentDataAccess) {}
+  constructor(
+    @InjectRepository(Content)
+    private readonly contentRepo: Repository<Content>
+  ) {}
 
   private refineSortOrderQueryParam(sortBy: string, sortOrder: string) {
     sortBy = sortBy ?? "content";
     if (sortOrder && sortOrder.toLowerCase().startsWith("desc")) {
-      sortOrder = "desc";
+      sortOrder = "DESC";
     } else {
-      sortOrder = "asc";
+      sortOrder = "ASC";
     }
     const sort = {};
     sort[sortBy] = sortOrder;
@@ -19,27 +28,55 @@ export class ContentController {
   }
 
   @Get("list")
-  async list(@Query() dto: PageListQuery): Promise<ContentListResult> {
+  async list(@Query() dto: PageListQuery): PageListResponse<Content[]> {
     const { pageIndex, pageSize, search, sortBy, sortOrder } = dto;
     const orderBy = this.refineSortOrderQueryParam(sortBy, sortOrder);
-    const where = { NOT: { content: undefined } };
-    if (search) {
-      where["content"] = { contains: search, mode: "insensitive" };
+    const queryBuilder = () => {
+      const builder = this.contentRepo
+        .createQueryBuilder("Content")
+        .select("Content.link_id", "linkId");
+      if (search) {
+        builder.where({ content: ILike(`%${search}%`) });
+      }
+      return builder;
+    };
+    try {
+      const totalBuilder = queryBuilder();
+      const total = await totalBuilder.getCount();
+      const resultBuilder = queryBuilder();
+      resultBuilder
+        .leftJoin("Content.link", "Link")
+        .addSelect("Link.url", "linkUrl")
+        .addSelect("Link.title", "linkTitle")
+        .orderBy(orderBy)
+        .offset((pageIndex - 1) * pageSize)
+        .limit(pageSize);
+      const result = await resultBuilder.getRawMany();
+      return { ok: true, result, total };
+    } catch (error) {
+      console.error(error);
+      return { ok: false, error };
     }
-    const total = await this.contentDb.count({ where });
-    const result = await this.contentDb.pageList({
-      pageIndex,
-      pageSize,
-      orderBy,
-      where,
-    });
-    return { result, total };
   }
 
   @Get()
-  getOne(@Query("linkId") linkId: number) {
-    return this.contentDb.get({
-      linkId: +linkId,
-    });
+  async getOne(@Query("linkId") linkId: number): PromiseResponse<Content> {
+    try {
+      const result = await this.contentRepo
+        .createQueryBuilder("Content")
+        .leftJoin("Content.link", "Link")
+        .leftJoin("Link.domain", "Domain")
+        .where({ linkId })
+        .select("link_id", "linkId")
+        .addSelect("content")
+        .addSelect("Link.url", "linkUrl")
+        .addSelect("Link.title", "linkTitle")
+        .addSelect("Domain.home", "domainHome")
+        .getRawOne();
+      return { ok: true, result };
+    } catch (error) {
+      console.error(error);
+      return { ok: false, error };
+    }
   }
 }

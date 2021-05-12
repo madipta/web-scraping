@@ -5,6 +5,7 @@ import {
   ContentLinkId,
   ContentListResult,
   ContentWithRef,
+  PromiseResponse,
 } from "@web-scraping/dto";
 
 @Injectable({
@@ -39,7 +40,7 @@ export class ContentService {
 
   async get(dto: ContentLinkId) {
     return this.http
-      .get<ContentWithRef>(this.contentGetUrl, {
+      .get<PromiseResponse>(this.contentGetUrl, {
         params: { linkId: `${dto.linkId}` },
       })
       .toPromise();

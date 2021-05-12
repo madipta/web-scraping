@@ -33,16 +33,16 @@
     <tr>
       <th>Id</th>
       <th>Domain</th>
-      <th nzColumnKey="link.title" [nzSortFn]="true">Title</th>
+      <th nzColumnKey="Link.title" [nzSortFn]="true">Title</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let data of contentList">
       <td>
-        <a [href]="data.link.url" target="_blank">{{ data.linkId }}</a>
+        <a [href]="data.linkUrl" target="_blank">{{ data.linkId }}</a>
       </td>
       <td>
-        {{ data.link.url | domainName }}
+        {{ data.linkUrl | domainName }}
       </td>
       <td>
         <a
@@ -51,7 +51,7 @@
               queryParams: { linkId: data.linkId }
             })
           "
-          >{{ data.link.title }}</a
+          >{{ data.linkTitle }}</a
         >
       </td>
     </tr>
