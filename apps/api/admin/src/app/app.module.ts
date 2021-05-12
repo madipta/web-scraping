@@ -6,7 +6,7 @@ import { DataAccessModule } from "@web-scraping/data-access";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { DomainController } from "./domain/domain.controller";
-// import { LinkController } from "./link/link.controller";
+import { LinkController } from "./link/link.controller";
 // import { ContentController } from "./content/content.controller";
 // import { ScrapingController } from "./scraping/scraping.controller";
 
@@ -20,7 +20,7 @@ import { DomainController } from "./domain/domain.controller";
   controllers: [
     AppController,
     DomainController,
-    // LinkController,
+    LinkController,
     // ContentController,
     // ScrapingController,
   ],

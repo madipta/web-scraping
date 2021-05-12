@@ -126,7 +126,14 @@ export class LinkListComponent implements OnInit {
   }
 
   async delete(id) {
-    this.linkService.delete(id);
+    const result = await this.linkService.delete(id);
+    if (result.ok) {
+      this.msg.success("Deleted!");
+      this.refreshData();
+    } else {
+      this.msg.error("Delete failed!");
+    }
+    
   }
 
   gotoContent(data: LinkWithRef) {

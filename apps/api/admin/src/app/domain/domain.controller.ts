@@ -83,22 +83,31 @@ export class DomainController {
     if (search) {
       where["home"] = ILike(`%${search}%`);
     }
+    const queryBuilder = () => {
+      const builder = this.domainRepo
+        .createQueryBuilder("Domain")
+        .select("Domain.id", "id");
+      if (search) {
+        builder.where({ home: ILike(`%${search}%`) });
+      }
+      return builder;
+    };
     try {
-      const total = await this.domainRepo.count(where);
-      const result = await this.domainRepo.createQueryBuilder("Domain")
-      .leftJoin("Domain.links", "Link")
-      .select("Domain.id", "id")
-      .addSelect("Domain.home", "home")
-      .addSelect("Domain.index_url", "indexUrl")
-      .addSelect("Domain.admin_email", "adminEmail")
-      .addSelect("Domain.active", "active")
-      .addSelect("COUNT(Link.id) as links_count")
-      .where(where)
-      .groupBy("Domain.id")
-      .orderBy(orderBy)
-      .take(pageSize)
-      .skip((pageIndex - 1) * pageSize)
-      .getRawMany();
+      const totalBuilder = queryBuilder();
+      const total = await totalBuilder.getCount();
+      const resultBuilder = queryBuilder();
+      resultBuilder
+        .leftJoin("Domain.links", "Link")
+        .addSelect("Domain.home", "home")
+        .addSelect("Domain.index_url", "indexUrl")
+        .addSelect("Domain.admin_email", "adminEmail")
+        .addSelect("Domain.active", "active")
+        .addSelect("COUNT(Link.id) as links_count")
+        .groupBy("Domain.id")
+        .orderBy(orderBy)
+        .take(pageSize)
+        .skip((pageIndex - 1) * pageSize);
+      const result = await resultBuilder.getRawMany();
       return { ok: true, result, total };
     } catch (error) {
       console.error(error);

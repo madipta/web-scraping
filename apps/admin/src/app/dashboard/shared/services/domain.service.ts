@@ -57,7 +57,7 @@ export class DomainService {
 
   async delete(body: IdNumber) {
     return this.http
-      .post<BaseResponse<Domain>>(this.domainDeleteUrl, body)
+      .post<BaseResponse>(this.domainDeleteUrl, body)
       .toPromise();
   }
 

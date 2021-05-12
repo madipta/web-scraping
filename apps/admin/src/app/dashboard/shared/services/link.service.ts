@@ -50,7 +50,7 @@ export class LinkService {
 
   async delete(id: number) {
     return await this.http
-      .post(this.linkDeleteUrl, { id: `${id}` })
+      .post<BaseResponse>(this.linkDeleteUrl, { id: `${id}` })
       .toPromise();
   }
 
