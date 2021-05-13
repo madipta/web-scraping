@@ -1,9 +1,9 @@
 module.exports = {
   projects: [
-    "<rootDir>/libs/data-access",
+    "<rootDir>/apps/admin",
     "<rootDir>/apps/api/admin",
     "<rootDir>/libs/dto",
     "<rootDir>/libs/scraper",
-    "<rootDir>/apps/admin","<rootDir>/libs/orm"
+    "<rootDir>/libs/orm",
   ],
 };

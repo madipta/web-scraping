@@ -1,11 +1,16 @@
 import { chromium } from "playwright";
 import { Injectable } from "@nestjs/common";
-import { LinkDataAccess } from "@web-scraping/data-access";
-import { Domain, ScrapIndexLink } from "@web-scraping/dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Domain, Link } from "@web-scraping/orm";
+import { ScrapIndexLink } from "@web-scraping/dto";
 
 @Injectable()
 export class WebIndexService {
-  constructor(private linkService: LinkDataAccess) {}
+  constructor(
+    @InjectRepository(Link)
+    private readonly linkRepo: Repository<Link>,
+  ) {}
 
   async getHyperlink(indexPage: string, indexPath: string) {
     const browser = await chromium.launch();
@@ -73,7 +78,7 @@ export class WebIndexService {
     );
     await Promise.all(
       filtered.map(async (link) => {
-        this.linkService.upsert({
+        this.linkRepo.save({
           url: link.url,
           title: link.title,
           domainId,

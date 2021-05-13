@@ -1,10 +1,11 @@
 import { Module } from "@nestjs/common";
-import { DataAccessModule } from "@web-scraping/data-access";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { OrmModule, Domain, Link, Content } from "@web-scraping/orm";
 import { WebIndexService } from "./web-index/web-index.service";
-import { WebContentService } from './web-content/web-content.service';
+import { WebContentService } from "./web-content/web-content.service";
 
 @Module({
-  imports: [DataAccessModule],
+  imports: [OrmModule, TypeOrmModule.forFeature([Domain, Link, Content])],
   providers: [WebIndexService, WebContentService],
   exports: [WebIndexService, WebContentService],
 })

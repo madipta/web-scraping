@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Brackets, ILike, Repository } from "typeorm";
-import {
+import type {
   IdNumber,
   PageListQuery,
   PageListResponse,

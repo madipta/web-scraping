@@ -18,9 +18,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@web-scraping/data-access": [
-        "libs/data-access/src/index.ts"
-      ],
       "@web-scraping/dto": [
         "libs/dto/src/index.ts"
       ],

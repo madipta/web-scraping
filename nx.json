@@ -28,9 +28,6 @@
     }
   },
   "projects": {
-    "data-access": {
-      "tags": []
-    },
     "api-admin": {
       "tags": []
     },

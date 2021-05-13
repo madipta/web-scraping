@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ILike, Repository } from "typeorm";
-import {
+import type {
   PageListQuery,
   PageListResponse,
   PromiseResponse,
