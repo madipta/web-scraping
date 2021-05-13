@@ -18,7 +18,7 @@ model Domain {
   indexUrl     String?   @map("index_url") @db.VarChar(2048)
   indexPath    String?   @map("index_path") @db.VarChar(250)
   nextPath     String?   @map("next_path") @db.VarChar(250)
-  scrollMore   Boolean   @map("scroll_more") @default(false)
+  scrollMore   Boolean   @default(false) @map("scroll_more")
   contentPath  String?   @map("content_path") @db.VarChar(250)
   headerPath   String?   @map("header_path") @db.VarChar(250)
   categoryPath String?   @map("category_path") @db.VarChar(250)
@@ -27,7 +27,7 @@ model Domain {
   disabled     Boolean   @default(false)
   broken       Boolean   @default(false)
   createdAt    DateTime  @default(now()) @map("created_at")
-  updateAt     DateTime? @updatedAt @map("updated_at")
+  updatedAt    DateTime? @updatedAt @map("updated_at")
   links        Link[]
 }
 
@@ -40,7 +40,7 @@ model Link {
   broken    Boolean   @default(false)
   scraped   Boolean   @default(false)
   createdAt DateTime  @default(now()) @map("created_at")
-  updateAt  DateTime? @updatedAt @map("updated_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
   domain    Domain    @relation(fields: [domainId], references: [id])
   content   Content?
 }
@@ -49,6 +49,6 @@ model Content {
   linkId    Int       @id @map("link_id")
   content   String    @db.Text
   createdAt DateTime  @default(now()) @map("created_at")
-  updateAt  DateTime? @updatedAt @map("updated_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
   link      Link      @relation(fields: [linkId], references: [id])
 }
