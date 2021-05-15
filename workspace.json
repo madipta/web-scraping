@@ -3,7 +3,7 @@
   "cli": {
     "defaultCollection": "@nrwl/nest"
   },
-  "defaultProject": "admin",
+  "defaultProject": "public",
   "generators": {
     "@nrwl/angular:application": {
       "style": "scss",
@@ -291,6 +291,122 @@
           "options": {
             "jestConfig": "libs/orm/jest.config.js",
             "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "public": {
+      "root": "apps/public",
+      "sourceRoot": "apps/public/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/public",
+            "index": "apps/public/src/index.html",
+            "main": "apps/public/src/main.tsx",
+            "polyfills": "apps/public/src/polyfills.ts",
+            "tsConfig": "apps/public/tsconfig.app.json",
+            "assets": [
+              "apps/public/src/favicon.ico",
+              "apps/public/src/assets"
+            ],
+            "styles": ["apps/public/src/app/styles/tailwind.css"],
+            "scripts": [],
+            "webpackConfig": "@nrwl/react/plugins/webpack"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/public/src/environments/environment.ts",
+                  "with": "apps/public/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "public:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "public:build:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/public/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/public"
+          ],
+          "options": {
+            "jestConfig": "apps/public/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build-tailwind-css": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": [],
+          "options": {
+            "command": "npx tailwindcss-cli@latest build ./src/styles.css -o src/app/styles/tailwind.css",
+            "cwd": "apps/public"
+          }
+        }
+      }
+    },
+    "public-e2e": {
+      "root": "apps/public-e2e",
+      "sourceRoot": "apps/public-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/public-e2e/cypress.json",
+            "tsConfig": "apps/public-e2e/tsconfig.e2e.json",
+            "devServerTarget": "public:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "public:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/public-e2e/**/*.{js,ts}"
+            ]
           }
         }
       }

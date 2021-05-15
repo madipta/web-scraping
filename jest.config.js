@@ -4,6 +4,6 @@ module.exports = {
     "<rootDir>/apps/api/admin",
     "<rootDir>/libs/dto",
     "<rootDir>/libs/scraper",
-    "<rootDir>/libs/orm",
+    "<rootDir>/libs/orm","<rootDir>/apps/public"
   ],
 };
