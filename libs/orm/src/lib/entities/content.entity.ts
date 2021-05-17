@@ -16,6 +16,22 @@ export class Content implements IContent {
   @Column()
   content: string;
 
+  @Field(() => String, { nullable: true })
+  @Column({ name: "image_url" })
+  imageUrl: string;
+
+  @Field(() => String, { nullable: true })
+  @Column()
+  slug: string;
+
+  @Field(() => String, { nullable: true })
+  @Column()
+  category: string;
+
+  @Field(() => Date, { nullable: true })
+  @Column({ name: "publish_date" })
+  publishDate: Date;
+
   @OneToOne(() => Link)
   @JoinColumn({
     name: "link_id",
