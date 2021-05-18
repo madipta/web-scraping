@@ -1,62 +1,29 @@
 {
   "implicitDependencies": {
     "workspace.json": "*",
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
-    },
+    "package.json": { "dependencies": "*", "devDependencies": "*" },
     "tsconfig.base.json": "*",
     "tslint.json": "*",
     ".eslintrc.json": "*",
     "nx.json": "*"
   },
-  "affected": {
-    "defaultBase": "master"
-  },
+  "affected": { "defaultBase": "master" },
   "npmScope": "web-scraping",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
-      "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ]
-      }
+      "options": { "cacheableOperations": ["build", "lint", "test", "e2e"] }
     }
   },
   "projects": {
-    "api-admin": {
-      "tags": []
-    },
-    "dto": {
-      "tags": []
-    },
-    "scraper": {
-      "tags": []
-    },
-    "admin": {
-      "tags": []
-    },
-    "admin-e2e": {
-      "tags": [],
-      "implicitDependencies": [
-        "admin"
-      ]
-    },
-    "orm": {
-      "tags": []
-    },
-    "public": {
-      "tags": []
-    },
-    "public-e2e": {
-      "tags": [],
-      "implicitDependencies": [
-        "public"
-      ]
-    }
+    "api-admin": { "tags": [] },
+    "dto": { "tags": [] },
+    "scraper": { "tags": [] },
+    "admin": { "tags": [] },
+    "admin-e2e": { "tags": [], "implicitDependencies": ["admin"] },
+    "orm": { "tags": [] },
+    "public": { "tags": [] },
+    "public-e2e": { "tags": [], "implicitDependencies": ["public"] },
+    "api-public": { "tags": [] }
   }
 }

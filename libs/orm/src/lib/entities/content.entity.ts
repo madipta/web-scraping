@@ -22,7 +22,7 @@ export class Content implements IContent {
 
   @Field(() => String, { nullable: true })
   @Column()
-  slug: string;
+  title: string;
 
   @Field(() => String, { nullable: true })
   @Column()
