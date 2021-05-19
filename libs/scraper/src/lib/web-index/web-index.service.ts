@@ -50,7 +50,7 @@ export class WebIndexService {
     if (home.substr(home.length - 1) !== "/") {
       home = home + "/";
     }
-    const { indexUrl, indexPath } = domain;
+    const { indexUrl, indexPath } = domain.setting;
     const indexPage = home + indexUrl;
     const urls = await this.getHyperlink(indexPage, indexPath);
     if (urls && urls.length) {

@@ -15,7 +15,7 @@ export class WebContentService {
   ) {}
 
   async scrap(browser: Browser, link: LinkWithRef) {
-    const contentPath = link.domain.contentPath;
+    const contentPath = link.domain.setting.contentPath;
     const page = await browser.newPage();
     console.time(`${link.id}`);
     const pageResponse = await page.goto(link.url, {

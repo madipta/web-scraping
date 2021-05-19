@@ -42,7 +42,6 @@
   <thead>
     <tr>
       <th nzColumnKey="home" [nzSortFn]="true">Domain</th>
-      <th>Index</th>
       <th>Admin Email</th>
       <th style="text-align: center">Links</th>
       <th style="text-align: center">Active</th>
@@ -53,11 +52,6 @@
     <tr *ngFor="let data of domainList">
       <td>
         <a [href]="data.home" target="_blank">{{ data.home | domainName }}</a>
-      </td>
-      <td>
-        <a [href]="data.home + data.indexUrl" target="_blank">{{
-          data.indexUrl
-        }}</a>
       </td>
       <td>{{ data.adminEmail }}</td>
       <td style="text-align: center">

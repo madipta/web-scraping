@@ -7,5 +7,5 @@ export interface ILink {
   scraped?: boolean;
   broken?: boolean;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
 }

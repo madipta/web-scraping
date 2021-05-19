@@ -95,7 +95,6 @@ export class DomainController {
       resultBuilder
         .leftJoin("Domain.links", "Link")
         .addSelect("Domain.home", "home")
-        .addSelect("Domain.index_url", "indexUrl")
         .addSelect("Domain.admin_email", "adminEmail")
         .addSelect("Domain.active", "active")
         .addSelect("COUNT(Link.id) as links_count")

@@ -3,11 +3,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import type { IDomain, ILink } from "../interfaces";
+import type { IDomain, IDomainSetting, ILink } from "../interfaces";
+import { DomainSetting } from "./domain-setting.entity";
 import { Link } from "./link.entity";
 
 @ObjectType()
@@ -20,34 +23,6 @@ export class Domain implements IDomain {
   @Field(() => String)
   @Column()
   home: string;
-
-  @Field(() => String, { nullable: true })
-  @Column({ name: "index_url", nullable: true })
-  indexUrl?: string | null;
-
-  @Field(() => String, { nullable: true })
-  @Column({ name: "index_path", nullable: true })
-  indexPath?: string | null;
-
-  @Field(() => String, { nullable: true })
-  @Column({ name: "next_path", nullable: true })
-  nextPath?: string | null;
-
-  @Field(() => Boolean, { nullable: true })
-  @Column({ name: "scroll_more", nullable: true })
-  scrollMore?: boolean;
-
-  @Field(() => String, { nullable: true })
-  @Column({ name: "content_path", nullable: true })
-  contentPath?: string | null;
-
-  @Field(() => String, { nullable: true })
-  @Column({ name: "header_path", nullable: true })
-  headerPath?: string | null;
-
-  @Field(() => String, { nullable: true })
-  @Column({ name: "category_path", nullable: true })
-  categoryPath?: string | null;
 
   @Field(() => String, { nullable: true })
   @Column({ name: "admin_email", nullable: true })
@@ -68,12 +43,19 @@ export class Domain implements IDomain {
   @Field(() => Date)
   @CreateDateColumn({ name: "created_at" })
   createdAt: Date;
-
-  @Field(() => Date)
+  
+  @Field(() => Date, { nullable: true })
   @UpdateDateColumn({ name: "updated_at" })
-  updatedAt: Date;
+  updatedAt?: Date;
 
   @Field(() => [Link])
   @OneToMany(() => Link, (link) => link.domain)
   links: ILink[];
+
+  @OneToOne(() => DomainSetting, setting => setting.domain)
+  @JoinColumn({
+    name: "id",
+    referencedColumnName: "id",
+  })
+  setting: IDomainSetting;
 }

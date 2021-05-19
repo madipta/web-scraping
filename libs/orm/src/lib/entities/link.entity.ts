@@ -44,9 +44,9 @@ export class Link implements ILink {
   @CreateDateColumn({ name: "created_at" })
   createdAt: Date;
 
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   @UpdateDateColumn({ name: "updated_at" })
-  updatedAt: Date;
+  updatedAt?: Date;
 
   @ManyToOne(() => Domain, (domain) => domain.links)
   @JoinColumn({ name: "domain_id" })

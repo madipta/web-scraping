@@ -18,7 +18,10 @@ export class ScrapingController {
   @Post("index")
   async pageIndex(@Body() dto: { domainId: number }) {
     try {
-      const domain = await this.domainRepo.findOne({ id: +dto.domainId });
+      const domain = await this.domainRepo.findOne(
+        { id: +dto.domainId },
+        { relations: ["setting"] }
+      );
       const result = await this.indexService.domainIndexing(domain);
       return { ok: true, result: result.length };
     } catch (error) {
@@ -31,7 +34,7 @@ export class ScrapingController {
   async pageContent(@Body() dto: { linkId: number }) {
     const link = await this.linkRepo.findOne(
       { id: dto.linkId },
-      { relations: ["domain"] }
+      { relations: ["domain", "domain.setting"] }
     );
     return await this.contentService.scrapContent(link);
   }
