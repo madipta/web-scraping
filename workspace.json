@@ -470,6 +470,31 @@
           }
         }
       }
+    },
+    "gql": {
+      "root": "libs/gql",
+      "sourceRoot": "libs/gql/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/gql/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/gql"
+          ],
+          "options": {
+            "jestConfig": "libs/gql/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   }
 }

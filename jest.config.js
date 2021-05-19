@@ -7,5 +7,6 @@ module.exports = {
     "<rootDir>/libs/orm",
     "<rootDir>/apps/public",
     "<rootDir>/apps/api/public",
+    "<rootDir>/libs/gql",
   ],
 };

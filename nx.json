@@ -24,6 +24,7 @@
     "orm": { "tags": [] },
     "public": { "tags": [] },
     "public-e2e": { "tags": [], "implicitDependencies": ["public"] },
-    "api-public": { "tags": [] }
+    "api-public": { "tags": [] },
+    "gql": { "tags": [] }
   }
 }
