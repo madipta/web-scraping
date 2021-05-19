@@ -3,11 +3,9 @@ import { DomainSetting } from "./domain-setting";
 
 export type DomainBase = {
   home: string;
-  indexUrl?: string | null;
   adminEmail?: string | null;
   active?: boolean;
   disabled?: boolean;
-  broken?: boolean;
   setting?: DomainSetting
 };
 

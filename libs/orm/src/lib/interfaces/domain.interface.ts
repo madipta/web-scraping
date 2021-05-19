@@ -4,7 +4,6 @@ export interface IDomain {
   adminEmail?: string | null;
   active?: boolean;
   disabled?: boolean;
-  broken?: boolean;
   createdAt: Date;
   updatedAt?: Date;
 }

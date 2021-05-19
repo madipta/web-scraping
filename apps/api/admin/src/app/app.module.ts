@@ -10,9 +10,10 @@ import {
 import { WebScraperModule } from "@web-scraping/scraper";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
+import { ContentController } from "./content/content.controller";
+import { DomainSettingController } from "./domain-setting/domain-setting.controller";
 import { DomainController } from "./domain/domain.controller";
 import { LinkController } from "./link/link.controller";
-import { ContentController } from "./content/content.controller";
 import { ScrapingController } from "./scraping/scraping.controller";
 
 @Module({
@@ -23,9 +24,10 @@ import { ScrapingController } from "./scraping/scraping.controller";
   ],
   controllers: [
     AppController,
-    DomainController,
-    LinkController,
     ContentController,
+    DomainController,
+    DomainSettingController,
+    LinkController,
     ScrapingController,
   ],
   providers: [AppService],

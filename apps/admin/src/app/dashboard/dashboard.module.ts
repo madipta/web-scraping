@@ -28,10 +28,10 @@ const routes: Routes = [
           (await import("./domain-list/domain-list.module")).DomainListModule,
       },
       {
-        path: "domain-scrap",
+        path: "domain-setting",
         loadChildren: async () =>
-          (await import("./domain-scrap/domain-scrap.module"))
-            .DomainScrapModule,
+          (await import("./domain-setting/domain-setting.module"))
+            .DomainSettingModule,
       },
       {
         path: "domain-update",

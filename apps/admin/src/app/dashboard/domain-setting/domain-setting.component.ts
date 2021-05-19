@@ -1,16 +1,16 @@
 import { Location } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
-import { NzMessageService } from "ng-zorro-antd/message";
-import { DomainService } from "../shared/services/domain.service";
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { DomainSettingService } from '../shared/services/domain-setting.service';
 
 @Component({
-  selector: "web-scraping-domain-scrap",
-  templateUrl: "./domain-scrap.component.html",
-  styleUrls: ["./domain-scrap.component.scss"],
+  selector: 'web-scraping-domain-setting',
+  templateUrl: './domain-setting.component.html',
+  styleUrls: ['./domain-setting.component.scss']
 })
-export class DomainScrapComponent implements OnInit {
+export class DomainSettingComponent implements OnInit {
   form!: FormGroup;
   public domain: { home: string };
   selectedId = 0;
@@ -20,7 +20,7 @@ export class DomainScrapComponent implements OnInit {
     private location: Location,
     private fb: FormBuilder,
     private msg: NzMessageService,
-    private domainService: DomainService
+    private settingService: DomainSettingService
   ) {}
 
   ngOnInit(): void {
@@ -35,17 +35,23 @@ export class DomainScrapComponent implements OnInit {
     this.form = this.fb.group({
       indexUrl: [null],
       indexPath: [null],
-      loadmoreIndexPath: [null],
+      nextPath: [null],
+      scrollMore: [null],
+      contentPath: [null],
+      headerPath: [null],
+      categoryPath: [null],
+      publishDatePath: [null],
+      imagePath: [null],
     });
   }
 
   async loadDomain() {
     const msgId = this.msg.loading("loading", { nzDuration: 0 }).messageId;
-    const res = await this.domainService.get({ id: this.selectedId });
+    const res = await this.settingService.get({ id: this.selectedId });
     this.msg.remove(msgId);
     if (res.ok) {
-      this.domain = res.result;
-      this.form.patchValue(this.domain);
+      this.domain = res.result.domain;
+      this.form.patchValue(res.result);
     } else {
       this.msg.error("res.error");
       this.location.back();
@@ -56,7 +62,7 @@ export class DomainScrapComponent implements OnInit {
     const msgId = this.msg.loading("loading", { nzDuration: 0 }).messageId;
     const values = this.form.getRawValue();
     const dto = { ...values, id: this.selectedId };
-    const res = await this.domainService.createOrUpdate(dto);
+    const res = await this.settingService.update(dto);
     this.msg.remove(msgId);
     if (res.ok) {
       this.msg.success(`Saved!`);
@@ -65,14 +71,4 @@ export class DomainScrapComponent implements OnInit {
     }
   }
 
-  async scrap() {
-    const msgId = this.msg.loading("loading", { nzDuration: 0 }).messageId;
-    const res = await this.domainService.scrapIndex(`${this.selectedId}`);
-    this.msg.remove(msgId);
-    if (res.ok) {
-      this.msg.success(`${res.result} links scraped!`);
-    } else {
-      this.msg.error(`failed! \n\n${res.error}`);
-    }
-  }
 }

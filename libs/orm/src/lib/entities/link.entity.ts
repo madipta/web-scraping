@@ -25,7 +25,7 @@ export class Link implements ILink {
   domainId: number;
 
   @Field(() => String)
-  @Column()
+  @Column({ unique: true })
   url: string;
 
   @Field(() => String, { nullable: true })
@@ -41,7 +41,7 @@ export class Link implements ILink {
   broken?: boolean;
 
   @Field(() => Date)
-  @CreateDateColumn({ name: "created_at" })
+  @CreateDateColumn({ name: "created_at", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
 
   @Field(() => Date, { nullable: true })

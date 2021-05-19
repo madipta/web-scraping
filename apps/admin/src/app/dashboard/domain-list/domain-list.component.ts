@@ -23,7 +23,7 @@ export class DomainListComponent {
   constructor(
     public router: Router,
     private msg: NzMessageService,
-    private DomainService: DomainService
+    private domainService: DomainService
   ) {}
 
   refreshData() {
@@ -49,7 +49,7 @@ export class DomainListComponent {
     this.sortField = sortField;
     this.sortOrder = sortOrder;
     this.search = search;
-    this.DomainService.fetchList(
+    this.domainService.fetchList(
       pageIndex,
       pageSize,
       sortField,
@@ -73,11 +73,22 @@ export class DomainListComponent {
 
   async delete(id) {
     const msgId = this.msg.loading("progress...", { nzDuration: 0 }).messageId;
-    const result = await this.DomainService.delete({ id });
+    const result = await this.domainService.delete({ id });
     this.msg.remove(msgId);
     if (result.ok) {
       this.msg.success("Deleted!");
       this.refreshData();
+    }
+  }
+
+  async scrap(id) {
+    const msgId = this.msg.loading("loading", { nzDuration: 0 }).messageId;
+    const res = await this.domainService.scrapIndex(id);
+    this.msg.remove(msgId);
+    if (res.ok) {
+      this.msg.success(`${res.result} links scraped!`);
+    } else {
+      this.msg.error(`failed! \n\n${res.error}`);
     }
   }
 

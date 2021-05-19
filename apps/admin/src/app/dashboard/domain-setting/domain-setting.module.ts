@@ -1,17 +1,17 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { SharedModule } from "../shared/shared.module";
-import { DomainScrapComponent } from "./domain-scrap.component";
+import { DomainSettingComponent } from "./domain-setting.component";
 
 const routes: Routes = [
   {
     path: "",
-    component: DomainScrapComponent,
+    component: DomainSettingComponent,
   },
 ];
 
 @NgModule({
-  declarations: [DomainScrapComponent],
+  declarations: [DomainSettingComponent],
   imports: [RouterModule.forChild(routes), SharedModule],
 })
-export class DomainScrapModule {}
+export class DomainSettingModule {}

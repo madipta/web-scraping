@@ -79,7 +79,7 @@
           nz-tooltip
           nzTooltipTitle="delete"
           nz-popconfirm
-          nzPopconfirmTitle="Are you sure delete this domain?"
+          [nzPopconfirmTitle]="'Are you sure delete ' + (data.home | domainName) + '?'"
           nzPopconfirmPlacement="left"
           nzOkText="Delete"
           nzCancelText="Cancel"
@@ -90,10 +90,27 @@
         <nz-divider nzType="vertical"></nz-divider>
         <a
           (click)="
-            router.navigate(['dashboard', 'domain-scrap'], {
+            router.navigate(['dashboard', 'domain-setting'], {
               queryParams: { id: data.id }
             })
           "
+        >
+          <i
+            nz-icon
+            nzType="setting"
+            nzTheme="fill"
+            nz-tooltip
+            nzTooltipTitle="setting"
+          ></i>
+        </a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a
+          nz-popconfirm
+          [nzPopconfirmTitle]="'Scrap ' + (data.home | domainName) + ' now?'"
+          nzPopconfirmPlacement="left"
+          nzOkText="Scrap"
+          nzCancelText="Cancel"
+          (nzOnConfirm)="scrap(data.id)"
         >
           <i
             nz-icon

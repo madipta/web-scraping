@@ -9,13 +9,15 @@ import type {
   PageListResponse,
   PromiseResponse,
 } from "@web-scraping/dto";
-import { Domain } from "@web-scraping/orm";
+import { Domain, DomainSetting } from "@web-scraping/orm";
 
 @Controller("domain")
 export class DomainController {
   constructor(
     @InjectRepository(Domain)
-    private readonly domainRepo: Repository<Domain>
+    private readonly domainRepo: Repository<Domain>,
+    @InjectRepository(DomainSetting)
+    private readonly settingRepo: Repository<DomainSetting>
   ) {}
 
   @Post("create")
@@ -25,6 +27,7 @@ export class DomainController {
       home = home.toLowerCase();
       const data = { ...dto, home };
       const result = await this.domainRepo.save(data);
+      this.settingRepo.save({ id: result.id });
       return { ok: true, result };
     } catch (error) {
       return { ok: false, error };
@@ -56,6 +59,7 @@ export class DomainController {
     try {
       const { id } = dto;
       await this.domainRepo.delete({ id });
+      this.settingRepo.delete({ id });
       return { ok: true };
     } catch (error) {
       console.error(error);

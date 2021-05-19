@@ -29,8 +29,8 @@ export class DomainSetting implements IDomainSetting {
   @Column({ name: "next_path", nullable: true })
   nextPath?: string | null;
 
-  @Field(() => Boolean, { nullable: true })
-  @Column({ name: "scroll_more", nullable: true })
+  @Field(() => Boolean)
+  @Column({ name: "scroll_more", default: false })
   scrollMore?: boolean;
 
   @Field(() => String, { nullable: true })
@@ -54,7 +54,7 @@ export class DomainSetting implements IDomainSetting {
   imagePath?: string | null;
 
   @Field(() => Date)
-  @CreateDateColumn({ name: "created_at" })
+  @CreateDateColumn({ name: "created_at", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
 
   @Field(() => Date, { nullable: true })

@@ -9,7 +9,7 @@ import { ScrapIndexLink } from "@web-scraping/dto";
 export class WebIndexService {
   constructor(
     @InjectRepository(Link)
-    private readonly linkRepo: Repository<Link>,
+    private readonly linkRepo: Repository<Link>
   ) {}
 
   async getHyperlink(indexPage: string, indexPath: string) {
@@ -78,12 +78,19 @@ export class WebIndexService {
     );
     await Promise.all(
       filtered.map(async (link) => {
-        this.linkRepo.save({
-          url: link.url,
-          title: link.title,
-          domainId,
-        });
+        this.linkUpsert(domainId, link);
       })
     );
+  }
+
+  async linkUpsert(domainId: number, link: ScrapIndexLink) {
+    const count = await this.linkRepo.count({ url: link.url });
+    if (!count) {
+      return this.linkRepo.save({
+        url: link.url,
+        title: link.title,
+        domainId,
+      });
+    }
   }
 }

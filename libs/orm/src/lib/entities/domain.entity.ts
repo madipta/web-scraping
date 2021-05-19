@@ -36,14 +36,10 @@ export class Domain implements IDomain {
   @Column({ nullable: true })
   disabled?: boolean;
 
-  @Field(() => Boolean, { nullable: true })
-  @Column({ nullable: true })
-  broken?: boolean;
-
   @Field(() => Date)
-  @CreateDateColumn({ name: "created_at" })
+  @CreateDateColumn({ name: "created_at", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
-  
+
   @Field(() => Date, { nullable: true })
   @UpdateDateColumn({ name: "updated_at" })
   updatedAt?: Date;
@@ -52,7 +48,9 @@ export class Domain implements IDomain {
   @OneToMany(() => Link, (link) => link.domain)
   links: ILink[];
 
-  @OneToOne(() => DomainSetting, setting => setting.domain)
+  @OneToOne(() => DomainSetting, (setting) => setting.domain, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({
     name: "id",
     referencedColumnName: "id",

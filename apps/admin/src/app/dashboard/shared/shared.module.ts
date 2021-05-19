@@ -1,3 +1,4 @@
+import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NzPageHeaderModule } from "ng-zorro-antd/page-header";
@@ -15,7 +16,6 @@ import { NzPopconfirmModule } from "ng-zorro-antd/popconfirm";
 import { NzToolTipModule } from "ng-zorro-antd/tooltip";
 import { DomainNamePipe } from "./pipes/domain-name.pipe";
 import { ChecklistComponent } from "./components/checklist/checklist.component";
-import { CommonModule } from "@angular/common";
 import { UrlPathPipe } from "./pipes/url-path.pipe";
 
 const modules = [

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DomainScrapComponent } from './domain-scrap.component';
+import { DomainSettingComponent } from './domain-setting.component';
 
-describe('DomainScrapComponent', () => {
-  let component: DomainScrapComponent;
-  let fixture: ComponentFixture<DomainScrapComponent>;
+describe('DomainSettingComponent', () => {
+  let component: DomainSettingComponent;
+  let fixture: ComponentFixture<DomainSettingComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DomainScrapComponent ]
+      declarations: [ DomainSettingComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DomainScrapComponent);
+    fixture = TestBed.createComponent(DomainSettingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

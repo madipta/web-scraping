@@ -31,13 +31,8 @@ export class DomainUpdateComponent implements OnInit {
     });
     this.form = this.fb.group({
       home: [null, [Validators.required]],
-      indexUrl: [null],
-      indexPath: [null],
-      contentPath: [null],
-      categoryPath: [null],
-      headerPath: [null],
       adminEmail: [null, [Validators.email]],
-      active: [false],
+      active: [true],
       disabled: [false],
     });
     if (!this.selectedId) {
