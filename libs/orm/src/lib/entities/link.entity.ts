@@ -14,9 +14,7 @@ import { Content } from "./content.entity";
 import { Domain } from "./domain.entity";
 
 @ObjectType()
-@Entity({
-  name: "Link",
-})
+@Entity()
 export class Link implements ILink {
   @Field(() => Number)
   @PrimaryGeneratedColumn()

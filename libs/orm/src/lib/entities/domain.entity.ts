@@ -3,7 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -12,9 +11,7 @@ import type { IDomain, ILink } from "../interfaces";
 import { Link } from "./link.entity";
 
 @ObjectType()
-@Entity({
-  name: "Domain",
-})
+@Entity()
 export class Domain implements IDomain {
   @Field(() => Number)
   @PrimaryGeneratedColumn()
