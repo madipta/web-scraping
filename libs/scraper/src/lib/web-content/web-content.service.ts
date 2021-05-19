@@ -2,6 +2,7 @@ import { Browser, chromium } from "playwright";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import * as sanitizeHtml from "sanitize-html";
 import { Content, Link } from "@web-scraping/orm";
 import { LinkWithRef } from "@web-scraping/dto";
 
@@ -13,6 +14,10 @@ export class WebContentService {
     @InjectRepository(Content)
     private readonly contentRepo: Repository<Content>
   ) {}
+
+  removeAllHtmlTags(html: string) {
+    return sanitizeHtml(html, { allowedTags: [], allowedAttributes: {} });
+  }
 
   async scrap(browser: Browser, link: LinkWithRef) {
     const contentPath = link.domain.setting.contentPath;
@@ -35,7 +40,7 @@ export class WebContentService {
     if (pageContent) {
       this.contentRepo.save({
         linkId: link.id,
-        content: pageContent.replace(/\s\s+/g, " "),
+        content: this.removeAllHtmlTags(pageContent.replace(/\s\s+/g, " ")),
       });
       this.linkRepo.update({ id: link.id }, { scraped: true });
       console.log(link.id, link.url);
@@ -65,7 +70,7 @@ export class WebContentService {
       const res = [];
       const links = await this.linkRepo.find({
         where: { domainId, scraped: false },
-        relations: ["domain"],
+        relations: ["domain", "domain.setting"],
       });
       for (let i = 0; i < links.length && i < 100; i++) {
         res.push(await this.scrap(browser, links[i]));
