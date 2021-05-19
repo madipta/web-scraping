@@ -1,8 +1,9 @@
 import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { OrmModule } from "@web-scraping/orm";
 
 @Module({
-  controllers: [],
+  imports: [OrmModule, TypeOrmModule.forFeature([])],
   providers: [],
-  exports: [],
 })
 export class GqlModule {}
