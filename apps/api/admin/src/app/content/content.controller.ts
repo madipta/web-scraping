@@ -16,7 +16,7 @@ export class ContentController {
   ) {}
 
   private refineSortOrderQueryParam(sortBy: string, sortOrder: string) {
-    sortBy = sortBy ?? "content";
+    sortBy = sortBy ?? "Link.title";
     if (sortOrder && sortOrder.toLowerCase().startsWith("desc")) {
       sortOrder = "DESC";
     } else {
@@ -36,7 +36,7 @@ export class ContentController {
         .createQueryBuilder("Content")
         .select("Content.link_id", "linkId");
       if (search) {
-        builder.where({ content: ILike(`%${search}%`) });
+        builder.where({ pageText: ILike(`%${search}%`) });
       }
       return builder;
     };
@@ -68,7 +68,7 @@ export class ContentController {
         .leftJoin("Link.domain", "Domain")
         .where({ linkId })
         .select("link_id", "linkId")
-        .addSelect("content")
+        .addSelect("page_text", "pageText")
         .addSelect("Link.url", "linkUrl")
         .addSelect("Link.title", "linkTitle")
         .addSelect("Domain.home", "domainHome")

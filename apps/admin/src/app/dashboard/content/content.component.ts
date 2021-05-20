@@ -10,7 +10,7 @@ import { ContentService } from "../shared/services/content.service";
   styleUrls: ["./content.component.scss"],
 })
 export class ContentComponent implements OnInit {
-  content: string;
+  pageText: string;
   home: string;
   url: string;
   constructor(
@@ -36,7 +36,7 @@ export class ContentComponent implements OnInit {
     this.msg.remove(msgId);
     if (res.ok) {
       const result = res.result as any;
-      this.content = result.content.replace(/\.\s/g, '.\n\n');
+      this.pageText = result.pageText.replace(/\.\s/g, '.\n\n');
       this.home = result.domainHome;
       this.url = result.linkUrl;
     } else {

@@ -15,7 +15,7 @@ export class ContentListComponent {
   loading = true;
   pageIndex = 1;
   pageSize = 20;
-  sortField = "content";
+  sortField = "Link.title";
   sortOrder = "asc";
   search = "";
 

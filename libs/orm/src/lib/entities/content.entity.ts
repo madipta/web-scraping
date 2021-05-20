@@ -11,8 +11,8 @@ export class Content implements IContent {
   linkId: number;
 
   @Field(() => String)
-  @Column()
-  content: string;
+  @Column({ name: "page_text" })
+  pageText: string;
 
   @Field(() => String, { nullable: true })
   @Column({ name: "image_url" })

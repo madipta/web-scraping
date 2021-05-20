@@ -25,7 +25,7 @@ export class ContentService {
     sortOrder: string | null,
     search: string | null
   ): Observable<ContentListResult> {
-    sortField = sortField ?? "content";
+    sortField = sortField ?? "Link.title";
     sortOrder = sortOrder ?? "asc";
     const params = new HttpParams()
       .append("pageIndex", `${pageIndex}`)

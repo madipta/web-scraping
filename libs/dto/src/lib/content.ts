@@ -2,7 +2,7 @@ import { CreatedAt, UpdatedAt } from "./common";
 import { LinkWithRef } from "./link";
 
 export type ContentBase = {
-  content: string;
+  pageText: string;
 };
 
 export type ContentLinkId = { linkId: number };
