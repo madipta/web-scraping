@@ -19,6 +19,14 @@ export class WebContentService {
     return sanitizeHtml(html, { allowedTags: [], allowedAttributes: {} });
   }
 
+  removeNonText(html: string) {
+    return sanitizeHtml(html, {
+      allowedTags: false,
+      allowedAttributes: false,
+      nonTextTags: ["style", "script", "textarea", "option", "noscript"],
+    });
+  }
+
   async scrap(browser: Browser, link: LinkWithRef) {
     const contentPath = link.domain.setting.contentPath;
     const page = await browser.newPage();
@@ -34,13 +42,14 @@ export class WebContentService {
       throw new Error(pageResponse.statusText());
     }
     this.linkRepo.update({ id: link.id }, { broken: false });
-    const pageContent = await page.$eval(contentPath, (tc) =>
-      tc ? tc.textContent : ""
-    );
+    const tc = await page.$eval(contentPath, tc => tc);
+    const pageContent = tc ? tc.textContent.replace(/\s\s+/g, " ") : "";
+    const pageHtml = tc ? tc.innerHTML.replace(/\s\s+/g, " ") : "";
     if (pageContent) {
       this.contentRepo.save({
         id: link.id,
-        text: this.removeAllHtmlTags(pageContent.replace(/\s\s+/g, " ")),
+        html: this.removeNonText(pageHtml),
+        text: this.removeAllHtmlTags(pageContent),
       });
       this.linkRepo.update({ id: link.id }, { scraped: true });
       console.log(link.id, link.url);
