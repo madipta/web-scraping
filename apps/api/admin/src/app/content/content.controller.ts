@@ -68,7 +68,7 @@ export class ContentController {
         .leftJoin("Link.domain", "Domain")
         .where({ linkId })
         .select("link_id", "linkId")
-        .addSelect("page_text", "pageText")
+        .addSelect("text")
         .addSelect("Link.url", "linkUrl")
         .addSelect("Link.title", "linkTitle")
         .addSelect("Domain.home", "domainHome")
