@@ -39,7 +39,7 @@
   <tbody>
     <tr *ngFor="let data of contentList">
       <td>
-        <a [href]="data.linkUrl" target="_blank">{{ data.linkId }}</a>
+        <a [href]="data.linkUrl" target="_blank">{{ data.id }}</a>
       </td>
       <td>
         {{ data.linkUrl | domainName }}
@@ -48,7 +48,7 @@
         <a
           (click)="
             router.navigate(['dashboard', 'content'], {
-              queryParams: { linkId: data.linkId }
+              queryParams: { id: data.id }
             })
           "
           >{{ data.linkTitle }}</a

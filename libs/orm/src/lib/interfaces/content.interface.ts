@@ -1,4 +1,5 @@
 export interface IContent {
-  linkId: number;
+  id: number;
   text: string;
+  html: string;
 }

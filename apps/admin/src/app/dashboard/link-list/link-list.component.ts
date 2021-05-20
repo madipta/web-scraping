@@ -142,7 +142,7 @@ export class LinkListComponent implements OnInit {
       return;
     }
     this.router.navigate(["dashboard", "content"], {
-      queryParams: { linkId: data.id },
+      queryParams: { id: data.id },
     });
   }
 }

@@ -13,6 +13,7 @@ export class ContentComponent implements OnInit {
   text: string;
   home: string;
   url: string;
+  
   constructor(
     private route: ActivatedRoute,
     private location: Location,
@@ -22,17 +23,17 @@ export class ContentComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      if (params && params.linkId) {
-        this.getContent(+params.linkId);
+      if (params && params.id) {
+        this.getContent(+params.id);
       } else {
         this.location.back();
       }
     });
   }
 
-  async getContent(linkId: number) {
+  async getContent(id: number) {
     const msgId = this.msg.loading("loading...", { nzDuration: 0 }).messageId;
-    const res = await this.contentService.get({ linkId });
+    const res = await this.contentService.get({ id });
     this.msg.remove(msgId);
     if (res.ok) {
       const result = res.result as any;

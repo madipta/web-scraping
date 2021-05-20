@@ -39,7 +39,7 @@ export class WebContentService {
     );
     if (pageContent) {
       this.contentRepo.save({
-        linkId: link.id,
+        id: link.id,
         text: this.removeAllHtmlTags(pageContent.replace(/\s\s+/g, " ")),
       });
       this.linkRepo.update({ id: link.id }, { scraped: true });

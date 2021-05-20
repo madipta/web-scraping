@@ -1,17 +1,16 @@
-import { CreatedAt, UpdatedAt } from "./common";
+import { CreatedAt, IdNumber, UpdatedAt } from "./common";
 import { LinkWithRef } from "./link";
 
 export type ContentBase = {
   text: string;
+  html: string;
 };
 
-export type ContentLinkId = { linkId: number };
-
-export type Content = ContentLinkId & CreatedAt & UpdatedAt & ContentBase;
+export type Content = IdNumber & CreatedAt & UpdatedAt & ContentBase;
 
 export type ContentCreateInput = ContentBase;
 
-export type ContentUpdateInput = ContentLinkId & Partial<ContentBase>;
+export type ContentUpdateInput = IdNumber & Partial<ContentBase>;
 
 export type ContentWithRef = Partial<Content> & {
   link?: Partial<LinkWithRef>;

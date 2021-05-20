@@ -2,9 +2,8 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import {
-  ContentLinkId,
   ContentListResult,
-  ContentWithRef,
+  IdNumber,
   PromiseResponse,
 } from "@web-scraping/dto";
 
@@ -38,10 +37,10 @@ export class ContentService {
     });
   }
 
-  async get(dto: ContentLinkId) {
+  async get(dto: IdNumber) {
     return this.http
       .get<PromiseResponse>(this.contentGetUrl, {
-        params: { linkId: `${dto.linkId}` },
+        params: { id: `${dto.id}` },
       })
       .toPromise();
   }

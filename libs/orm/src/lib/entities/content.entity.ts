@@ -7,12 +7,16 @@ import { Link } from "./link.entity";
 @Entity()
 export class Content implements IContent {
   @Field(() => Number)
-  @PrimaryColumn({ name: "link_id" })
-  linkId: number;
+  @PrimaryColumn({ name: "id" })
+  id: number;
 
-  @Field(() => String)
-  @Column({ name: "text" })
+  @Field(() => String, { nullable: true })
+  @Column()
   text: string;
+
+  @Field(() => String, { nullable: true })
+  @Column()
+  html: string;
 
   @Field(() => String, { nullable: true })
   @Column({ name: "image_url" })
@@ -32,7 +36,7 @@ export class Content implements IContent {
 
   @OneToOne(() => Link)
   @JoinColumn({
-    name: "link_id",
+    name: "id",
     referencedColumnName: "id",
   })
   link: ILink;

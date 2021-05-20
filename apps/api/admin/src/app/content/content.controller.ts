@@ -34,7 +34,7 @@ export class ContentController {
     const queryBuilder = () => {
       const builder = this.contentRepo
         .createQueryBuilder("Content")
-        .select("Content.link_id", "linkId");
+        .select("Content.id", "id");
       if (search) {
         builder.where({ pageText: ILike(`%${search}%`) });
       }
@@ -60,14 +60,14 @@ export class ContentController {
   }
 
   @Get()
-  async getOne(@Query("linkId") linkId: number): PromiseResponse<Content> {
+  async getOne(@Query("id") id: number): PromiseResponse<Content> {
     try {
       const result = await this.contentRepo
         .createQueryBuilder("Content")
         .leftJoin("Content.link", "Link")
         .leftJoin("Link.domain", "Domain")
-        .where({ linkId })
-        .select("link_id", "linkId")
+        .where({ id })
+        .select("Content.id", "id")
         .addSelect("text")
         .addSelect("Link.url", "linkUrl")
         .addSelect("Link.title", "linkTitle")
