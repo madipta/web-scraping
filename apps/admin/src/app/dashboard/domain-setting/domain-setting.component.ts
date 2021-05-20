@@ -36,12 +36,14 @@ export class DomainSettingComponent implements OnInit {
       indexUrl: [null],
       indexPath: [null],
       nextPath: [null],
-      scrollMore: [null],
+      scrollMore: [false],
       contentPath: [null],
       headerPath: [null],
       categoryPath: [null],
       publishDatePath: [null],
       imagePath: [null],
+      indexingType: ["web"],
+      loadIndexType: ["full"]
     });
   }
 

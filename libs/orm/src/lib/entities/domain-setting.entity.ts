@@ -10,12 +10,38 @@ import {
 import type { IDomain, IDomainSetting } from "../interfaces";
 import { Domain } from "./domain.entity";
 
+export enum ContentIndexingType {
+  API = "api",
+  SPA = "spa",
+  WEB = "web",
+}
+
+export enum LoadIndexType {
+  FULL = "full",
+  NEXT = "next",
+  SCROLL = "scroll",
+}
+
 @ObjectType()
 @Entity()
 export class DomainSetting implements IDomainSetting {
   @Field(() => Number)
   @PrimaryColumn()
   id: number;
+
+  @Field(() => String)
+  @Column({
+    name: "indexing_type",
+    default: ContentIndexingType.WEB,
+  })
+  indexingType: ContentIndexingType;
+
+  @Field(() => String)
+  @Column({
+    name: "load_index_type",
+    default: LoadIndexType.FULL,
+  })
+  loadIndexType: LoadIndexType;
 
   @Field(() => String, { nullable: true })
   @Column({ name: "index_url", nullable: true })

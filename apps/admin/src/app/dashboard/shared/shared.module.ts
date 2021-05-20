@@ -17,6 +17,7 @@ import { NzToolTipModule } from "ng-zorro-antd/tooltip";
 import { DomainNamePipe } from "./pipes/domain-name.pipe";
 import { ChecklistComponent } from "./components/checklist/checklist.component";
 import { UrlPathPipe } from "./pipes/url-path.pipe";
+import { NzRadioModule } from "ng-zorro-antd/radio";
 
 const modules = [
   CommonModule,
@@ -35,6 +36,7 @@ const modules = [
   NzMessageModule,
   NzPopconfirmModule,
   NzToolTipModule,
+  NzRadioModule
 ];
 
 const declarations = [DomainNamePipe, ChecklistComponent, UrlPathPipe];

@@ -7,11 +7,31 @@
 
 <form nz-form [formGroup]="form">
   <nz-form-item>
-    <nz-form-label
-      [nzSm]="6"
-      [nzXs]="24"
-      nzFor="indexUrl"
-      nzTooltipTitle="Relative index url path (without http/s & domain)"
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="indexUrl"
+      >Indexing Type</nz-form-label
+    >
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-radio-group formControlName="indexingType">
+        <label nz-radio nzValue="web">Web</label>
+        <label nz-radio nzValue="api">API</label>
+        <label nz-radio nzValue="spa">SPA</label>
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="loadIndexType"
+      >Load Index Type</nz-form-label
+    >
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-radio-group formControlName="loadIndexType">
+        <label nz-radio nzValue="full">Full</label>
+        <label nz-radio nzValue="next">Next</label>
+        <label nz-radio nzValue="scroll">Scroll</label>
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="indexUrl"
       >Index URL</nz-form-label
     >
     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -24,11 +44,7 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label
-      [nzSm]="6"
-      [nzXs]="24"
-      nzFor="indexPath"
-      nzTooltipTitle="HTML path to index hyperlink"
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="indexPath"
       >Index path</nz-form-label
     >
     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -41,11 +57,7 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label
-      [nzSm]="6"
-      [nzXs]="24"
-      nzFor="nextPath"
-      nzTooltipTitle="HTML path to next hyperlink"
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="nextPath"
       >Next path</nz-form-label
     >
     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -58,11 +70,7 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label
-      [nzSm]="6"
-      [nzXs]="24"
-      nzFor="nextPath"
-      nzTooltipTitle="HTML path to next hyperlink"
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="nextPath"
       >Next path</nz-form-label
     >
     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -75,11 +83,7 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label
-      [nzSm]="6"
-      [nzXs]="24"
-      nzFor="scrollMore"
-      nzTooltipTitle="are using scroll for paging"
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="scrollMore"
       >Scroll More</nz-form-label
     >
     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -87,11 +91,7 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label
-      [nzSm]="6"
-      [nzXs]="24"
-      nzFor="headerPath"
-      nzTooltipTitle="HTML path to header title element"
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="headerPath"
       >Header path</nz-form-label
     >
     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -104,11 +104,7 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label
-      [nzSm]="6"
-      [nzXs]="24"
-      nzFor="categoryPath"
-      nzTooltipTitle="HTML path to category element"
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="categoryPath"
       >Category path</nz-form-label
     >
     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -121,11 +117,7 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label
-      [nzSm]="6"
-      [nzXs]="24"
-      nzFor="publishDatePath"
-      nzTooltipTitle="HTML path to publish date element"
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="publishDatePath"
       >Publish Date Path</nz-form-label
     >
     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -138,11 +130,7 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label
-      [nzSm]="6"
-      [nzXs]="24"
-      nzFor="imagePath"
-      nzTooltipTitle="HTML path to image element"
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="imagePath"
       >Image Path</nz-form-label
     >
     <nz-form-control [nzSm]="14" [nzXs]="24">
