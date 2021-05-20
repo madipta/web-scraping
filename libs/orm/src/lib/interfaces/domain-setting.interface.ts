@@ -1,6 +1,7 @@
 export interface IDomainSetting {
   id: number;
   indexUrl?: string | null;
+  indexFeedUrl?: string | null;
   indexPath?: string | null;
   nextPath?: string | null;
   scrollMore?: boolean;

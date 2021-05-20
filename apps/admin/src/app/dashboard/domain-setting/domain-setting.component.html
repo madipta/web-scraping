@@ -44,6 +44,19 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="indexFeedUrl"
+      >Index Feed URL</nz-form-label
+    >
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input
+        nz-input
+        id="indexFeedUrl"
+        formControlName="indexFeedUrl"
+        placeholder="ex: index/feed"
+      />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="indexPath"
       >Index path</nz-form-label
     >
@@ -53,19 +66,6 @@
         id="indexPath"
         formControlName="indexPath"
         placeholder="ex: main article.index a"
-      />
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="nextPath"
-      >Next path</nz-form-label
-    >
-    <nz-form-control [nzSm]="14" [nzXs]="24">
-      <input
-        nz-input
-        id="nextPath"
-        formControlName="nextPath"
-        placeholder="ex: main a.next"
       />
     </nz-form-control>
   </nz-form-item>

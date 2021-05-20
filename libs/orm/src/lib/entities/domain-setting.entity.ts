@@ -48,6 +48,10 @@ export class DomainSetting implements IDomainSetting {
   indexUrl?: string | null;
 
   @Field(() => String, { nullable: true })
+  @Column({ name: "index_feed_url", nullable: true })
+  indexFeedUrl?: string | null;
+
+  @Field(() => String, { nullable: true })
   @Column({ name: "index_path", nullable: true })
   indexPath?: string | null;
 

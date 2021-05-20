@@ -5,5 +5,5 @@ export interface IDomain {
   active?: boolean;
   disabled?: boolean;
   createdAt: Date;
-  updatedAt?: Date;
+  updatedAt?: Date | null;
 }

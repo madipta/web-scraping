@@ -34,6 +34,7 @@ export class DomainSettingComponent implements OnInit {
     });
     this.form = this.fb.group({
       indexUrl: [null],
+      indexFeedUrl: [null],
       indexPath: [null],
       nextPath: [null],
       scrollMore: [false],
