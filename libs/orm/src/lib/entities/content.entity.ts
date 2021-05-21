@@ -15,35 +15,40 @@ import { Link } from "./link.entity";
 @Entity()
 export class Content implements IContent {
   @Field(() => Number)
-  @PrimaryColumn({ name: "id" })
+  @PrimaryColumn({ type: "bigint" })
   id: number;
 
   @Field(() => String, { nullable: true })
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "text" })
   feed?: string | null;
 
   @Field(() => String, { nullable: true })
-  @Column({ name: "feed_url", nullable: true })
+  @Column({
+    name: "feed_url",
+    nullable: true,
+    type: "character varying",
+    length: 2048,
+  })
   feedUrl?: string | null;
 
   @Field(() => String, { nullable: true })
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "text" })
   text?: string | null;
 
   @Field(() => String, { nullable: true })
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "text" })
   html?: string | null;
 
   @Field(() => String, { nullable: true })
-  @Column({ name: "image_html", nullable: true })
+  @Column({ name: "image_html", nullable: true, type: "text" })
   imageHtml?: string | null;
 
   @Field(() => String, { nullable: true })
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "character varying", length: 2048 })
   title?: string | null;
 
   @Field(() => String, { nullable: true })
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "character varying", length: 2048 })
   category?: string | null;
 
   @Field(() => Date, { nullable: true })
@@ -55,10 +60,10 @@ export class Content implements IContent {
   createdAt: Date;
 
   @Field(() => Date, { nullable: true })
-  @UpdateDateColumn({ name: "updated_at" })
+  @UpdateDateColumn({ name: "updated_at", nullable: true })
   updatedAt?: Date;
 
-  @OneToOne(() => Link)
+  @OneToOne(() => Link, (link) => link.content)
   @JoinColumn({
     name: "id",
     referencedColumnName: "id",

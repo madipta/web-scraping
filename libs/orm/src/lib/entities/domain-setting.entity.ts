@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
@@ -26,13 +27,15 @@ export enum LoadIndexType {
 @Entity()
 export class DomainSetting implements IDomainSetting {
   @Field(() => Number)
-  @PrimaryColumn()
+  @PrimaryColumn({ type: "int" })
   id: number;
 
   @Field(() => String)
   @Column({
     name: "indexing_type",
     default: ContentIndexingType.WEB,
+    type: "character varying",
+    length: 3,
   })
   indexingType: ContentIndexingType;
 
@@ -40,23 +43,45 @@ export class DomainSetting implements IDomainSetting {
   @Column({
     name: "load_index_type",
     default: LoadIndexType.FULL,
+    type: "character varying",
+    length: 5,
   })
   loadIndexType: LoadIndexType;
 
   @Field(() => String, { nullable: true })
-  @Column({ name: "index_url", nullable: true })
+  @Column({
+    name: "index_url",
+    nullable: true,
+    type: "character varying",
+    length: 2048,
+  })
   indexUrl?: string | null;
 
   @Field(() => String, { nullable: true })
-  @Column({ name: "index_feed_url", nullable: true })
+  @Column({
+    name: "index_feed_url",
+    nullable: true,
+    type: "character varying",
+    length: 2048,
+  })
   indexFeedUrl?: string | null;
 
   @Field(() => String, { nullable: true })
-  @Column({ name: "index_path", nullable: true })
+  @Column({
+    name: "index_path",
+    nullable: true,
+    type: "character varying",
+    length: 250,
+  })
   indexPath?: string | null;
 
   @Field(() => String, { nullable: true })
-  @Column({ name: "next_path", nullable: true })
+  @Column({
+    name: "next_path",
+    nullable: true,
+    type: "character varying",
+    length: 250,
+  })
   nextPath?: string | null;
 
   @Field(() => Boolean)
@@ -64,23 +89,48 @@ export class DomainSetting implements IDomainSetting {
   scrollMore?: boolean;
 
   @Field(() => String, { nullable: true })
-  @Column({ name: "content_path", nullable: true })
+  @Column({
+    name: "content_path",
+    nullable: true,
+    type: "character varying",
+    length: 250,
+  })
   contentPath?: string | null;
 
   @Field(() => String, { nullable: true })
-  @Column({ name: "header_path", nullable: true })
+  @Column({
+    name: "header_path",
+    nullable: true,
+    type: "character varying",
+    length: 250,
+  })
   headerPath?: string | null;
 
   @Field(() => String, { nullable: true })
-  @Column({ name: "category_path", nullable: true })
+  @Column({
+    name: "category_path",
+    nullable: true,
+    type: "character varying",
+    length: 250,
+  })
   categoryPath?: string | null;
 
   @Field(() => String, { nullable: true })
-  @Column({ name: "publish_date_path", nullable: true })
+  @Column({
+    name: "publish_date_path",
+    nullable: true,
+    type: "character varying",
+    length: 250,
+  })
   publishDatePath?: string | null;
 
   @Field(() => String, { nullable: true })
-  @Column({ name: "image_path", nullable: true })
+  @Column({
+    name: "image_path",
+    nullable: true,
+    type: "character varying",
+    length: 250,
+  })
   imagePath?: string | null;
 
   @Field(() => Date)
@@ -88,9 +138,13 @@ export class DomainSetting implements IDomainSetting {
   createdAt: Date;
 
   @Field(() => Date, { nullable: true })
-  @UpdateDateColumn({ name: "updated_at" })
+  @UpdateDateColumn({ name: "updated_at", nullable: true })
   updatedAt?: Date;
 
   @OneToOne(() => Domain, (domain) => domain.setting)
+  @JoinColumn({
+    name: "id",
+    referencedColumnName: "id",
+  })
   domain: IDomain;
 }

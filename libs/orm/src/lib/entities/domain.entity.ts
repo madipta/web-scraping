@@ -3,7 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -17,15 +16,20 @@ import { Link } from "./link.entity";
 @Entity()
 export class Domain implements IDomain {
   @Field(() => Number)
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: "int" })
   id: number;
 
   @Field(() => String)
-  @Column()
+  @Column({ unique: true, type: "character varying", length: 2048 })
   home: string;
 
   @Field(() => String, { nullable: true })
-  @Column({ name: "admin_email", nullable: true })
+  @Column({
+    name: "admin_email",
+    nullable: true,
+    type: "character varying",
+    length: 150,
+  })
   adminEmail?: string | null;
 
   @Field(() => Boolean, { nullable: true })
@@ -41,7 +45,7 @@ export class Domain implements IDomain {
   createdAt: Date;
 
   @Field(() => Date, { nullable: true })
-  @UpdateDateColumn({ name: "updated_at" })
+  @UpdateDateColumn({ name: "updated_at", nullable: true })
   updatedAt?: Date;
 
   @Field(() => [Link])
@@ -50,10 +54,6 @@ export class Domain implements IDomain {
 
   @OneToOne(() => DomainSetting, (setting) => setting.domain, {
     onDelete: "CASCADE",
-  })
-  @JoinColumn({
-    name: "id",
-    referencedColumnName: "id",
   })
   setting: IDomainSetting;
 }

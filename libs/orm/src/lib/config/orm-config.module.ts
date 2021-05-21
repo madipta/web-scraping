@@ -19,7 +19,7 @@ const schema = Joi.object({
   DB_MAIN_USER: Joi.string().default("postgres"),
   DB_MAIN_PASSWORD: Joi.string().default("kosong"),
   DB_MAIN_DATABASE: Joi.string().default("web-scraping"),
-  DB_MAIN_SYNCHRONIZE: Joi.boolean().default(false),
+  DB_MAIN_SYNCHRONIZE: Joi.string().default("true"),
 });
 
 @Module({
