@@ -42,9 +42,8 @@ export class WebContentService {
       throw new Error(pageResponse.statusText());
     }
     this.linkRepo.update({ id: link.id }, { broken: false });
-    const tc = await page.$eval(contentPath, tc => tc);
-    const pageContent = tc ? tc.textContent.replace(/\s\s+/g, " ") : "";
-    const pageHtml = tc ? tc.innerHTML.replace(/\s\s+/g, " ") : "";
+    const pageContent = await page.$eval(contentPath, tc => tc.textContent.replace(/\s\s+/g, " "));
+    const pageHtml = await page.$eval(contentPath, tc => tc.innerHTML.replace(/\s\s+/g, " "));
     if (pageContent) {
       this.contentRepo.save({
         id: link.id,
