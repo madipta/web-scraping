@@ -6,20 +6,22 @@ export type DomainBase = {
   adminEmail?: string | null;
   active?: boolean;
   disabled?: boolean;
-  setting?: DomainSetting
 };
 
-export type Domain = IdNumber & CreatedAt & UpdatedAt & DomainBase;
+export type Domain = IdNumber &
+  CreatedAt &
+  UpdatedAt &
+  DomainBase & { setting?: DomainSetting };
 
 export type DomainCreateInput = DomainBase;
 
 export type DomainUpdateInput = IdNumber & Partial<DomainBase>;
 
 export type DomainListItem = Partial<Domain> & {
-  links_count: number;
+  linksCount: number;
 };
 
 export type DomainListResult = {
   result: DomainListItem[];
   total: number;
-}
+};

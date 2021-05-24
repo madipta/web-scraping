@@ -2,7 +2,10 @@ import { CreatedAt, IdNumber, UpdatedAt } from "./common";
 import { DomainBase } from "./domain";
 
 export type DomainSettingBase = {
+  indexingType: string;
+  loadIndexType: string;
   indexUrl?: string | null;
+  indexFeedUrl?: string | null;
   indexPath?: string | null;
   nextPath?: string | null;
   scrollMore?: boolean;

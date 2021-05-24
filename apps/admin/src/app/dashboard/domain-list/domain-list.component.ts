@@ -36,30 +36,29 @@ export class DomainListComponent {
     );
   }
 
-  loadData(
+  async loadData(
     pageIndex: number,
     pageSize: number,
     sortField: string | null,
     sortOrder: string | null,
     search: string | null
-  ): void {
+  ) {
     this.loading = true;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
     this.sortField = sortField;
     this.sortOrder = sortOrder;
     this.search = search;
-    this.domainService.fetchList(
+    const res = await this.domainService.fetchList(
       pageIndex,
       pageSize,
       sortField,
       sortOrder,
       search
-    ).subscribe((data) => {
-      this.loading = false;
-      this.total = data.total;
-      this.domainList = data.result;
-    });
+    );
+    this.loading = false;
+    this.total = res.total;
+    this.domainList = res.result;
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
@@ -93,7 +92,7 @@ export class DomainListComponent {
   }
 
   gotoLinks(data: DomainListItem) {
-    if (!+data.links_count) {
+    if (!+data.linksCount) {
       this.msg.error("Links not scraped yet!");
       return;
     }

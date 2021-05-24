@@ -1,10 +1,10 @@
 import { Location } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Domain, LinkWithRef } from "@web-scraping/dto";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { filter } from "rxjs/operators";
-import { Domain, LinkWithRef } from "@web-scraping/dto";
 import { DomainService } from "../shared/services/domain.service";
 import { LinkService } from "../shared/services/link.service";
 
@@ -43,7 +43,7 @@ export class LinkListComponent implements OnInit {
         }
         this.domain = await this.getDomain(+params.id);
         if (this.domain) {
-          // this.refreshData();
+          this.refreshData();
         }
       });
   }
@@ -68,33 +68,30 @@ export class LinkListComponent implements OnInit {
     );
   }
 
-  loadData(
+  async loadData(
     pageIndex: number,
     pageSize: number,
     sortField: string | null,
     sortOrder: string | null,
     search: string | null
-  ): void {
+  ) {
     this.loading = true;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
     this.sortField = sortField;
     this.sortOrder = sortOrder;
     this.search = search;
-    this.linkService
-      .fetchList(
-        this.domain.id,
-        pageIndex,
-        pageSize,
-        sortField,
-        sortOrder,
-        search
-      )
-      .subscribe((data) => {
-        this.loading = false;
-        this.total = data.total;
-        this.linkList = data.result;
-      });
+    const res = await this.linkService.fetchList(
+      this.domain.id,
+      pageIndex,
+      pageSize,
+      sortField,
+      sortOrder,
+      search
+    );
+    this.loading = false;
+    this.total = res.total;
+    this.linkList = res.result;
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
@@ -133,7 +130,6 @@ export class LinkListComponent implements OnInit {
     } else {
       this.msg.error("Delete failed!");
     }
-    
   }
 
   gotoContent(data: LinkWithRef) {

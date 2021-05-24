@@ -44,7 +44,7 @@ export class DomainSetting implements IDomainSetting {
     name: "load_index_type",
     default: LoadIndexType.FULL,
     type: "character varying",
-    length: 5,
+    length: 6,
   })
   loadIndexType: LoadIndexType;
 
@@ -141,10 +141,8 @@ export class DomainSetting implements IDomainSetting {
   @UpdateDateColumn({ name: "updated_at", nullable: true })
   updatedAt?: Date;
 
+  @Field(() => Domain)
   @OneToOne(() => Domain, (domain) => domain.setting)
-  @JoinColumn({
-    name: "id",
-    referencedColumnName: "id",
-  })
+  @JoinColumn({ name: "id", referencedColumnName: "id" })
   domain: IDomain;
 }

@@ -52,8 +52,9 @@ export class Link implements ILink {
   @UpdateDateColumn({ name: "updated_at", nullable: true })
   updatedAt?: Date;
 
+  @Field(() => Domain)
   @ManyToOne(() => Domain, (domain) => domain.links)
-  @JoinColumn({ name: "domain_id" })
+  @JoinColumn({ name: "domain_id", referencedColumnName: "id" })
   domain: IDomain;
 
   @OneToOne(() => Content, (content) => content.link, { onDelete: "CASCADE" })

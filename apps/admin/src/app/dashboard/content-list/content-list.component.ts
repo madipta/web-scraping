@@ -34,30 +34,29 @@ export class ContentListComponent {
     );
   }
 
-  loadData(
+  async loadData(
     pageIndex: number,
     pageSize: number,
     sortField: string | null,
     sortOrder: string | null,
     search: string | null
-  ): void {
+  ) {
     this.loading = true;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
     this.sortField = sortField;
     this.sortOrder = sortOrder;
     this.search = search;
-    this.contentService.fetchList(
+    const res = await this.contentService.fetchList(
       pageIndex,
       pageSize,
       sortField,
       sortOrder,
       search
-    ).subscribe((data) => {
-      this.loading = false;
-      this.total = data.total;
-      this.contentList = data.result;
-    });
+    );
+    this.loading = false;
+    this.total = res.total;
+    this.contentList = res.result;
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {

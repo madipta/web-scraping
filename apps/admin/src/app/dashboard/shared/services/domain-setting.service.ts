@@ -1,33 +1,46 @@
-import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import {
-  BaseResponse,
   DomainSettingUpdateInput,
   DomainSettingWithRef,
   IdNumber,
 } from "@web-scraping/dto";
+import { Apollo } from "apollo-angular";
+import { map, take } from "rxjs/operators";
+import {
+  GET_DOMAIN_SETTING_QUERY,
+  UPDATE_DOMAIN_SETTING_QUERY,
+} from "../gql/domain-setting";
 
 @Injectable({
   providedIn: "root",
 })
 export class DomainSettingService {
-  private apiUrl = "http://localhost:3333/api/";
-  private domainSettingGetUrl = this.apiUrl + "domain-setting";
-  private domainSettingUpdateUrl = this.apiUrl + "domain-setting/update";
-
-  constructor(private http: HttpClient) {}
+  constructor(private apollo: Apollo) {}
 
   async get(dto: IdNumber) {
-    return this.http
-      .get<BaseResponse<DomainSettingWithRef>>(this.domainSettingGetUrl, {
-        params: { id: `${dto.id}` },
+    return this.apollo
+      .query<DomainSettingWithRef>({
+        query: GET_DOMAIN_SETTING_QUERY,
+        variables: { id: dto.id },
+        fetchPolicy: "no-cache",
       })
+      .pipe(
+        take(1),
+        map((obj) => obj.data["getDomainSettingById"])
+      )
       .toPromise();
   }
 
-  async update(body: DomainSettingUpdateInput) {
-    return await this.http
-      .post<BaseResponse<DomainSettingWithRef>>(this.domainSettingUpdateUrl, body)
+  async update(dto: DomainSettingUpdateInput) {
+    return this.apollo
+      .mutate({
+        mutation: UPDATE_DOMAIN_SETTING_QUERY,
+        variables: { ...dto },
+      })
+      .pipe(
+        take(1),
+        map((obj) => obj.data["updateDomainSetting"])
+      )
       .toPromise();
   }
 }

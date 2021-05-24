@@ -1,21 +1,14 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import {
-  ContentListResult,
-  IdNumber,
-  PromiseResponse,
-} from "@web-scraping/dto";
+import { ContentWithRef, IdNumber } from "@web-scraping/dto";
+import { Apollo } from "apollo-angular";
+import { map, take } from "rxjs/operators";
+import { CONTENT_PAGE_LIST_QUERY, GET_CONTENT_QUERY } from "../gql/content";
 
 @Injectable({
   providedIn: "root",
 })
 export class ContentService {
-  private apiUrl = "http://localhost:3333/api/";
-  private contentGetUrl = this.apiUrl + "content";
-  private contentListUrl = this.apiUrl + "content/list";
-
-  constructor(private http: HttpClient) {}
+  constructor(private apollo: Apollo) {}
 
   fetchList(
     pageIndex: number,
@@ -23,25 +16,31 @@ export class ContentService {
     sortField: string | null,
     sortOrder: string | null,
     search: string | null
-  ): Observable<ContentListResult> {
-    sortField = sortField ?? "Link.title";
-    sortOrder = sortOrder ?? "asc";
-    const params = new HttpParams()
-      .append("pageIndex", `${pageIndex}`)
-      .append("pageSize", `${pageSize}`)
-      .append("sortBy", `${sortField}`)
-      .append("sortOrder", `${sortOrder}`)
-      .append("search", search);
-    return this.http.get<ContentListResult>(`${this.contentListUrl}`, {
-      params,
-    });
+  ) {
+    return this.apollo
+      .query<ContentWithRef>({
+        query: CONTENT_PAGE_LIST_QUERY,
+        variables: { pageIndex, pageSize, sortField, sortOrder, search },
+        fetchPolicy: "no-cache",
+      })
+      .pipe(
+        take(1),
+        map((obj) => obj.data["contentPagelist"])
+      )
+      .toPromise();
   }
 
   async get(dto: IdNumber) {
-    return this.http
-      .get<PromiseResponse>(this.contentGetUrl, {
-        params: { id: `${dto.id}` },
+    return this.apollo
+      .query<ContentWithRef>({
+        query: GET_CONTENT_QUERY,
+        variables: { id: dto.id },
+        fetchPolicy: "no-cache",
       })
+      .pipe(
+        take(1),
+        map((obj) => obj.data["getContentById"])
+      )
       .toPromise();
   }
 }

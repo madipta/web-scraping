@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, InputType, ObjectType } from "@nestjs/graphql";
 import {
   Column,
   CreateDateColumn,
@@ -12,6 +12,7 @@ import type { IDomain, IDomainSetting, ILink } from "../interfaces";
 import { DomainSetting } from "./domain-setting.entity";
 import { Link } from "./link.entity";
 
+@InputType('DomainCreateInput', { isAbstract: true })
 @ObjectType()
 @Entity()
 export class Domain implements IDomain {
@@ -19,7 +20,7 @@ export class Domain implements IDomain {
   @PrimaryGeneratedColumn({ type: "int" })
   id: number;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: false })
   @Column({ unique: true, type: "character varying", length: 2048 })
   home: string;
 
@@ -52,7 +53,9 @@ export class Domain implements IDomain {
   @OneToMany(() => Link, (link) => link.domain)
   links: ILink[];
 
+  @Field(() => DomainSetting)
   @OneToOne(() => DomainSetting, (setting) => setting.domain, {
+    nullable: true,
     onDelete: "CASCADE",
   })
   setting: IDomainSetting;

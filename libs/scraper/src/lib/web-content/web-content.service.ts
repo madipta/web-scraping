@@ -16,7 +16,10 @@ export class WebContentService {
   ) {}
 
   removeAllHtmlTags(html: string) {
-    return sanitizeHtml(html, { allowedTags: [], allowedAttributes: {} });
+    return sanitizeHtml(html, {
+      allowedTags: [],
+      allowedAttributes: {},
+    }).trim();
   }
 
   removeNonText(html: string) {
@@ -24,7 +27,7 @@ export class WebContentService {
       allowedTags: false,
       allowedAttributes: false,
       nonTextTags: ["style", "script", "textarea", "option", "noscript"],
-    });
+    }).trim();
   }
 
   async scrap(browser: Browser, link: LinkWithRef) {
@@ -42,8 +45,12 @@ export class WebContentService {
       throw new Error(pageResponse.statusText());
     }
     this.linkRepo.update({ id: link.id }, { broken: false });
-    const pageContent = await page.$eval(contentPath, tc => tc.textContent.replace(/\s\s+/g, " "));
-    const pageHtml = await page.$eval(contentPath, tc => tc.innerHTML.replace(/\s\s+/g, " "));
+    const pageContent = await page.$eval(contentPath, (tc) =>
+      tc.textContent.replace(/\s\s+/g, " ")
+    );
+    const pageHtml = await page.$eval(contentPath, (tc) =>
+      tc.innerHTML.replace(/\s\s+/g, " ")
+    );
     if (pageContent) {
       this.contentRepo.save({
         id: link.id,

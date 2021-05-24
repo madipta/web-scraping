@@ -1,20 +1,19 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { BaseResponse, IdNumber, LinkListResult } from "@web-scraping/dto";
+import { BaseResponse, LinkWithRef } from "@web-scraping/dto";
+import { Apollo } from "apollo-angular";
+import { map, take } from "rxjs/operators";
+import { DELETE_LINK_QUERY, LINK_PAGE_LIST_QUERY } from "../gql/link";
 
 @Injectable({
   providedIn: "root",
 })
 export class LinkService {
   private apiUrl = "http://localhost:3333/api/";
-  private linkGetUrl = this.apiUrl + "link";
-  private linkListUrl = this.apiUrl + "link/list";
-  private linkDeleteUrl = this.apiUrl + "link/delete";
   private linkScrapUrl = this.apiUrl + "scraping/content";
   private linkScrapAllUrl = this.apiUrl + "scraping/all-content";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private apollo: Apollo) {}
 
   fetchList(
     domainId: number,
@@ -23,22 +22,24 @@ export class LinkService {
     sortField: string,
     sortOrder: string,
     search: string | null
-  ): Observable<LinkListResult> {
-    sortField = sortField ?? "title";
-    sortOrder = sortOrder ?? "asc";
-    const params = new HttpParams()
-      .append("domainId", `${domainId}`)
-      .append("pageIndex", `${pageIndex}`)
-      .append("pageSize", `${pageSize}`)
-      .append("sortBy", `${sortField}`)
-      .append("sortOrder", `${sortOrder}`)
-      .append("search", search);
-    return this.http.get<LinkListResult>(`${this.linkListUrl}`, { params });
-  }
-
-  async get(dto: IdNumber) {
-    return this.http
-      .get(this.linkGetUrl, { params: { id: `${dto.id}` } })
+  ) {
+    return this.apollo
+      .query<LinkWithRef>({
+        query: LINK_PAGE_LIST_QUERY,
+        variables: {
+          domainId,
+          pageIndex,
+          pageSize,
+          sortField,
+          sortOrder,
+          search,
+        },
+        fetchPolicy: "no-cache",
+      })
+      .pipe(
+        take(1),
+        map((obj) => obj.data["linkPagelist"])
+      )
       .toPromise();
   }
 
@@ -49,8 +50,15 @@ export class LinkService {
   }
 
   async delete(id: number) {
-    return await this.http
-      .post<BaseResponse>(this.linkDeleteUrl, { id: `${id}` })
+    return this.apollo
+      .mutate({
+        mutation: DELETE_LINK_QUERY,
+        variables: { id },
+      })
+      .pipe(
+        take(1),
+        map((obj) => obj.data["deleteLink"])
+      )
       .toPromise();
   }
 

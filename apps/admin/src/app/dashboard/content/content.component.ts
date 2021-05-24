@@ -13,6 +13,7 @@ export class ContentComponent implements OnInit {
   text: string;
   home: string;
   url: string;
+  title: string;
   
   constructor(
     private route: ActivatedRoute,
@@ -40,6 +41,7 @@ export class ContentComponent implements OnInit {
       this.text = result.text.replace(/\.\s/g, '.\n\n');
       this.home = result.domainHome;
       this.url = result.linkUrl;
+      this.title = result.linkTitle;
     } else {
       this.msg.error("Content failed to open!");
       this.location.back();
