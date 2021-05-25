@@ -11,7 +11,6 @@ export const GET_DOMAIN_SETTING_QUERY = gql`
         indexFeedUrl
         indexPath
         nextPath
-        scrollMore
         contentPath
         headerPath
         categoryPath
@@ -35,7 +34,6 @@ export const UPDATE_DOMAIN_SETTING_QUERY = gql`
     $indexFeedUrl: String
     $indexPath: String
     $nextPath: String
-    $scrollMore: Boolean
     $contentPath: String
     $headerPath: String
     $categoryPath: String
@@ -51,7 +49,6 @@ export const UPDATE_DOMAIN_SETTING_QUERY = gql`
         indexFeedUrl: $indexFeedUrl
         indexPath: $indexPath
         nextPath: $nextPath
-        scrollMore: $scrollMore
         contentPath: $contentPath
         headerPath: $headerPath
         categoryPath: $categoryPath

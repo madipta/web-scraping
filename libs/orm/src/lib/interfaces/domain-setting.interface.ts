@@ -4,7 +4,6 @@ export interface IDomainSetting {
   indexFeedUrl?: string | null;
   indexPath?: string | null;
   nextPath?: string | null;
-  scrollMore?: boolean;
   contentPath?: string | null;
   headerPath?: string | null;
   categoryPath?: string | null;

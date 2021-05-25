@@ -1,14 +1,14 @@
 import { Location } from "@angular/common";
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { DomainSettingService } from '../shared/services/domain-setting.service';
+import { Component, OnInit } from "@angular/core";
+import { FormGroup, FormBuilder } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
+import { NzMessageService } from "ng-zorro-antd/message";
+import { DomainSettingService } from "../shared/services/domain-setting.service";
 
 @Component({
-  selector: 'web-scraping-domain-setting',
-  templateUrl: './domain-setting.component.html',
-  styleUrls: ['./domain-setting.component.scss']
+  selector: "web-scraping-domain-setting",
+  templateUrl: "./domain-setting.component.html",
+  styleUrls: ["./domain-setting.component.scss"],
 })
 export class DomainSettingComponent implements OnInit {
   form!: FormGroup;
@@ -37,14 +37,13 @@ export class DomainSettingComponent implements OnInit {
       indexFeedUrl: [null],
       indexPath: [null],
       nextPath: [null],
-      scrollMore: [false],
       contentPath: [null],
       headerPath: [null],
       categoryPath: [null],
       publishDatePath: [null],
       imagePath: [null],
       indexingType: ["web"],
-      loadIndexType: ["full"]
+      loadIndexType: ["full"],
     });
   }
 
@@ -73,5 +72,4 @@ export class DomainSettingComponent implements OnInit {
       this.msg.error(`failed! \n\n${res.error}`);
     }
   }
-
 }

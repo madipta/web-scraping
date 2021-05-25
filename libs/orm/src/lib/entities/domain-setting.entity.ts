@@ -84,10 +84,6 @@ export class DomainSetting implements IDomainSetting {
   })
   nextPath?: string | null;
 
-  @Field(() => Boolean)
-  @Column({ name: "scroll_more", default: false })
-  scrollMore?: boolean;
-
   @Field(() => String, { nullable: true })
   @Column({
     name: "content_path",
