@@ -1,5 +1,5 @@
 export interface IContent {
-  id: number;
+  id?: number;
   feed?: string | null;
   feedUrl?: string | null;
   text?: string | null;
@@ -8,6 +8,6 @@ export interface IContent {
   title?: string | null;
   category?: string | null;
   publishDate?: Date | null;
-  createdAt: Date;
+  createdAt?: Date;
   updatedAt?: Date | null;
 }

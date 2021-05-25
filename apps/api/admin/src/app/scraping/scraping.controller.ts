@@ -1,18 +1,16 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Domain, Link } from "@web-scraping/orm";
-import { WebContentService, WebIndexService } from "@web-scraping/scraper";
+import { Domain } from "@web-scraping/orm";
+import { ScraperService, WebIndexService } from "@web-scraping/scraper";
 
 @Controller("scraping")
 export class ScrapingController {
   constructor(
-    @InjectRepository(Link)
-    private readonly linkRepo: Repository<Link>,
     @InjectRepository(Domain)
     private readonly domainRepo: Repository<Domain>,
     private readonly indexService: WebIndexService,
-    private readonly contentService: WebContentService
+    private readonly scraper: ScraperService
   ) {}
 
   @Post("index")
@@ -32,15 +30,11 @@ export class ScrapingController {
 
   @Post("content")
   async pageContent(@Body() dto: { linkId: number }) {
-    const link = await this.linkRepo.findOne(
-      { id: dto.linkId },
-      { relations: ["domain", "domain.setting"] }
-    );
-    return await this.contentService.scrapContent(link);
+    return this.scraper.content(dto.linkId);
   }
 
   @Post("all-content")
   async allContent(@Body() dto: { domainId: number }) {
-    return await this.contentService.scrapAllContent(+dto.domainId);
+    return await this.scraper.allContent(dto.domainId);
   }
 }

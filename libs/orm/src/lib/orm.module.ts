@@ -22,5 +22,6 @@ import { OrmConfigModule } from "./config/orm-config.module";
       }),
     }),
   ],
+  providers: [],
 })
 export class OrmModule {}
