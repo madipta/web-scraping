@@ -20,19 +20,6 @@ export class Content implements IContent {
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true, type: "text" })
-  feed?: string | null;
-
-  @Field(() => String, { nullable: true })
-  @Column({
-    name: "feed_url",
-    nullable: true,
-    type: "character varying",
-    length: 2048,
-  })
-  feedUrl?: string | null;
-
-  @Field(() => String, { nullable: true })
-  @Column({ nullable: true, type: "text" })
   text?: string | null;
 
   @Field(() => String, { nullable: true })

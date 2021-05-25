@@ -73,6 +73,14 @@ export class ScraperService {
     }).trim();
   }
 
+  removeNonText(html: string) {
+    return sanitizeHtml(html, {
+      allowedTags: false,
+      allowedAttributes: false,
+      nonTextTags: ["style", "script", "textarea", "option", "noscript"],
+    }).trim();
+  }
+
   getText($: cheerio.CheerioAPI, path: string) {
     if (path) {
       const el = $(path);
@@ -85,7 +93,7 @@ export class ScraperService {
 
   getTimestamp($: cheerio.CheerioAPI, path: string) {
     if (path) {
-      const el = $(path);
+      const el = $(path).first();
       if (el.length) {
         const dtAttr = el.attr("datetime");
         if (dtAttr) {
@@ -105,13 +113,9 @@ export class ScraperService {
 
   getImage($: cheerio.CheerioAPI, path: string) {
     if (path) {
-      const imageEl = $(path);
+      const imageEl = $(path).first();
       if (imageEl.length) {
-        imageEl
-          .first()
-          .removeAttr("width")
-          .removeAttr("height")
-          .removeAttr("class");
+        imageEl.removeAttr("width").removeAttr("height").removeAttr("class");
         return $.html(imageEl);
       }
     }

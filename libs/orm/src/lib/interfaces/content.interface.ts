@@ -1,7 +1,5 @@
 export interface IContent {
   id?: number;
-  feed?: string | null;
-  feedUrl?: string | null;
   text?: string | null;
   html?: string | null;
   imageHtml?: string | null;
