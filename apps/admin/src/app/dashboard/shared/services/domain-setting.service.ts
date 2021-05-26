@@ -1,15 +1,15 @@
 import { Injectable } from "@angular/core";
-import {
-  DomainSettingUpdateInput,
-  DomainSettingWithRef,
-  IdNumber,
-} from "@web-scraping/dto";
 import { Apollo } from "apollo-angular";
 import { map, take } from "rxjs/operators";
 import {
   GET_DOMAIN_SETTING_QUERY,
-  UPDATE_DOMAIN_SETTING_QUERY,
+  UPDATE_DOMAIN_SETTING_MUTATION,
 } from "../gql/domain-setting";
+import {
+  GqlGetDomainSetting,
+  GqlUpdateDomainSettingInput,
+  GqlUpdateDomainSettingResult,
+} from "../gql/dto/domain-setting.dto";
 
 @Injectable({
   providedIn: "root",
@@ -17,11 +17,11 @@ import {
 export class DomainSettingService {
   constructor(private apollo: Apollo) {}
 
-  async get(dto: IdNumber) {
+  async get(dto: { id: number }): Promise<GqlGetDomainSetting> {
     return this.apollo
-      .query<DomainSettingWithRef>({
+      .query({
         query: GET_DOMAIN_SETTING_QUERY,
-        variables: { id: dto.id },
+        variables: { ...dto },
         fetchPolicy: "no-cache",
       })
       .pipe(
@@ -31,10 +31,12 @@ export class DomainSettingService {
       .toPromise();
   }
 
-  async update(dto: DomainSettingUpdateInput) {
+  async update(
+    dto: GqlUpdateDomainSettingInput
+  ): Promise<GqlUpdateDomainSettingResult> {
     return this.apollo
       .mutate({
-        mutation: UPDATE_DOMAIN_SETTING_QUERY,
+        mutation: UPDATE_DOMAIN_SETTING_MUTATION,
         variables: { ...dto },
       })
       .pipe(

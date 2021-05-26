@@ -1,12 +1,16 @@
 export interface IDomainSetting {
   id: number;
-  indexUrl?: string | null;
-  indexFeedUrl?: string | null;
-  indexPath?: string | null;
-  nextPath?: string | null;
-  contentPath?: string | null;
-  headerPath?: string | null;
-  categoryPath?: string | null;
+  scrapIndexMethod: string;
+  scrapIndexFormat: string;
+  indexUrl?: string;
+  indexFeedUrl?: string;
+  indexPath?: string;
+  nextPath?: string;
+  scrapArticleMethod: string;
+  scrapArticleFormat: string;
+  articlePath?: string;
+  headerPath?: string;
+  categoryPath?: string;
   createdAt: Date;
   updatedAt?: Date;
 }

@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
-import { ContentWithRef, IdNumber } from "@web-scraping/dto";
 import { Apollo } from "apollo-angular";
 import { map, take } from "rxjs/operators";
 import { CONTENT_PAGE_LIST_QUERY, GET_CONTENT_QUERY } from "../gql/content";
+import { GqlContentPageList, GqlGetContent } from "../gql/dto/content.dto";
 
 @Injectable({
   providedIn: "root",
@@ -16,9 +16,9 @@ export class ContentService {
     sortField: string | null,
     sortOrder: string | null,
     search: string | null
-  ) {
+  ): Promise<GqlContentPageList> {
     return this.apollo
-      .query<ContentWithRef>({
+      .query({
         query: CONTENT_PAGE_LIST_QUERY,
         variables: { pageIndex, pageSize, sortField, sortOrder, search },
         fetchPolicy: "no-cache",
@@ -30,11 +30,11 @@ export class ContentService {
       .toPromise();
   }
 
-  async get(dto: IdNumber) {
+  async get(dto: { id:number }): Promise<GqlGetContent> {
     return this.apollo
-      .query<ContentWithRef>({
+      .query({
         query: GET_CONTENT_QUERY,
-        variables: { id: dto.id },
+        variables: { ...dto },
         fetchPolicy: "no-cache",
       })
       .pipe(

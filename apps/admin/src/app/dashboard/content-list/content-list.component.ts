@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
-import { ContentWithRef } from "@web-scraping/dto";
+import { GqlContentPageListResult } from "../shared/gql/dto/content.dto";
 import { ContentService } from "../shared/services/content.service";
 
 @Component({
@@ -11,7 +11,7 @@ import { ContentService } from "../shared/services/content.service";
 })
 export class ContentListComponent {
   total = 1;
-  contentList: ContentWithRef[] = [];
+  contentList: GqlContentPageListResult[] = [];
   loading = true;
   pageIndex = 1;
   pageSize = 20;

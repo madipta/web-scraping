@@ -11,17 +11,10 @@ import {
 import type { IDomain, IDomainSetting } from "../interfaces";
 import { Domain } from "./domain.entity";
 
-export enum ContentIndexingType {
-  API = "api",
-  SPA = "spa",
-  WEB = "web",
-}
-
-export enum LoadIndexType {
-  FULL = "full",
-  NEXT = "next",
-  SCROLL = "scroll",
-}
+export type ScrapIndexMethodType = "web-full";
+export type ScrapIndexFormatType = "html";
+export type ScrapArticleMethodType = "web-full";
+export type ScrapArticleFormatType = "html";
 
 @ObjectType()
 @Entity()
@@ -32,21 +25,21 @@ export class DomainSetting implements IDomainSetting {
 
   @Field(() => String)
   @Column({
-    name: "indexing_type",
-    default: ContentIndexingType.WEB,
+    name: "scrap_index_method",
+    default: "web-full",
     type: "character varying",
-    length: 3,
+    length: 10,
   })
-  indexingType: ContentIndexingType;
+  scrapIndexMethod: ScrapIndexMethodType;
 
   @Field(() => String)
   @Column({
-    name: "load_index_type",
-    default: LoadIndexType.FULL,
+    name: "scrap_index_format",
+    default: "html",
     type: "character varying",
-    length: 6,
+    length: 10,
   })
-  loadIndexType: LoadIndexType;
+  scrapIndexFormat: ScrapIndexFormatType;
 
   @Field(() => String, { nullable: true })
   @Column({
@@ -84,14 +77,32 @@ export class DomainSetting implements IDomainSetting {
   })
   nextPath?: string | null;
 
+  @Field(() => String)
+  @Column({
+    name: "scrap_article_method",
+    default: "web-full",
+    type: "character varying",
+    length: 10,
+  })
+  scrapArticleMethod: ScrapArticleMethodType;
+
+  @Field(() => String)
+  @Column({
+    name: "scrap_article_format",
+    default: "html",
+    type: "character varying",
+    length: 10,
+  })
+  scrapArticleFormat: ScrapArticleFormatType;
+
   @Field(() => String, { nullable: true })
   @Column({
-    name: "content_path",
+    name: "article_path",
     nullable: true,
     type: "character varying",
     length: 250,
   })
-  contentPath?: string | null;
+  articlePath?: string | null;
 
   @Field(() => String, { nullable: true })
   @Column({

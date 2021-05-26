@@ -1,29 +1,28 @@
-import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import {
-  BaseResponse,
-  DomainListResult,
-  DomainUpdateInput,
-  IdNumber,
-} from "@web-scraping/dto";
 import { Apollo } from "apollo-angular";
 import { map, take } from "rxjs/operators";
 import {
-  CREATE_DOMAIN_QUERY,
-  DELETE_DOMAIN_QUERY,
+  CREATE_DOMAIN_MUTATION,
+  DELETE_DOMAIN_MUTATION,
   DOMAIN_PAGE_LIST_QUERY,
   GET_DOMAIN_QUERY,
-  UPDATE_DOMAIN_QUERY,
+  UPDATE_DOMAIN_MUTATION,
 } from "../gql/domain";
+import {
+  GqlCreateDomainInput,
+  GqlCreateDomainResult,
+  GqlDeleteDomainResult,
+  GqlDomainPageList,
+  GqlGetDomain,
+  GqlUpdateDomainInput,
+  GqlUpdateDomainResult,
+} from "../gql/dto/domain.dto";
 
 @Injectable({
   providedIn: "root",
 })
 export class DomainService {
-  private apiUrl = "http://localhost:3333/api/";
-  private domainScrapUrl = this.apiUrl + "scraping/index";
-
-  constructor(private http: HttpClient, private apollo: Apollo) {}
+  constructor(private apollo: Apollo) {}
 
   async fetchList(
     pageIndex: number,
@@ -31,9 +30,9 @@ export class DomainService {
     sortField: string | null,
     sortOrder: string | null,
     search: string | null
-  ) {
+  ): Promise<GqlDomainPageList> {
     return this.apollo
-      .query<DomainListResult>({
+      .query({
         query: DOMAIN_PAGE_LIST_QUERY,
         variables: { pageIndex, pageSize, sortField, sortOrder, search },
         fetchPolicy: "no-cache",
@@ -45,11 +44,11 @@ export class DomainService {
       .toPromise();
   }
 
-  async get(dto: IdNumber) {
+  async get(dto: { id: number }): Promise<GqlGetDomain> {
     return this.apollo
-      .query<DomainListResult>({
+      .query({
         query: GET_DOMAIN_QUERY,
-        variables: { id: dto.id },
+        variables: { ...dto },
         fetchPolicy: "no-cache",
       })
       .pipe(
@@ -59,10 +58,10 @@ export class DomainService {
       .toPromise();
   }
 
-  async create(dto: DomainUpdateInput) {
+  async create(dto: GqlCreateDomainInput): Promise<GqlCreateDomainResult> {
     return this.apollo
       .mutate({
-        mutation: CREATE_DOMAIN_QUERY,
+        mutation: CREATE_DOMAIN_MUTATION,
         variables: { ...dto },
       })
       .pipe(
@@ -72,10 +71,10 @@ export class DomainService {
       .toPromise();
   }
 
-  async update(dto: DomainUpdateInput) {
+  async update(dto: GqlUpdateDomainInput): Promise<GqlUpdateDomainResult> {
     return this.apollo
       .mutate({
-        mutation: UPDATE_DOMAIN_QUERY,
+        mutation: UPDATE_DOMAIN_MUTATION,
         variables: { ...dto },
       })
       .pipe(
@@ -85,17 +84,17 @@ export class DomainService {
       .toPromise();
   }
 
-  async createOrUpdate(body: DomainUpdateInput) {
+  async createOrUpdate(body: GqlUpdateDomainInput) {
     if (body.id) {
       return this.update(body);
     }
     return this.create(body);
   }
 
-  async delete(dto: IdNumber) {
+  async delete(dto: { id: number }): Promise<GqlDeleteDomainResult> {
     return this.apollo
       .mutate({
-        mutation: DELETE_DOMAIN_QUERY,
+        mutation: DELETE_DOMAIN_MUTATION,
         variables: { ...dto },
       })
       .pipe(
@@ -106,8 +105,9 @@ export class DomainService {
   }
 
   async scrapIndex(domainId: string) {
-    return this.http
-      .post<BaseResponse>(this.domainScrapUrl, { domainId })
-      .toPromise();
+    // return this.http
+    //   .post<BaseResponse>(this.domainScrapUrl, { domainId })
+    //   .toPromise();
+    throw "not implemented";
   }
 }

@@ -1,13 +1,15 @@
-export interface ILinkSetting {
+export interface ISetting {
   id: number;
   url: string;
-  indexingType: string;
-  loadIndexType: string;
+  scrapIndexMethod: string;
+  scrapIndexFormat: string;
   indexUrl: string;
   indexFeedUrl: string;
   indexPath: string;
   nextPath: string;
-  contentPath: string;
+  scrapArticleMethod: string;
+  scrapArticleFormat: string;
+  articlePath: string;
   headerPath: string;
   categoryPath: string;
   publishDatePath: string;

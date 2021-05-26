@@ -1,10 +1,8 @@
 import { Injectable, NotImplementedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ILinkSetting } from "@web-scraping/dto";
-import { Link, Content, IContent, ILink } from "@web-scraping/orm";
-import * as cheerio from "cheerio";
-import * as sanitizeHtml from "sanitize-html";
+import { Link, Content, ILink } from "@web-scraping/orm";
 import { Repository } from "typeorm";
+import { ISetting } from "./common/setting.interface";
 import { ContentService } from "./content/content.service";
 
 @Injectable()
@@ -13,8 +11,7 @@ export class ScraperService {
     @InjectRepository(Link)
     private readonly linkRepo: Repository<Link>,
     @InjectRepository(Content)
-    private readonly contentRepo: Repository<Content>,
-    private readonly cs: ContentService
+    private readonly contentRepo: Repository<Content>
   ) {}
 
   async index() {
@@ -23,10 +20,11 @@ export class ScraperService {
 
   async allContent(domainId: number) {
     try {
-      const links = await this.domainLinkQuery(domainId);
+      const links = await this.getLinksByDomain(domainId);
       for (let i = 0; i < links.length; i++) {
         await this.content(links[i].id);
       }
+      return { ok: true };
     } catch (e) {
       console.error(e);
       return { ok: false, error: "Scrap domain content error!" };
@@ -35,25 +33,21 @@ export class ScraperService {
 
   async content(linkId: number) {
     try {
-      const link = await this.linkQuery(linkId);
-      if (!link) {
-        throw new Error("Link not found!");
+      const setting = await this.getSetting(linkId);
+      if (!setting) {
+        throw new Error("Setting not found!");
       }
-      const res = await this.cs.loadHtmlPage(link);
+      const cs = new ContentService(setting);
+      const res = await cs.load(setting.url);
       if (!res.ok) {
-        this.linkRepo.update({ id: link.id }, { scraped: true, broken: true });
+        this.linkRepo.update({ id: setting.id }, { scraped: true, broken: true });
         throw new Error("Error loading page content!");
       }
-      this.linkRepo.update({ id: link.id }, { scraped: true, broken: false });
-      const responseHtmlText = res.text;
-      const $ = cheerio.load(responseHtmlText);
-      const data: IContent = { id: linkId };
-      data.text = this.getText($, link.contentPath);
-      data.html = $(link.contentPath).html();
-      data.imageHtml = this.getImage($, link.imagePath);
-      data.title = this.getText($, link.headerPath);
-      data.category = this.getText($, link.categoryPath);
-      data.publishDate = this.getTimestamp($, link.publishDatePath);
+      this.linkRepo.update({ id: setting.id }, { scraped: true, broken: false });
+      const data = await cs.scrap(res.text);
+      if (!data) {
+        throw new Error("Error scraping content!");
+      }
       if (await this.contentRepo.count({ id: linkId })) {
         await this.contentRepo.update({ id: data.id }, data);
       } else {
@@ -66,85 +60,31 @@ export class ScraperService {
     }
   }
 
-  removeAllHtmlTags(html: string) {
-    return sanitizeHtml(html, {
-      allowedTags: [],
-      allowedAttributes: {},
-    }).trim();
-  }
-
-  removeNonText(html: string) {
-    return sanitizeHtml(html, {
-      allowedTags: false,
-      allowedAttributes: false,
-      nonTextTags: ["style", "script", "textarea", "option", "noscript"],
-    }).trim();
-  }
-
-  getText($: cheerio.CheerioAPI, path: string) {
-    if (path) {
-      const el = $(path);
-      if (el.length) {
-        return this.removeAllHtmlTags($.text(el.first()));
-      }
-    }
-    return null;
-  }
-
-  getTimestamp($: cheerio.CheerioAPI, path: string) {
-    if (path) {
-      const el = $(path).first();
-      if (el.length) {
-        const dtAttr = el.attr("datetime");
-        if (dtAttr) {
-          const dtAttrVal = new Date(dtAttr);
-          if (dtAttrVal) {
-            return dtAttrVal;
-          }
-        }
-        const dtText = new Date($.text(el));
-        if (dtText) {
-          return dtText;
-        }
-      }
-    }
-    return null;
-  }
-
-  getImage($: cheerio.CheerioAPI, path: string) {
-    if (path) {
-      const imageEl = $(path).first();
-      if (imageEl.length) {
-        imageEl.removeAttr("width").removeAttr("height").removeAttr("class");
-        return $.html(imageEl);
-      }
-    }
-    return null;
-  }
-
-  private linkQuery(linkId: number) {
+  private getSetting(linkId: number) {
     return this.linkRepo
       .createQueryBuilder("Link")
       .innerJoin("Link.domain", "Domain")
       .innerJoin("Domain.setting", "Setting")
       .select("Link.id", "id")
       .addSelect("Link.url", "url")
-      .addSelect("Setting.indexing_type", "indexingType")
-      .addSelect("Setting.load_index_type", "loadIndexType")
+      .addSelect("Setting.scrap_index_method", "scrapIndexMethod")
+      .addSelect("Setting.scrap_index_format", "scrapIndexFormat")
       .addSelect("Setting.index_url", "indexUrl")
       .addSelect("Setting.index_feed_url", "indexFeedUrl")
       .addSelect("Setting.index_path", "indexPath")
       .addSelect("Setting.next_path", "nextPath")
-      .addSelect("Setting.content_path", "contentPath")
+      .addSelect("Setting.article_path", "articlePath")
+      .addSelect("Setting.scrap_article_method", "scrapArticleMethod")
+      .addSelect("Setting.scrap_article_format", "scrapArticleFormat")
       .addSelect("Setting.header_path", "headerPath")
       .addSelect("Setting.category_path", "categoryPath")
       .addSelect("Setting.publish_date_path", "publishDatePath")
       .addSelect("Setting.image_path", "imagePath")
       .where({ id: linkId })
-      .getRawOne<ILinkSetting>();
+      .getRawOne<ISetting>();
   }
 
-  private domainLinkQuery(domainId: number) {
+  private getLinksByDomain(domainId: number) {
     return this.linkRepo
       .createQueryBuilder("Link")
       .innerJoin("Link.domain", "Domain")

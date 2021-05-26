@@ -5,13 +5,15 @@ export const GET_DOMAIN_SETTING_QUERY = gql`
     getDomainSettingById(input: { id: $id }) {
       ok
       result {
-        indexingType
-        loadIndexType
+        scrapIndexMethod
+        scrapIndexFormat
         indexUrl
         indexFeedUrl
         indexPath
         nextPath
-        contentPath
+        scrapArticleMethod
+        scrapArticleFormat
+        articlePath
         headerPath
         categoryPath
         publishDatePath
@@ -25,16 +27,18 @@ export const GET_DOMAIN_SETTING_QUERY = gql`
   }
 `;
 
-export const UPDATE_DOMAIN_SETTING_QUERY = gql`
+export const UPDATE_DOMAIN_SETTING_MUTATION = gql`
   mutation(
     $id: Int!
-    $indexingType: String
-    $loadIndexType: String
+    $scrapIndexMethod: String
+    $scrapIndexFormat: String
     $indexUrl: String
     $indexFeedUrl: String
     $indexPath: String
     $nextPath: String
-    $contentPath: String
+    $scrapArticleMethod: String
+    $scrapArticleFormat: String
+    $articlePath: String
     $headerPath: String
     $categoryPath: String
     $publishDatePath: String
@@ -43,13 +47,15 @@ export const UPDATE_DOMAIN_SETTING_QUERY = gql`
     updateDomainSetting(
       input: {
         id: $id
-        indexingType: $indexingType
-        loadIndexType: $loadIndexType
+        scrapIndexMethod: $scrapIndexMethod
+        scrapIndexFormat: $scrapIndexFormat
         indexUrl: $indexUrl
         indexFeedUrl: $indexFeedUrl
         indexPath: $indexPath
         nextPath: $nextPath
-        contentPath: $contentPath
+        scrapArticleMethod: $scrapArticleMethod
+        scrapArticleFormat: $scrapArticleFormat
+        articlePath: $articlePath
         headerPath: $headerPath
         categoryPath: $categoryPath
         publishDatePath: $publishDatePath

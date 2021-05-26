@@ -1,26 +1,33 @@
-import { Injectable } from "@nestjs/common";
-import { ILinkSetting } from "@web-scraping/dto";
-import { chromium, Response } from "playwright";
+import { ISetting } from "../common/setting.interface";
+import { IContentLoader } from "../loaders/content-loader.interface";
+import { WebLoader } from "../loaders/web-loader";
+import { IContentScrap } from "./scrapers/content-scrap.interface";
+import { HtmlScrap } from "./scrapers/html-scrap";
 
-@Injectable()
+const contentLoaders = {
+  "web-full": new WebLoader(),
+};
+
+const contentScrapers = {
+  "html": HtmlScrap,
+};
+
 export class ContentService {
-  async loadHtmlPage(setting: ILinkSetting) {
-    const browser = await chromium.launch();
-    let response: Response;
-    try {
-      console.time(setting.url);
-      const page = await browser.newPage();
-      response = await page.goto(setting.url, {
-        waitUntil: "domcontentloaded",
-      });
-      const text = await response.text();
-      console.timeEnd(setting.url);
-      await page.waitForTimeout(200);
-      return { ok: response.ok, text};
-    } catch (error) {
-      return { ok: false, error };
-    } finally {
-      await browser.close();
-    }
+  url: string;
+  loader: IContentLoader;
+  scraper: IContentScrap;
+
+  constructor(private setting: ISetting) {
+    this.url = setting.url;
+    this.loader = contentLoaders[setting.scrapIndexMethod];
+    this.scraper = new contentScrapers["html"]();
+  }
+
+  async load(url: string) {
+    return this.loader.load(url);
+  }
+
+  async scrap(text: string) {
+    return this.scraper.scrap(text, this.setting);
   }
 }

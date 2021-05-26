@@ -31,14 +31,14 @@
     "api-admin": {
       "tags": []
     },
-    "dto": {
-      "tags": []
-    },
     "scraper": {
       "tags": []
     },
     "admin": {
-      "tags": []
+      "tags": [],
+      "implicitDependencies": [
+        "api-admin"
+      ]
     },
     "admin-e2e": {
       "tags": [],

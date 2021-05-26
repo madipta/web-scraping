@@ -12,7 +12,7 @@ import { DomainSettingService } from "../shared/services/domain-setting.service"
 })
 export class DomainSettingComponent implements OnInit {
   form!: FormGroup;
-  public domain: { home: string };
+  public domainHome: string;
   selectedId = 0;
 
   constructor(
@@ -37,13 +37,15 @@ export class DomainSettingComponent implements OnInit {
       indexFeedUrl: [null],
       indexPath: [null],
       nextPath: [null],
-      contentPath: [null],
+      articlePath: [null],
       headerPath: [null],
       categoryPath: [null],
       publishDatePath: [null],
       imagePath: [null],
-      indexingType: ["web"],
-      loadIndexType: ["full"],
+      scrapIndexMethod: ["web-full"],
+      scrapIndexFormat: ["html"],
+      scrapArticleMethod: ["web-full"],
+      scrapArticleFormat: ["html"]
     });
   }
 
@@ -52,7 +54,7 @@ export class DomainSettingComponent implements OnInit {
     const res = await this.settingService.get({ id: this.selectedId });
     this.msg.remove(msgId);
     if (res.ok) {
-      this.domain = res.result.domain;
+      this.domainHome = res.result.domain?.home;
       this.form.patchValue(res.result);
     } else {
       this.msg.error("res.error");

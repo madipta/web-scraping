@@ -34,7 +34,7 @@ export const LINK_PAGE_LIST_QUERY = gql`
   }
 `;
 
-export const DELETE_LINK_QUERY = gql`
+export const DELETE_LINK_MUTATION = gql`
   mutation($id: Int!) {
     deleteLink(input: { id: $id }) {
       ok

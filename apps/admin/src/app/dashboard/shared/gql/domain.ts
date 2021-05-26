@@ -35,6 +35,7 @@ export const GET_DOMAIN_QUERY = gql`
   query($id: Int!) {
     getDomainById(input: { id: $id }) {
       ok
+      error
       result {
         id
         home
@@ -42,12 +43,11 @@ export const GET_DOMAIN_QUERY = gql`
         active
         disabled
       }
-      error
     }
   }
 `;
 
-export const CREATE_DOMAIN_QUERY = gql`
+export const CREATE_DOMAIN_MUTATION = gql`
   mutation(
     $home: String!
     $adminEmail: String
@@ -71,7 +71,7 @@ export const CREATE_DOMAIN_QUERY = gql`
   }
 `;
 
-export const UPDATE_DOMAIN_QUERY = gql`
+export const UPDATE_DOMAIN_MUTATION = gql`
   mutation(
     $id: Int!
     $home: String
@@ -94,7 +94,7 @@ export const UPDATE_DOMAIN_QUERY = gql`
   }
 `;
 
-export const DELETE_DOMAIN_QUERY = gql`
+export const DELETE_DOMAIN_MUTATION = gql`
   mutation($id: Int!) {
     deleteDomain(input: { id: $id }) {
       ok

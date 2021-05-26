@@ -1,32 +1,28 @@
 <nz-page-header
   nzBackIcon
   style="margin-bottom: 40px"
-  [nzTitle]="domain?.home | domainName"
+  [nzTitle]="domainHome | domainName"
 >
 </nz-page-header>
 
 <form nz-form [formGroup]="form">
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="indexUrl"
-      >Indexing Type</nz-form-label
-    >
+    <nz-form-label [nzSm]="6" [nzXs]="24">Scrap Index Method</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <nz-radio-group formControlName="indexingType">
-        <label nz-radio nzValue="web">Web</label>
-        <label nz-radio nzValue="api">API</label>
-        <label nz-radio nzValue="spa">SPA</label>
+      <nz-radio-group formControlName="scrapIndexMethod">
+        <label nz-radio nzValue="web-full">Web Full</label><br />
+        <label nz-radio nzValue="web-more">Web More</label><br />
+        <label nz-radio nzValue="web-paging">Web Paging</label><br />
+        <label nz-radio nzValue="web-scroll">Web Scroll</label>
       </nz-radio-group>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="loadIndexType"
-      >Load Index Type</nz-form-label
-    >
+    <nz-form-label [nzSm]="6" [nzXs]="24">Scrap Index Format</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <nz-radio-group formControlName="loadIndexType">
-        <label nz-radio nzValue="full">Full</label>
-        <label nz-radio nzValue="next">Next</label>
-        <label nz-radio nzValue="scroll">Scroll</label>
+      <nz-radio-group formControlName="scrapIndexFormat">
+        <label nz-radio nzValue="html">HTML</label><br />
+        <label nz-radio nzValue="json">JSON</label><br />
       </nz-radio-group>
     </nz-form-control>
   </nz-form-item>
@@ -79,6 +75,39 @@
         id="nextPath"
         formControlName="nextPath"
         placeholder="ex: main a.next"
+      />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24">Scrap Article Method</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-radio-group formControlName="scrapArticleMethod">
+        <label nz-radio nzValue="web-full">Web Full</label><br />
+        <label nz-radio nzValue="web-more">Web More</label><br />
+        <label nz-radio nzValue="web-paging">Web Paging</label><br />
+        <label nz-radio nzValue="web-scroll">Web Scroll</label>
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24">Scrap Article Format</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-radio-group formControlName="scrapArticleFormat">
+        <label nz-radio nzValue="html">HTML</label><br />
+        <label nz-radio nzValue="json">JSON</label><br />
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="articlePath"
+      >Article path</nz-form-label
+    >
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input
+        nz-input
+        id="articlePath"
+        formControlName="articlePath"
+        placeholder="ex: main article"
       />
     </nz-form-control>
   </nz-form-item>

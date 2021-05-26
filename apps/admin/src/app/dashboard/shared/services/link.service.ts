@@ -1,19 +1,14 @@
-import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BaseResponse, LinkWithRef } from "@web-scraping/dto";
 import { Apollo } from "apollo-angular";
 import { map, take } from "rxjs/operators";
-import { DELETE_LINK_QUERY, LINK_PAGE_LIST_QUERY } from "../gql/link";
+import { GqlDeleteLinkResult, GqlLinkPageList } from "../gql/dto/link.dto";
+import { DELETE_LINK_MUTATION, LINK_PAGE_LIST_QUERY } from "../gql/link";
 
 @Injectable({
   providedIn: "root",
 })
 export class LinkService {
-  private apiUrl = "http://localhost:3333/api/";
-  private linkScrapUrl = this.apiUrl + "scraping/content";
-  private linkScrapAllUrl = this.apiUrl + "scraping/all-content";
-
-  constructor(private http: HttpClient, private apollo: Apollo) {}
+  constructor(private apollo: Apollo) {}
 
   fetchList(
     domainId: number,
@@ -22,9 +17,9 @@ export class LinkService {
     sortField: string,
     sortOrder: string,
     search: string | null
-  ) {
+  ): Promise<GqlLinkPageList> {
     return this.apollo
-      .query<LinkWithRef>({
+      .query({
         query: LINK_PAGE_LIST_QUERY,
         variables: {
           domainId,
@@ -43,16 +38,10 @@ export class LinkService {
       .toPromise();
   }
 
-  async scrapContent(linkId: number) {
-    return await this.http
-      .post<BaseResponse>(this.linkScrapUrl, { linkId })
-      .toPromise();
-  }
-
-  async delete(id: number) {
+  async delete(id: number): Promise<GqlDeleteLinkResult> {
     return this.apollo
       .mutate({
-        mutation: DELETE_LINK_QUERY,
+        mutation: DELETE_LINK_MUTATION,
         variables: { id },
       })
       .pipe(
@@ -62,9 +51,17 @@ export class LinkService {
       .toPromise();
   }
 
+  async scrapContent(linkId: number) {
+    // return await this.http
+    //   .post<BaseResponse>(this.linkScrapUrl, { linkId })
+    //   .toPromise();
+    throw "Not Implemented!"
+  }
+
   async scrapAllContent(domainId: number) {
-    return await this.http
-      .post(this.linkScrapAllUrl, { domainId: `${domainId}` })
-      .toPromise();
+    // return await this.http
+    //   .post(this.linkScrapAllUrl, { domainId: `${domainId}` })
+    //   .toPromise();
+    throw "Not Implemented!"
   }
 }

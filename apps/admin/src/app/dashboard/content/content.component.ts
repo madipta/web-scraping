@@ -37,7 +37,7 @@ export class ContentComponent implements OnInit {
     const res = await this.contentService.get({ id });
     this.msg.remove(msgId);
     if (res.ok) {
-      const result = res.result as any;
+      const result = res.result;
       this.text = result.text.replace(/\.\s/g, '.\n\n');
       this.home = result.domainHome;
       this.url = result.linkUrl;

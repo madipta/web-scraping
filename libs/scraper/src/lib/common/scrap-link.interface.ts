@@ -1,4 +1,4 @@
-export class ScrapIndexLink {
+export class IScrapedLink {
   title?: string;
   url: string;
 }

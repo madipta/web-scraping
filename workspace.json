@@ -93,31 +93,6 @@
         }
       }
     },
-    "dto": {
-      "root": "libs/dto",
-      "sourceRoot": "libs/dto/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/dto/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/dto"
-          ],
-          "options": {
-            "jestConfig": "libs/dto/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "scraper": {
       "root": "libs/scraper",
       "sourceRoot": "libs/scraper/src",

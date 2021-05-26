@@ -3,7 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Domain, Link } from "@web-scraping/orm";
-import { ScrapIndexLink } from "@web-scraping/dto";
+import { IScrapedLink } from "../common/scrap-link.interface";
 
 @Injectable()
 export class WebIndexService {
@@ -14,7 +14,7 @@ export class WebIndexService {
 
   async getHyperlink(indexPage: string, indexPath: string) {
     const browser = await chromium.launch();
-    let urls: ScrapIndexLink[];
+    let urls: IScrapedLink[];
     try {
       const page = await browser.newPage();
       await page.goto(indexPage, { waitUntil: "domcontentloaded" });
@@ -29,10 +29,10 @@ export class WebIndexService {
           if (end < start) {
             end = url.length;
           }
-          const snug = decodeURIComponent(url.substring(start, end));
+          const slug = decodeURIComponent(url.substring(start, end));
           let title = el.textContent.trim();
-          if (title.length - snug.length < -10) {
-            title = snug.replace(/-/g, " ");
+          if (title.length - slug.length < -10) {
+            title = slug.replace(/-/g, " ");
           }
           return { title, url };
         })
@@ -61,7 +61,7 @@ export class WebIndexService {
 
   async upsertData(
     domainId: number,
-    urls: ScrapIndexLink[],
+    urls: IScrapedLink[],
     home: string,
     indexPage: string
   ) {
@@ -83,7 +83,7 @@ export class WebIndexService {
     );
   }
 
-  async linkUpsert(domainId: number, link: ScrapIndexLink) {
+  async linkUpsert(domainId: number, link: IScrapedLink) {
     const count = await this.linkRepo.count({ url: link.url });
     if (!count) {
       return this.linkRepo.save({
