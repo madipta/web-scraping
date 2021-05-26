@@ -117,10 +117,10 @@ export class LinkListComponent implements OnInit {
   }
 
   async scrapAll() {
-    // const msgId = this.msg.loading("progress...", { nzDuration: 0 }).messageId;
-    // await this.linkService.scrapAllContent(this.domain.id);
-    // this.msg.remove(msgId);
-    // this.refreshData();
+    const msgId = this.msg.loading("progress...", { nzDuration: 0 }).messageId;
+    await this.scraperService.scrapeContentByDomain(this.domain.id);
+    this.msg.remove(msgId);
+    this.refreshData();
     throw "Not Implemented!"
   }
 
