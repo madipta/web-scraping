@@ -60,7 +60,7 @@ export class DomainResolver {
     @InjectRepository(Domain)
     private readonly domainRepo: Repository<Domain>,
     @InjectRepository(DomainSetting)
-    private readonly settingRepo: Repository<DomainSetting>
+    private readonly settingRepo: Repository<DomainSetting>,
   ) {}
 
   @Mutation(() => DomainResult)

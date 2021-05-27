@@ -1,4 +1,3 @@
-
 export interface ILink {
   id: number;
   domainId: number;
@@ -6,6 +5,6 @@ export interface ILink {
   title?: string | null;
   scraped?: boolean;
   broken?: boolean;
-  createdAt: Date;
+  createdAt?: Date;
   updatedAt?: Date;
 }

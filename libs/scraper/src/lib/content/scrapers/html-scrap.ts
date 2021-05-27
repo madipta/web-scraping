@@ -1,12 +1,13 @@
 import { IContent } from "@web-scraping/orm";
 import { HtmlHelper } from "../../common/html-helper";
 import { ISetting } from "../../common/setting.interface";
-import { IContentScrap } from "./content-scrap.interface";
+import { IContentScrap } from "../content-scrap.interface";
 
 export class HtmlScrap implements IContentScrap {
   async scrap(text: string, setting: ISetting) {
     const $ = new HtmlHelper(text);
-    const data: IContent = { id: setting.id };
+    const data: IContent = {};
+    data.domainId = setting.domainId;
     data.text = $.getText(setting.articlePath);
     data.html = $.outerHtml(setting.articlePath);
     data.imageHtml = $.getImageHtml(setting.imagePath);

@@ -8,11 +8,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import type { IDomain, IDomainSetting, ILink } from "../interfaces";
+import type { IContent, IDomain, IDomainSetting, ILink } from "../interfaces";
+import { Content } from "./content.entity";
 import { DomainSetting } from "./domain-setting.entity";
 import { Link } from "./link.entity";
 
-@InputType('DomainCreateInput', { isAbstract: true })
+@InputType({ isAbstract: true })
 @ObjectType()
 @Entity()
 export class Domain implements IDomain {
@@ -52,6 +53,10 @@ export class Domain implements IDomain {
   @Field(() => [Link])
   @OneToMany(() => Link, (link) => link.domain)
   links: ILink[];
+
+  // @Field(() => [Content])
+  @OneToMany(() => Content, (content) => content.domain)
+  contents: IContent[];
 
   @Field(() => DomainSetting)
   @OneToOne(() => DomainSetting, (setting) => setting.domain, {

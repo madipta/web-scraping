@@ -103,11 +103,4 @@ export class DomainService {
       )
       .toPromise();
   }
-
-  async scrapIndex(domainId: string) {
-    // return this.http
-    //   .post<BaseResponse>(this.domainScrapUrl, { domainId })
-    //   .toPromise();
-    throw "not implemented";
-  }
 }

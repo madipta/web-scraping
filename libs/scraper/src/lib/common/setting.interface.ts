@@ -1,10 +1,10 @@
 export interface ISetting {
   id: number;
+  domainId: number;
+  domainHome?: string;
   url: string;
   scrapIndexMethod: string;
   scrapIndexFormat: string;
-  indexUrl: string;
-  indexFeedUrl: string;
   indexPath: string;
   nextPath: string;
   scrapArticleMethod: string;

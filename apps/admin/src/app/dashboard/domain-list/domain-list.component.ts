@@ -4,6 +4,7 @@ import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { DomainService } from "../shared/services/domain.service";
 import { GqlDomainPageListResult } from "../shared/gql/dto/domain.dto";
+import { ScraperService } from "../shared/services/scraper.service";
 
 @Component({
   selector: "web-scraping-domain-list",
@@ -23,7 +24,8 @@ export class DomainListComponent {
   constructor(
     public router: Router,
     private msg: NzMessageService,
-    private domainService: DomainService
+    private domainService: DomainService,
+    private scraperService: ScraperService
   ) {}
 
   refreshData() {
@@ -81,15 +83,15 @@ export class DomainListComponent {
   }
 
   async scrap(id) {
-    // const msgId = this.msg.loading("loading", { nzDuration: 0 }).messageId;
-    // const res = await this.domainService.scrapIndex(id);
-    // this.msg.remove(msgId);
-    // if (res.ok) {
-    //   this.msg.success(`${res.result} links scraped!`);
-    // } else {
-    //   this.msg.error(`failed! \n\n${res.error}`);
-    // }
-    throw "Not implemented"
+    const msgId = this.msg.loading("progress...", { nzDuration: 0 }).messageId;
+    const result = await this.scraperService.scrapIndex(id);
+    this.msg.remove(msgId);
+    if (result.ok) {
+      this.msg.success("Index scraping success!");
+    } else {
+      this.msg.error("Index scraping failed!");
+    }
+    this.refreshData();
   }
 
   gotoLinks(data: GqlDomainPageListResult) {

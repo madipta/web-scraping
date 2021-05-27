@@ -121,7 +121,6 @@ export class LinkListComponent implements OnInit {
     await this.scraperService.scrapeContentByDomain(this.domain.id);
     this.msg.remove(msgId);
     this.refreshData();
-    throw "Not Implemented!"
   }
 
   async scrapOne(linkId: number) {
@@ -129,9 +128,9 @@ export class LinkListComponent implements OnInit {
     const result = await this.scraperService.scrapContent(linkId);
     this.msg.remove(msgId);
     if (result.ok) {
-      this.msg.success("Scraped success!");
+      this.msg.success("Content scraping success!");
     } else {
-      this.msg.error("Scraped failed!");
+      this.msg.error("Content scraping failed!");
     }
     this.refreshData();
   }

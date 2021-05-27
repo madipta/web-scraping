@@ -8,6 +8,13 @@ export class ScraperResolver {
   constructor(private readonly scraper: ScraperService) {}
 
   @Mutation(() => BaseResult)
+  async scrapeIndex(
+    @Args("input") dto: AutoNumberInput
+  ): Promise<BaseResult> {
+    return this.scraper.index(dto.id);
+  }
+
+  @Mutation(() => BaseResult)
   async scrapeContent(
     @Args("input") dto: AutoNumberInput
   ): Promise<BaseResult> {

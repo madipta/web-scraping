@@ -1,22 +1,29 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, InputType, ObjectType } from "@nestjs/graphql";
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from "typeorm";
-import type { IContent, ILink } from "../interfaces";
+import type { IContent, IDomain, ILink } from "../interfaces";
+import { Domain } from "./domain.entity";
 import { Link } from "./link.entity";
 
+@InputType({ isAbstract: true })
 @ObjectType()
 @Entity()
 export class Content implements IContent {
   @Field(() => Number)
   @PrimaryColumn({ type: "bigint" })
   id: number;
+  
+  @Field(() => Number)
+  @Column({ name: "domain_id", type: "int" })
+  domainId: number;
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true, type: "text" })
@@ -56,4 +63,9 @@ export class Content implements IContent {
     referencedColumnName: "id",
   })
   link: ILink;
+
+  // @Field(() => Domain)
+  @ManyToOne(() => Domain, (domain) => domain.contents)
+  @JoinColumn({ name: "domain_id", referencedColumnName: "id" })
+  domain: IDomain;
 }

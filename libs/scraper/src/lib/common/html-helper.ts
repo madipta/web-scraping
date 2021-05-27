@@ -2,7 +2,7 @@ import * as cheerio from "cheerio";
 import { HtmlSanitizer } from "./html-sanitizer";
 
 export class HtmlHelper {
-  private $: cheerio.CheerioAPI;
+  $: cheerio.CheerioAPI;
 
   constructor(htmlString: string) {
     this.$ = cheerio.load(htmlString);
