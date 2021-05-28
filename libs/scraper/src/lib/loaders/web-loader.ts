@@ -1,26 +1,19 @@
-import { chromium, Response  } from "playwright";
-import { IContentLoader } from "./content-loader.interface";
+import axios from "axios";
+import { IScrapeLoader } from "./loader.interface";
 
-export class WebLoader implements IContentLoader {
+export class WebLoader implements IScrapeLoader<string> {
   async load(url: string) {
-    const browser = await chromium.launch();
-    let response: Response;
     try {
       console.time(url);
-      const page = await browser.newPage();
-      response = await page.goto(url, {
-        waitUntil: "domcontentloaded",
-      });
-      const text = await response.text();
-      const ok = response.ok();
+      const response = await axios.get(url);
+      if (response.status < 200 && response.status >= 300) {
+        throw "Server or Network Error";
+      }
       console.timeEnd(url);
-      await page.waitForTimeout(200);
-      return { ok, text };
+      return response.data;
     } catch (e) {
-      console.error(e);      
-      return { ok: false, error: `[NOT LOADED] ${url}` };
-    } finally {
-      await browser.close();
+      console.error(e);
+      throw `[WEB LOADER ERROR] ${url}`;
     }
   }
 }

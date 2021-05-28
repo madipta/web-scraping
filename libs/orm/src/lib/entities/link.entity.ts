@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, InputType, ObjectType } from "@nestjs/graphql";
 import {
   Column,
   CreateDateColumn,
@@ -13,6 +13,7 @@ import type { IContent, IDomain, ILink } from "../interfaces";
 import { Content } from "./content.entity";
 import { Domain } from "./domain.entity";
 
+@InputType("LinkEntity", { isAbstract: true })
 @ObjectType()
 @Entity()
 export class Link implements ILink {

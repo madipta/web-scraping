@@ -13,7 +13,7 @@ import { Content } from "./content.entity";
 import { DomainSetting } from "./domain-setting.entity";
 import { Link } from "./link.entity";
 
-@InputType({ isAbstract: true })
+@InputType("DomainEntity", { isAbstract: true })
 @ObjectType()
 @Entity()
 export class Domain implements IDomain {
@@ -54,11 +54,11 @@ export class Domain implements IDomain {
   @OneToMany(() => Link, (link) => link.domain)
   links: ILink[];
 
-  // @Field(() => [Content])
+  @Field(() => [Content])
   @OneToMany(() => Content, (content) => content.domain)
   contents: IContent[];
 
-  @Field(() => DomainSetting)
+  @Field(() => DomainSetting, { nullable: true })
   @OneToOne(() => DomainSetting, (setting) => setting.domain, {
     nullable: true,
     onDelete: "CASCADE",

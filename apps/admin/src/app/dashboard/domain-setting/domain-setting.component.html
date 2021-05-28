@@ -10,7 +10,16 @@
     <nz-form-label [nzSm]="6" [nzXs]="24">Scrap Index Method</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-radio-group formControlName="scrapIndexMethod">
-        <label nz-radio nzValue="web-full">Web Full</label><br />
+        <label nz-radio nzValue="web">Web</label><br />
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24">Scrap Index Paging</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-radio-group formControlName="scrapIndexPaging">
+        <label nz-radio nzValue="full">Full</label>
+        <label nz-radio nzValue="page">Page</label>
       </nz-radio-group>
     </nz-form-control>
   </nz-form-item>
@@ -78,7 +87,7 @@
     <nz-form-label [nzSm]="6" [nzXs]="24">Scrap Article Method</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-radio-group formControlName="scrapArticleMethod">
-        <label nz-radio nzValue="web-full">Web Full</label><br />
+        <label nz-radio nzValue="web">Web</label><br />
       </nz-radio-group>
     </nz-form-control>
   </nz-form-item>

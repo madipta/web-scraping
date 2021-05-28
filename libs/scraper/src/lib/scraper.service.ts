@@ -1,11 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Link, Content, ILink, DomainSetting } from "@web-scraping/orm";
+import { Subscription } from "rxjs";
 import { Repository } from "typeorm";
 import { ISetting } from "./common/setting.interface";
 import { ContentManager } from "./content/content-manager";
-import { IIndexScrapResult } from "./index/index-scrap.interface";
-import { IndexService } from "./index/index.service";
+import { IndexManager } from "./index/index-manager";
+import { IIndexScrapResult } from "./index/scrapers/index-scrap.interface";
 
 @Injectable()
 export class ScraperService {
@@ -19,31 +20,33 @@ export class ScraperService {
   ) {}
 
   async index(domainId: number) {
+    let subs: Subscription;
     try {
       const setting = await this.getSetting(domainId);
       if (!setting) {
         throw new Error("Setting not found!");
       }
-      const cs = new IndexService(setting);
-      const res = await cs.load(setting.url);
-      if (!res.ok) {
-        throw new Error("Error domain indexing!");
-      }
-      const links: IIndexScrapResult[] = await cs.scrap(res.text);
-      await Promise.all(
-        links.map(async (link) => {
-          this.linkUpsert(link);
-        })
-      );
+      const cs = new IndexManager(setting);
+      subs = cs.linksAdd$.subscribe(async (links) => {
+        await Promise.all(
+          links.map(async (link) => {
+            this.linkUpsert(link);
+          })
+        );
+      });
+      await cs.run();
       return { ok: true };
     } catch (e) {
       console.error(e);
-      return { ok: false, error: "Scrap content failed!" };
+      return { ok: false, error: "Scrap index failed!" };
+    } finally {
+      if (subs && !subs.closed) {
+        subs.unsubscribe();
+      }
     }
   }
 
   async linkUpsert(link: IIndexScrapResult) {
-    console.log(link.url);
     const count = await this.linkRepo.count({ url: link.url });
     if (!count) {
       this.linkRepo.save({ ...link });

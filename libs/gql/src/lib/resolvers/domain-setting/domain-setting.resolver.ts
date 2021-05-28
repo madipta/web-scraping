@@ -30,7 +30,7 @@ export class DomainSettingResult extends BaseResult {
   result?: DomainSetting;
 }
 
-@Resolver(DomainSetting)
+@Resolver(() => DomainSetting)
 export class DomainSettingResolver {
   constructor(
     @InjectRepository(Domain)

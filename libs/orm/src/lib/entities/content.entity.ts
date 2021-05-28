@@ -13,7 +13,7 @@ import type { IContent, IDomain, ILink } from "../interfaces";
 import { Domain } from "./domain.entity";
 import { Link } from "./link.entity";
 
-@InputType({ isAbstract: true })
+@InputType("ContentEntity", { isAbstract: true })
 @ObjectType()
 @Entity()
 export class Content implements IContent {
@@ -51,12 +51,13 @@ export class Content implements IContent {
 
   @Field(() => Date)
   @CreateDateColumn({ name: "created_at", default: () => "CURRENT_TIMESTAMP" })
-  createdAt: Date;
+  createdAt?: Date;
 
   @Field(() => Date, { nullable: true })
   @UpdateDateColumn({ name: "updated_at", nullable: true })
   updatedAt?: Date;
 
+  @Field(() => Link, { nullable: true })
   @OneToOne(() => Link, (link) => link.content)
   @JoinColumn({
     name: "id",
@@ -64,7 +65,7 @@ export class Content implements IContent {
   })
   link: ILink;
 
-  // @Field(() => Domain)
+  @Field(() => Domain, { nullable: true })
   @ManyToOne(() => Domain, (domain) => domain.contents)
   @JoinColumn({ name: "domain_id", referencedColumnName: "id" })
   domain: IDomain;

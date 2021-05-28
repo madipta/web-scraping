@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, InputType, ObjectType } from "@nestjs/graphql";
 import {
   Column,
   CreateDateColumn,
@@ -11,11 +11,13 @@ import {
 import type { IDomain, IDomainSetting } from "../interfaces";
 import { Domain } from "./domain.entity";
 
-export type ScrapIndexMethodType = "web-full";
+export type ScrapIndexMethodType = "web";
+export type ScrapIndexPagingType = "full" | "page";
 export type ScrapIndexFormatType = "html";
-export type ScrapArticleMethodType = "web-full";
+export type ScrapArticleMethodType = "web";
 export type ScrapArticleFormatType = "html";
 
+@InputType("DomainSettingEntity", { isAbstract: true })
 @ObjectType()
 @Entity()
 export class DomainSetting implements IDomainSetting {
@@ -26,11 +28,20 @@ export class DomainSetting implements IDomainSetting {
   @Field(() => String)
   @Column({
     name: "scrap_index_method",
-    default: "web-full",
+    default: "web",
     type: "character varying",
     length: 10,
   })
   scrapIndexMethod: ScrapIndexMethodType;
+
+  @Field(() => String)
+  @Column({
+    name: "scrap_index_paging",
+    default: "full",
+    type: "character varying",
+    length: 10,
+  })
+  scrapIndexPaging: ScrapIndexPagingType;
 
   @Field(() => String)
   @Column({
@@ -80,7 +91,7 @@ export class DomainSetting implements IDomainSetting {
   @Field(() => String)
   @Column({
     name: "scrap_article_method",
-    default: "web-full",
+    default: "web",
     type: "character varying",
     length: 10,
   })

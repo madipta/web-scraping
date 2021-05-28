@@ -1,7 +1,7 @@
 export interface IContent {
   id?: number;
   domainId?: number;
-  text?: string | null;
+  text?: string;
   html?: string | null;
   imageHtml?: string | null;
   title?: string | null;

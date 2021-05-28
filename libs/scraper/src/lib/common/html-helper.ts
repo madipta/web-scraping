@@ -12,7 +12,9 @@ export class HtmlHelper {
     if (path) {
       const el = this.$(path);
       if (el.length) {
-        return HtmlSanitizer.removeAllHtmlTags(this.$.text(el.first()));
+        return HtmlSanitizer.removeAllHtmlTags(this.$.text(el.first()) || "")
+          .replace(/\s\s+/g, " ")
+          .trim();
       }
     }
     return null;
@@ -54,6 +56,6 @@ export class HtmlHelper {
   }
 
   outerHtml(path: string) {
-    return this.$(path).html();
+    return this.$(path).html().replace(/\s\s+/g, " ").trim();
   }
 }

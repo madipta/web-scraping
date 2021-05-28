@@ -15,7 +15,7 @@ import {
   Resolver,
 } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Domain, DomainSetting, RefineSortParam } from "@web-scraping/orm";
+import { Content, Domain, DomainSetting, RefineSortParam } from "@web-scraping/orm";
 import { ILike, Repository } from "typeorm";
 import { AutoNumberInput } from "../core/auto-number-input";
 import { BaseResult } from "../core/base-result";
@@ -61,6 +61,8 @@ export class DomainResolver {
     private readonly domainRepo: Repository<Domain>,
     @InjectRepository(DomainSetting)
     private readonly settingRepo: Repository<DomainSetting>,
+    @InjectRepository(Content)
+    private readonly contentRepo: Repository<Content>,
   ) {}
 
   @Mutation(() => DomainResult)
@@ -168,5 +170,10 @@ export class DomainResolver {
   @ResolveField()
   async setting(@Parent() domain: Domain) {
     return this.settingRepo.findOne({ id: domain.id });
+  }
+
+  @ResolveField()
+  async contents(@Parent() domain: Domain) {
+    return this.contentRepo.find({ domainId: domain.id });
   }
 }

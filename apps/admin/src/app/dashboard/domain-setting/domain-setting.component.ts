@@ -42,9 +42,10 @@ export class DomainSettingComponent implements OnInit {
       categoryPath: [null],
       publishDatePath: [null],
       imagePath: [null],
-      scrapIndexMethod: ["web-full"],
+      scrapIndexMethod: ["web"],
+      scrapIndexPaging: ["full"],
       scrapIndexFormat: ["html"],
-      scrapArticleMethod: ["web-full"],
+      scrapArticleMethod: ["web"],
       scrapArticleFormat: ["html"]
     });
   }

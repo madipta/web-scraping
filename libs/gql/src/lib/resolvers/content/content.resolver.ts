@@ -1,6 +1,6 @@
-import { Args, Field, ObjectType, Query, Resolver } from "@nestjs/graphql";
+import { Args, Field, ObjectType, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Content, RefineSortParam } from "@web-scraping/orm";
+import { Content, Domain, RefineSortParam } from "@web-scraping/orm";
 import { ILike, Repository } from "typeorm";
 import { AutoNumberInput } from "../core/auto-number-input";
 import { BaseResult } from "../core/base-result";
@@ -32,6 +32,8 @@ export class ContentPageListResult extends PageListResult {
 @Resolver(() => Content)
 export class ContentResolver {
   constructor(
+    @InjectRepository(Domain)
+    private readonly domainRepo: Repository<Domain>,
     @InjectRepository(Content)
     private readonly contentRepo: Repository<Content>
   ) {}
@@ -87,5 +89,15 @@ export class ContentResolver {
       console.error(error);
       return { ok: false, error };
     }
+  }
+
+  @ResolveField()
+  async link(@Parent() content: Content) {
+    return this.domainRepo.findOne({ id: content.domainId });
+  }
+
+  @ResolveField()
+  async domain(@Parent() content: Content) {
+    return this.domainRepo.findOne({ id: content.domainId });
   }
 }
