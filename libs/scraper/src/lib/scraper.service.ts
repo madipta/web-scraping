@@ -34,7 +34,7 @@ export class ScraperService {
           })
         );
       });
-      await cs.run();
+      await cs.manage();
       return { ok: true };
     } catch (e) {
       console.error(e);
@@ -110,6 +110,7 @@ export class ScraperService {
       .addSelect("Link.url", "url")
       .addSelect("Link.domainId", "domainId")
       .addSelect("Setting.scrap_index_method", "scrapIndexMethod")
+      .addSelect("Setting.scrap_index_paging", "scrapIndexPaging")
       .addSelect("Setting.scrap_index_format", "scrapIndexFormat")
       .addSelect("Setting.index_path", "indexPath")
       .addSelect("Setting.next_path", "nextPath")
@@ -130,6 +131,7 @@ export class ScraperService {
       .innerJoin("DomainSetting.domain", "Domain")
       .select("Domain.id", "id")
       .addSelect("scrap_index_method", "scrapIndexMethod")
+      .addSelect("scrap_index_paging", "scrapIndexPaging")
       .addSelect("scrap_index_format", "scrapIndexFormat")
       .addSelect("Domain.home", "domainHome")
       .addSelect("concat(Domain.home,index_url)", "url")

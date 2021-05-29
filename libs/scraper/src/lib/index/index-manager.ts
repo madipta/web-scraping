@@ -1,15 +1,17 @@
-import { Subject } from 'rxjs';
-import { IndexLoaders, IndexScrapers } from '../common/constants';
-import { ISetting } from '../common/setting.interface';
-import { IIndexScrapResult } from './scrapers/index-scrap.interface';
+import { Subject } from "rxjs";
+import { IndexLoaders, IndexPaging, IndexScrapers } from "../common/constants";
+import { ISetting } from "../common/setting.interface";
+import { ILooper } from "./loopers/looper.interface";
+import { IIndexScrapResult } from "./scrapers/index-scrap.interface";
 
 export class IndexManager {
-  private linkAddSubject = new Subject<IIndexScrapResult[]>();
+  linkAddSubject = new Subject<IIndexScrapResult[]>();
+  private looper: ILooper;
 
-  constructor(private setting: ISetting) {}
+  constructor(public setting: ISetting) {}
 
   async load(url: string) {
-    const loader = IndexLoaders[this.setting.scrapIndexMethod];
+    const loader = new IndexLoaders[this.setting.scrapIndexMethod]();
     return loader.load(url);
   }
 
@@ -18,10 +20,9 @@ export class IndexManager {
     return scraper.scrap(text, this.setting);
   }
 
-  async run() {
-    const res = await this.load(this.setting.url);
-    const links: IIndexScrapResult[] = await this.scrap(res);
-    this.linkAddSubject.next(links);
+  async manage() {
+    this.looper = new IndexPaging[this.setting.scrapIndexPaging](this);
+    await this.looper.run();
   }
 
   linksAdd$ = this.linkAddSubject.asObservable();

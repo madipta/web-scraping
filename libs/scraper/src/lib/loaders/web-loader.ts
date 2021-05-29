@@ -5,10 +5,12 @@ export class WebLoader implements IScrapeLoader<string> {
   async load(url: string) {
     try {
       console.time(url);
-      const response = await axios.get(url);
-      if (response.status < 200 && response.status >= 300) {
-        throw "Server or Network Error";
-      }
+      const response = await axios.get(url, {
+        timeout: 6000,
+      });
+      // if (response.status < 200 && response.status >= 300) {
+      //   throw "Server or Network Error";
+      // }
       console.timeEnd(url);
       return response.data;
     } catch (e) {

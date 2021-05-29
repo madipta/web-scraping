@@ -4,6 +4,7 @@ export interface ISetting {
   domainHome?: string;
   url: string;
   scrapIndexMethod: string;
+  scrapIndexPaging: string;
   scrapIndexFormat: string;
   indexPath: string;
   nextPath: string;

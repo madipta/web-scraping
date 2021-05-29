@@ -11,21 +11,32 @@ export class IndexHtmlScrap implements IIndexScrap {
     const data = [];
     doc.$(setting.indexPath).each((i, o) => {
       const el = doc.$(o);
-      const url = el.attr("href");
+      let url = el.attr("href");
+      const posHashtag = url.indexOf('#');
+      if (posHashtag > -1) {
+        url = url.substr(0, posHashtag - 1);
+      }
       if (
         url &&
         url !== home &&
         url.startsWith(home) &&
-        url !== indexPage &&
-        !urls.includes(url)
+        url !== indexPage
       ) {
-        const title = el.text();
-        urls.push(url);
-        data.push({
-          url,
-          domainId: setting.id,
-          title,
-        });
+        const title = el.text().trim();
+        if (!urls.includes(url)) {
+          urls.push(url);
+          data.push({
+            url,
+            domainId: setting.id,
+            title,
+          });
+        } else {
+          console.log(urls);
+          
+          urls.filter(val => val.url === url).forEach(item=> {
+            console.log(item);
+          })
+        }
       }
     });
     return data;

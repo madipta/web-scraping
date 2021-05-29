@@ -12,7 +12,7 @@ import type { IDomain, IDomainSetting } from "../interfaces";
 import { Domain } from "./domain.entity";
 
 export type ScrapIndexMethodType = "web";
-export type ScrapIndexPagingType = "full" | "page";
+export type ScrapIndexPagingType = "single" | "paging";
 export type ScrapIndexFormatType = "html";
 export type ScrapArticleMethodType = "web";
 export type ScrapArticleFormatType = "html";
@@ -37,7 +37,7 @@ export class DomainSetting implements IDomainSetting {
   @Field(() => String)
   @Column({
     name: "scrap_index_paging",
-    default: "full",
+    default: "single",
     type: "character varying",
     length: 10,
   })

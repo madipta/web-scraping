@@ -6,6 +6,7 @@ export const GET_DOMAIN_SETTING_QUERY = gql`
       ok
       result {
         scrapIndexMethod
+        scrapIndexPaging
         scrapIndexFormat
         indexUrl
         indexFeedUrl
@@ -31,6 +32,7 @@ export const UPDATE_DOMAIN_SETTING_MUTATION = gql`
   mutation(
     $id: Int!
     $scrapIndexMethod: String
+    $scrapIndexPaging: String
     $scrapIndexFormat: String
     $indexUrl: String
     $indexFeedUrl: String
@@ -48,6 +50,7 @@ export const UPDATE_DOMAIN_SETTING_MUTATION = gql`
       input: {
         id: $id
         scrapIndexMethod: $scrapIndexMethod
+        scrapIndexPaging: $scrapIndexPaging
         scrapIndexFormat: $scrapIndexFormat
         indexUrl: $indexUrl
         indexFeedUrl: $indexFeedUrl
