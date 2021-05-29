@@ -12,6 +12,9 @@ export class IndexHtmlScrap implements IIndexScrap {
     doc.$(setting.indexPath).each((i, o) => {
       const el = doc.$(o);
       let url = el.attr("href");
+      if (!url) {
+        return;
+      }
       const posHashtag = url.indexOf('#');
       if (posHashtag > -1) {
         url = url.substr(0, posHashtag - 1);
@@ -30,12 +33,6 @@ export class IndexHtmlScrap implements IIndexScrap {
             domainId: setting.id,
             title,
           });
-        } else {
-          console.log(urls);
-          
-          urls.filter(val => val.url === url).forEach(item=> {
-            console.log(item);
-          })
         }
       }
     });

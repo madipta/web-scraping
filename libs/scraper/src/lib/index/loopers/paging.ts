@@ -12,11 +12,12 @@ export class PagingLooper implements ILooper {
     let page = 1;
     let links = [];
     let errorCount = 0;
+    let totalErrorCount = 0;
     const maxPage = 100;
     const maxErrorCount = 3;
+    const maxTotalErrorCount = 100;
     do {
       links = [];
-      console.log(page);
       const url = this.manager.setting.url.replace(
         "{{PAGE_NUMBER}}",
         `${page++}`
@@ -29,7 +30,10 @@ export class PagingLooper implements ILooper {
       } catch (e) {
         page--;
         errorCount++;
-        console.log(errorCount);
+        totalErrorCount++;
+        if (totalErrorCount >= maxTotalErrorCount) {
+          throw "[PagingLooper] too many errors!"
+        }
         if (errorCount <= maxErrorCount) {
           continue;
         }

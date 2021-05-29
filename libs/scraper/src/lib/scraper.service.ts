@@ -73,19 +73,19 @@ export class ScraperService {
         throw new Error("Setting not found!");
       }
       const cs = new ContentManager(setting);
-      const res = await cs.load(setting.url);
-      if (!res.ok) {
+      const responseText = await cs.load(setting.url);
+      if (!responseText) {
         this.linkRepo.update(
           { id: setting.id },
           { scraped: true, broken: true }
-        );
+        );     
         throw new Error("Error loading page content!");
       }
       this.linkRepo.update(
         { id: setting.id },
         { scraped: true, broken: false }
       );
-      const data = await cs.scrap(res.text);
+      const data = await cs.scrap(responseText);
       if (!data) {
         throw new Error("Error scraping content!");
       }
