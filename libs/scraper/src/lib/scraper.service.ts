@@ -54,10 +54,26 @@ export class ScraperService {
   }
 
   async allContent(domainId: number) {
+    let errorCount = 0;
+    let totalErrorCount = 0;
+    const maxErrorCount = 10;
+    const maxTotalErrorCount = 100;
     try {
       const links = await this.getLinksByDomain(domainId);
       for (let i = 0; i < links.length; i++) {
-        await this.content(links[i].id);
+        const response = await this.content(links[i].id);
+        if (response.ok) {
+          errorCount = 0;
+        } else {
+          errorCount++;
+          totalErrorCount++;
+        }
+        if (errorCount > maxErrorCount) {
+          throw "[SCRAPP ALL CONTENT ERROR] too many errors in a row.";
+        }
+        if (totalErrorCount > maxTotalErrorCount) {
+          throw "[SCRAPP ALL CONTENT ERROR] max total errors reached.";
+        }
       }
       return { ok: true };
     } catch (e) {
@@ -73,27 +89,30 @@ export class ScraperService {
         throw new Error("Setting not found!");
       }
       const cs = new ContentManager(setting);
-      const responseText = await cs.load(setting.url);
-      if (!responseText) {
+      cs.errorLoading$.subscribe(() => {
         this.linkRepo.update(
           { id: setting.id },
           { scraped: true, broken: true }
-        );     
+        );
         throw new Error("Error loading page content!");
-      }
-      this.linkRepo.update(
-        { id: setting.id },
-        { scraped: true, broken: false }
-      );
-      const data = await cs.scrap(responseText);
-      if (!data) {
+      });
+      cs.successLoading$.subscribe(() => {
+        this.linkRepo.update(
+          { id: setting.id },
+          { scraped: true, broken: false }
+        );
+      });
+      cs.errorScraping$.subscribe(() => {
         throw new Error("Error scraping content!");
-      }
-      if (await this.contentRepo.count({ id: linkId })) {
-        await this.contentRepo.update({ id: linkId }, data);
-      } else {
-        await this.contentRepo.save({ ...data, id: linkId });
-      }
+      });
+      cs.contentAdd$.subscribe(async (data) => {
+        if (await this.contentRepo.count({ id: linkId })) {
+          await this.contentRepo.update({ id: linkId }, data);
+        } else {
+          await this.contentRepo.save({ ...data, id: linkId });
+        }
+      });
+      await cs.manage();
       return { ok: true };
     } catch (e) {
       console.error(e);

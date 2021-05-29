@@ -22,7 +22,7 @@ export class HtmlHelper {
 
   getTimestamp(path: string) {
     if (path) {
-      const el = this.$(path).first();
+      const el = this.$(path);
       if (el.length) {
         const dtAttr = el.attr("datetime");
         if (dtAttr) {
@@ -42,7 +42,7 @@ export class HtmlHelper {
 
   getImageHtml(path: string) {
     if (path) {
-      const imageEl = this.$(path).first();
+      const imageEl = this.$(path);
       if (imageEl.length) {
         imageEl
           .removeAttr("width")
@@ -56,6 +56,6 @@ export class HtmlHelper {
   }
 
   outerHtml(path: string) {
-    return this.$(path).html().replace(/\s\s+/g, " ").trim();
+    return (this.$(path).html() || "").replace(/\s\s+/g, " ").trim();
   }
 }
