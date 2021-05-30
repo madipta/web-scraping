@@ -29,14 +29,14 @@ export class ContentManager {
     const responseText = await this.load(this.setting.url);
     if (!responseText) {
       this.errorLoadingSubject.next();
-      throw "[ContentManager] Empty result.";
+      return;
     }
     this.successLoadingSubject.next();
     const content = await this.scrap(responseText);
     if (!content) {
       this.errorScrapingSubject.next();
-    } else {
-      this.contentAddSubject.next(content);
+      return;
     }
+    this.contentAddSubject.next(content);
   }
 }
