@@ -29,9 +29,9 @@ export class ContentManager {
     const responseText = await this.load(this.setting.url);
     if (!responseText) {
       this.errorLoadingSubject.next();
-    } else {
-      this.successLoadingSubject.next();
+      throw "[ContentManager] Empty result.";
     }
+    this.successLoadingSubject.next();
     const content = await this.scrap(responseText);
     if (!content) {
       this.errorScrapingSubject.next();
