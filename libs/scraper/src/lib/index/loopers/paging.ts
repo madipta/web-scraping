@@ -13,7 +13,7 @@ export class PagingLooper implements ILooper {
     let links = [];
     let errorCount = 0;
     let totalErrorCount = 0;
-    const maxPage = 100;
+    const maxPage = 1000;
     const maxErrorCount = 3;
     const maxTotalErrorCount = 100;
     do {
@@ -27,17 +27,17 @@ export class PagingLooper implements ILooper {
         links = await this.manager.scrap(res);
         this.manager.linkAddSubject.next(links);
         errorCount = 0;
-      } catch (e) {
+      } catch (error) {
         page--;
         errorCount++;
         totalErrorCount++;
+        console.error(`[PagingLooper] ${errorCount}x, total:${totalErrorCount}`);
         if (totalErrorCount >= maxTotalErrorCount) {
-          throw "[PagingLooper] too many errors!"
+          throw "[PagingLooper] too many errors!";
         }
         if (errorCount <= maxErrorCount) {
           continue;
         }
-        console.error(e);
       }
     } while (links && links.length && page <= maxPage);
     return false;
