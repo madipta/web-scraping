@@ -30,10 +30,6 @@ export class Content implements IContent {
   text?: string | null;
 
   @Field(() => String, { nullable: true })
-  @Column({ nullable: true, type: "text" })
-  html?: string | null;
-
-  @Field(() => String, { nullable: true })
   @Column({ name: "image_html", nullable: true, type: "text" })
   imageHtml?: string | null;
 

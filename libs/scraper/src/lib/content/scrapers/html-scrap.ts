@@ -9,7 +9,6 @@ export class HtmlScrap implements IContentScrap {
     const data: IContent = {};
     data.domainId = setting.domainId;
     data.text = $.getText(setting.articlePath);
-    data.html = $.outerHtml(setting.articlePath);
     data.imageHtml = $.getImageHtml(setting.imagePath);
     data.title = $.getText(setting.headerPath);
     data.category = $.getText(setting.categoryPath);
