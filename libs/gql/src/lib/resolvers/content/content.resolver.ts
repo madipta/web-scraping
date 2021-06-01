@@ -1,7 +1,15 @@
-import { Args, Field, ObjectType, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
+import {
+  Args,
+  Field,
+  ObjectType,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Content, Domain, RefineSortParam } from "@web-scraping/orm";
-import { ILike, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { AutoNumberInput } from "../core/auto-number-input";
 import { BaseResult } from "../core/base-result";
 import { PageListInput } from "../core/page-list-input";
@@ -39,7 +47,9 @@ export class ContentResolver {
   ) {}
 
   @Query(() => ContentResult)
-  async getContentById(@Args("input") dto: AutoNumberInput): Promise<ContentResult> {
+  async getContentById(
+    @Args("input") dto: AutoNumberInput
+  ): Promise<ContentResult> {
     try {
       const result = await this.contentRepo
         .createQueryBuilder("Content")
@@ -60,7 +70,9 @@ export class ContentResolver {
   }
 
   @Query(() => ContentPageListResult)
-  async contentPagelist(@Args("input") dto: PageListInput): Promise<ContentPageListResult> {
+  async contentPagelist(
+    @Args("input") dto: PageListInput
+  ): Promise<ContentPageListResult> {
     const { pageIndex, pageSize, search, sortBy, sortOrder } = dto;
     const orderBy = RefineSortParam(sortBy ?? "Link.title", sortOrder);
     const queryBuilder = () => {
@@ -68,7 +80,7 @@ export class ContentResolver {
         .createQueryBuilder("Content")
         .select("Content.id", "id");
       if (search) {
-        builder.where({ text: ILike(`%${search}%`) });
+        builder.where("text ILIKE :search", { search: `%${search}%` });
       }
       return builder;
     };

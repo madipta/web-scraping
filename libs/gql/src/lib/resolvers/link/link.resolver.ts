@@ -12,7 +12,7 @@ import {
 } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Content, Domain, Link, RefineSortParam } from "@web-scraping/orm";
-import { Brackets, ILike, Repository } from "typeorm";
+import { Brackets, Repository } from "typeorm";
 import { AutoNumberInput } from "../core/auto-number-input";
 import { BaseResult } from "../core/base-result";
 import { PageListInput } from "../core/page-list-input";
@@ -84,11 +84,9 @@ export class LinkResolver {
       if (search) {
         builder.andWhere(
           new Brackets((qb) => {
-            qb.where({ url: ILike(`%${search}%`) }).orWhere(
-              new Brackets((qb) => {
-                qb.where({ title: ILike(`%${search}%`) });
-              })
-            );
+            qb.where("url ILIKE :search OR title ILIKE :search", {
+              search: `%${search}%`,
+            });
           })
         );
       }

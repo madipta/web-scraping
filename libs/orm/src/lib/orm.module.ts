@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { join } from "path";
 import { OrmConfigModule } from "./config/orm-config.module";
 
 @Module({
@@ -17,7 +16,6 @@ import { OrmConfigModule } from "./config/orm-config.module";
         password: configService.get("password"),
         database: configService.get("database"),
         synchronize: configService.get("synchronize"),
-        entities: [join(__dirname + "/entities/**/*.entity{.ts,.js}")],
         autoLoadEntities: true,
       }),
     }),

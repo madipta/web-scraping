@@ -20,7 +20,7 @@ export class Content implements IContent {
   @Field(() => Number)
   @PrimaryColumn({ type: "bigint" })
   id: number;
-  
+
   @Field(() => Number)
   @Column({ name: "domain_id", type: "int" })
   domainId: number;
@@ -28,6 +28,14 @@ export class Content implements IContent {
   @Field(() => String, { nullable: true })
   @Column({ nullable: true, type: "text" })
   text?: string | null;
+
+  @Column({
+    name: "search_vector",
+    nullable: true,
+    type: "tsvector",
+    select: false,
+  })
+  searchVector?: string | null;
 
   @Field(() => String, { nullable: true })
   @Column({ name: "image_html", nullable: true, type: "text" })

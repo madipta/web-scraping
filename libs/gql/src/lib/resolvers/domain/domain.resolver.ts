@@ -15,8 +15,13 @@ import {
   Resolver,
 } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Content, Domain, DomainSetting, RefineSortParam } from "@web-scraping/orm";
-import { ILike, Repository } from "typeorm";
+import {
+  Content,
+  Domain,
+  DomainSetting,
+  RefineSortParam,
+} from "@web-scraping/orm";
+import { Repository } from "typeorm";
 import { AutoNumberInput } from "../core/auto-number-input";
 import { BaseResult } from "../core/base-result";
 import { PageListInput } from "../core/page-list-input";
@@ -62,7 +67,7 @@ export class DomainResolver {
     @InjectRepository(DomainSetting)
     private readonly settingRepo: Repository<DomainSetting>,
     @InjectRepository(Content)
-    private readonly contentRepo: Repository<Content>,
+    private readonly contentRepo: Repository<Content>
   ) {}
 
   @Mutation(() => DomainResult)
@@ -141,7 +146,7 @@ export class DomainResolver {
         .createQueryBuilder("Domain")
         .select("Domain.id", "id");
       if (search) {
-        builder.where({ home: ILike(`%${search}%`) });
+        builder.where("home ILIKE :search", { search: `%${search}%` });
       }
       return builder;
     };

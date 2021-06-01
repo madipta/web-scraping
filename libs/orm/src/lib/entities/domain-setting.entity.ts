@@ -11,10 +11,10 @@ import {
 import type { IDomain, IDomainSetting } from "../interfaces";
 import { Domain } from "./domain.entity";
 
-export type ScrapIndexMethodType = "web";
+export type ScrapIndexMethodType = "web" | "spa";
 export type ScrapIndexPagingType = "single" | "paging";
 export type ScrapIndexFormatType = "html";
-export type ScrapArticleMethodType = "web";
+export type ScrapArticleMethodType = "web" | "spa";
 export type ScrapArticleFormatType = "html";
 
 @InputType("DomainSettingEntity", { isAbstract: true })
