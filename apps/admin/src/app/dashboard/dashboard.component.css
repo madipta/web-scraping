@@ -1,32 +1,24 @@
-nz-layout {
-  background: rgba(240, 245, 255, 0.6);
-  min-height: 100vh;
-}
-
-.sider-menu {
-  padding: 8px 0 60px;
-}
-
 nz-header {
-  background: #fff;
-  padding: 0 0 0 20px;
+  position: fixed;
+  width: 100%;
 }
 
 nz-content {
-  margin: 24px 16px 0;
+  padding: 0 30px;
+  margin-top: 64px;
 }
 
 .inner-content {
-  padding: 24px;
   background: #fff;
   min-height: 300px;
+  padding: 0 30px;
 }
 
 nz-footer {
-  background: rgba(220, 231, 255, 0.7);
-  color: rgba(80, 100, 115, 0.7);
+  color: rgba(26, 53, 73, 0.7);
   font-size: 0.765em;
   line-height: 1.2em;
   text-align: center;
-  padding: 8px 0 6px 0px;
+  padding: 12px 0 12px;
+  margin-top: 50px;
 }

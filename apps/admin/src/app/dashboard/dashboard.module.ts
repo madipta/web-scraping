@@ -5,6 +5,8 @@ import { NzLayoutModule } from "ng-zorro-antd/layout";
 import { NzMenuModule } from "ng-zorro-antd/menu";
 import { NzIconModule } from "ng-zorro-antd/icon";
 import { DashboardComponent } from "./dashboard.component";
+import { NzStatisticModule } from "ng-zorro-antd/statistic";
+import { NzGridModule } from "ng-zorro-antd/grid";
 
 const routes: Routes = [
   {
@@ -65,8 +67,10 @@ const routes: Routes = [
     HttpClientModule,
     RouterModule.forChild(routes),
     NzLayoutModule,
+    NzGridModule,
     NzMenuModule,
     NzIconModule,
+    NzStatisticModule
   ],
 })
 export class DashboardModule {}
