@@ -1,10 +1,10 @@
 <nz-layout>
   <nz-header nzTheme="dark">
     <nz-row>
-      <nz-col [nzSpan]="4">
-        <h1 style="color: aliceblue;">Web Scraper</h1>
+      <nz-col [nzSpan]="4" style="color: aliceblue; font-size: 1.4rem;">
+        <b>Web Scraper</b>
       </nz-col>
-      <nz-col [nzSpan]="12" [nzOffset]="2">
+      <nz-col [nzSpan]="16" [nzOffset]="1">
         <ul nz-menu nzMode="horizontal" nzTheme="dark" style="border: none">
           <li nz-menu-item>
             <i nz-icon nzType="cloud"></i>
@@ -26,7 +26,7 @@
           </li>
         </ul>
       </nz-col>
-      <nz-col [nzSpan]="6" style="text-align: right">
+      <nz-col [nzSpan]="3" style="text-align: right">
         <a (click)="router.navigate([''])" style="margin-right: 16px">
           <i nz-icon nzType="poweroff" nz-tooltip nzTooltipTitle="scrap"></i>
           <span style="padding-left: 4px">Signout</span>
