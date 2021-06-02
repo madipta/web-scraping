@@ -1,4 +1,4 @@
-import { ScrapeJobStatusType } from "@web-scraping/orm";
+import { ScrapeJobStatusType } from "../entities/scrape-job.entity";
 
 export interface IScrapeJob {
   id: string;

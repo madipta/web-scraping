@@ -14,13 +14,22 @@ import { PageListInput } from "../core/page-list-input";
 import { PageListResult } from "../core/page-list-result";
 
 @ObjectType()
-export class ScrapJobPageListResult extends PageListResult {
-  @Field(() => [ScrapeJob], { nullable: true })
-  result?: ScrapeJob[];
+export class ScrapeJobPagelistItem extends ScrapeJob {
+  @Field(() => String, { nullable: true })
+  title?: string;
+
+  @Field(() => String, { nullable: true })
+  url?: string;
+}
+
+@ObjectType()
+export class ScrapeJobPageListResult extends PageListResult {
+  @Field(() => [ScrapeJobPagelistItem], { nullable: true })
+  result?: ScrapeJobPagelistItem[];
 }
 
 @Resolver(() => ScrapeJob)
-export class ScrapJobResolver {
+export class ScrapeJobResolver {
   constructor(
     @InjectRepository(Link)
     private readonly linkRepo: Repository<Link>,
@@ -28,17 +37,19 @@ export class ScrapJobResolver {
     private readonly scrapJobRepo: Repository<ScrapeJob>
   ) {}
 
-  @Query(() => ScrapJobPageListResult)
+  @Query(() => ScrapeJobPageListResult)
   async scrapeJobPagelist(
     @Args("input") dto: PageListInput
-  ): Promise<ScrapJobPageListResult> {
+  ): Promise<ScrapeJobPageListResult> {
     const { pageIndex, pageSize, search, sortBy, sortOrder } = dto;
     const orderBy = RefineSortParam(sortBy ?? "status", sortOrder);
     const queryBuilder = () => {
       const builder = this.scrapJobRepo
         .createQueryBuilder("ScrapeJob")
         .innerJoin("ScrapeJob.link", "Link")
-        .select("ScrapeJob.id", "id");
+        .select("ScrapeJob.id", "id")
+        .addSelect("Link.title", "title")
+        .addSelect("Link.url", "url");
       if (search) {
         builder.where("Link.url ILIKE :search OR Link.title ILIKE :search", {
           search: `%${search}%`,
@@ -54,8 +65,6 @@ export class ScrapJobResolver {
         .addSelect("ScrapeJob.status", "status")
         .addSelect("ScrapeJob.started_at", "startedAt")
         .addSelect("ScrapeJob.finishedAt", "finishedAt")
-        .innerJoin("Link.title", "title")
-        .innerJoin("Link.url", "url")
         .orderBy(orderBy)
         .offset((pageIndex - 1) * pageSize)
         .limit(pageSize);

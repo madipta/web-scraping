@@ -1,5 +1,4 @@
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
-import { ILink, IScrapeJob, Link } from "@web-scraping/orm";
 import {
   Column,
   CreateDateColumn,
@@ -8,6 +7,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import type { ILink, IScrapeJob } from "../interfaces";
+import { Link } from "./link.entity";
 
 export type ScrapeJobStatusType =
   | "created"

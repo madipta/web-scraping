@@ -18,7 +18,7 @@ import { LinkResolver } from "./resolvers/link/link.resolver";
 import { DomainSettingResolver } from "./resolvers/domain-setting/domain-setting.resolver";
 import { ContentResolver } from "./resolvers/content/content.resolver";
 import { ScraperResolver } from "./resolvers/scraper/scraper.resolver";
-import { ScrapJobResolver } from './resolvers/scrap-job/scrap-job.resolver';
+import { ScrapeJobResolver } from './resolvers/scrape-job/scrape-job.resolver';
 
 @Module({
   imports: [
@@ -41,7 +41,7 @@ import { ScrapJobResolver } from './resolvers/scrap-job/scrap-job.resolver';
     LinkResolver,
     DomainSettingResolver,
     ScraperResolver,
-    ScrapJobResolver,
+    ScrapeJobResolver,
   ],
 })
 export class GqlModule {}

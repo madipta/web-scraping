@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ScrapJobResolver } from './scrap-job.resolver';
+import { ScrapeJobResolver } from './scrape-job.resolver';
 
-describe('ScrapJobResolver', () => {
-  let resolver: ScrapJobResolver;
+describe('ScrapeJobResolver', () => {
+  let resolver: ScrapeJobResolver;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ScrapJobResolver],
+      providers: [ScrapeJobResolver],
     }).compile();
 
-    resolver = module.get<ScrapJobResolver>(ScrapJobResolver);
+    resolver = module.get<ScrapeJobResolver>(ScrapeJobResolver);
   });
 
   it('should be defined', () => {

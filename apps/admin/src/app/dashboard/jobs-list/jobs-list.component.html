@@ -1,1 +1,54 @@
-<p>jobs-list works!</p>
+<nz-page-header
+  nzTitle="Scrape Job List"
+  style="margin-bottom: 40px"
+></nz-page-header>
+
+<div style="display: flex; margin-bottom: 10px">
+  <div style="flex: 1 1 0%"></div>
+  <div style="display: flex">
+    <nz-input-group nzPrefixIcon="filter">
+      <input nz-input placeholder="filter by url / title" #txtSearch />
+    </nz-input-group>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="search = txtSearch.value; refreshData()"
+    >
+      <i nz-icon nzType="search" nzTheme="outline"></i>Filter
+    </button>
+  </div>
+</div>
+
+<nz-table
+  nzShowSizeChanger
+  nzSize="middle"
+  [nzData]="scrapeJobList"
+  [nzFrontPagination]="false"
+  [nzLoading]="loading"
+  [nzTotal]="total"
+  [nzPageSize]="pageSize"
+  [nzPageIndex]="pageIndex"
+  [nzShowSizeChanger]="false"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th nzColumnKey="title" [nzSortFn]="true">title</th>
+      <th>Status</th>
+      <th>Created At</th>
+      <th>Started At</th>
+      <th>Finished At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of scrapeJobList">
+      <td>
+        <a [href]="data.url" target="_blank">{{ data.title }}</a>
+      </td>
+      <td>{{ data.status }}</td>
+      <td>{{ data.createdAt }}</td>
+      <td>{{ data.startedAt }}</td>
+      <td>{{ data.finishedAt }}</td>
+    </tr>
+  </tbody>
+</nz-table>
