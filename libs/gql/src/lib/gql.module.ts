@@ -38,10 +38,10 @@ import { ScrapeJobResolver } from './resolvers/scrape-job/scrape-job.resolver';
   providers: [
     ContentResolver,
     DomainResolver,
-    LinkResolver,
     DomainSettingResolver,
-    ScraperResolver,
+    LinkResolver,
     ScrapeJobResolver,
+    ScraperResolver,
   ],
 })
 export class GqlModule {}

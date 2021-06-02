@@ -51,7 +51,7 @@ export class ScrapeJobResolver {
         .addSelect("Link.title", "title")
         .addSelect("Link.url", "url");
       if (search) {
-        builder.where("Link.url ILIKE :search OR Link.title ILIKE :search", {
+        builder.where("url ILIKE :search OR title ILIKE :search", {
           search: `%${search}%`,
         });
       }
@@ -63,6 +63,7 @@ export class ScrapeJobResolver {
       const resultBuilder = queryBuilder();
       resultBuilder
         .addSelect("ScrapeJob.status", "status")
+        .addSelect("ScrapeJob.created_at", "createdAt")
         .addSelect("ScrapeJob.started_at", "startedAt")
         .addSelect("ScrapeJob.finishedAt", "finishedAt")
         .orderBy(orderBy)

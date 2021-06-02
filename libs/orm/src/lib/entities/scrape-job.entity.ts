@@ -35,7 +35,7 @@ export class ScrapeJob implements IScrapeJob {
   @Column()
   status: ScrapeJobStatusType;
 
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   @CreateDateColumn({ name: "created_at", default: () => "CURRENT_TIMESTAMP" })
   createdAt?: Date;
 
