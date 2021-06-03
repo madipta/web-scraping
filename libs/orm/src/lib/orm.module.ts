@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { Content, Domain, DomainSetting, Link, ScrapeJob } from "./entities";
 import { OrmConfigModule } from "./config/orm-config.module";
 
 @Module({
@@ -22,4 +23,14 @@ import { OrmConfigModule } from "./config/orm-config.module";
   ],
   providers: [],
 })
-export class OrmModule {}
+export class OrmModule {
+  static Register() {
+    return TypeOrmModule.forFeature([
+      Content,
+      Domain,
+      DomainSetting,
+      Link,
+      ScrapeJob,
+    ]);
+  }
+}

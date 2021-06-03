@@ -1,16 +1,8 @@
 import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import {
-  Content,
-  Domain,
-  DomainSetting,
-  Link,
-  OrmModule,
-  ScrapeJob,
-} from "@web-scraping/orm";
-import { WebScraperModule } from "@web-scraping/scraper";
+import { OrmModule } from "@web-scraping/orm";
+import { ScrapeQueueModule } from "@web-scraping/scrape-queue";
 import { join } from "path";
 import { GqlConfigModule } from "./config/gql-config.module";
 import { DomainResolver } from "./resolvers/domain/domain.resolver";
@@ -18,13 +10,14 @@ import { LinkResolver } from "./resolvers/link/link.resolver";
 import { DomainSettingResolver } from "./resolvers/domain-setting/domain-setting.resolver";
 import { ContentResolver } from "./resolvers/content/content.resolver";
 import { ScraperResolver } from "./resolvers/scraper/scraper.resolver";
-import { ScrapeJobResolver } from './resolvers/scrape-job/scrape-job.resolver';
+import { ScrapeJobResolver } from "./resolvers/scrape-job/scrape-job.resolver";
 
 @Module({
   imports: [
     OrmModule,
-    TypeOrmModule.forFeature([Content, Domain, DomainSetting, Link, ScrapeJob]),
-    WebScraperModule,
+    OrmModule.Register(),
+    ScrapeQueueModule,
+    ScrapeQueueModule.Register(),
     GraphQLModule.forRootAsync({
       imports: [GqlConfigModule],
       inject: [ConfigService],

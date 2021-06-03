@@ -16,9 +16,9 @@ const config = () => ({
 const schema = Joi.object({
   DB_MAIN_HOST: Joi.string().default("127.0.0.1"),
   DB_MAIN_PORT: Joi.number().default(5432),
-  DB_MAIN_USER: Joi.string().default("postgres"),
-  DB_MAIN_PASSWORD: Joi.string().default("kosong"),
-  DB_MAIN_DATABASE: Joi.string().default("web-scraping"),
+  DB_MAIN_USER: Joi.string(),
+  DB_MAIN_PASSWORD: Joi.string(),
+  DB_MAIN_DATABASE: Joi.string(),
   DB_MAIN_SYNCHRONIZE: Joi.string().default("false"),
 });
 

@@ -1,5 +1,5 @@
 export interface ISetting {
-  id: number;
+  linkId?: number;
   domainId: number;
   domainHome?: string;
   url: string;

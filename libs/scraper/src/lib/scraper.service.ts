@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Link, Content, ILink, DomainSetting } from "@web-scraping/orm";
+import { Link, Content, DomainSetting, ScrapeJob } from "@web-scraping/orm";
 import { Subscription } from "rxjs";
 import { Repository } from "typeorm";
 import { ISetting } from "./common/setting.interface";
@@ -16,7 +16,9 @@ export class ScraperService {
     @InjectRepository(Content)
     private readonly contentRepo: Repository<Content>,
     @InjectRepository(DomainSetting)
-    private readonly settingRepo: Repository<DomainSetting>
+    private readonly settingRepo: Repository<DomainSetting>,
+    @InjectRepository(ScrapeJob)
+    private readonly scrapeJobRepo: Repository<ScrapeJob>
   ) {}
 
   async index(domainId: number) {
@@ -53,35 +55,6 @@ export class ScraperService {
     }
   }
 
-  async allContent(domainId: number) {
-    let errorCount = 0;
-    let totalErrorCount = 0;
-    const maxErrorCount = 10;
-    const maxTotalErrorCount = 100;
-    try {
-      const links = await this.getLinksByDomain(domainId);
-      for (let i = 0; i < links.length; i++) {
-        const response = await this.content(links[i].id);
-        if (response.ok) {
-          errorCount = 0;
-        } else {
-          errorCount++;
-          totalErrorCount++;
-        }
-        if (errorCount > maxErrorCount) {
-          throw "[SCRAPP ALL CONTENT ERROR] too many errors in a row.";
-        }
-        if (totalErrorCount > maxTotalErrorCount) {
-          throw "[SCRAPP ALL CONTENT ERROR] max total errors reached.";
-        }
-      }
-      return { ok: true };
-    } catch (e) {
-      console.error(e);
-      return { ok: false, error: "Scrap domain content error!" };
-    }
-  }
-
   async content(linkId: number) {
     try {
       const setting = await this.getSettingByLink(linkId);
@@ -91,14 +64,14 @@ export class ScraperService {
       const cs = new ContentManager(setting);
       cs.errorLoading$.subscribe(() => {
         this.linkRepo.update(
-          { id: setting.id },
+          { id: setting.linkId },
           { scraped: true, broken: true }
         );
         throw new Error("Error loading page content!");
       });
       cs.successLoading$.subscribe(() => {
         this.linkRepo.update(
-          { id: setting.id },
+          { id: setting.linkId },
           { scraped: true, broken: false }
         );
       });
@@ -125,7 +98,7 @@ export class ScraperService {
       .createQueryBuilder("Link")
       .innerJoin("Link.domain", "Domain")
       .innerJoin("Domain.setting", "Setting")
-      .select("Link.id", "id")
+      .select("Link.id", "linkId")
       .addSelect("Link.url", "url")
       .addSelect("Link.domainId", "domainId")
       .addSelect("Setting.scrap_index_method", "scrapIndexMethod")
@@ -148,11 +121,11 @@ export class ScraperService {
     return this.settingRepo
       .createQueryBuilder()
       .innerJoin("DomainSetting.domain", "Domain")
-      .select("Domain.id", "id")
+      .select("Domain.id", "domainId")
+      .addSelect("Domain.home", "domainHome")
       .addSelect("scrap_index_method", "scrapIndexMethod")
       .addSelect("scrap_index_paging", "scrapIndexPaging")
       .addSelect("scrap_index_format", "scrapIndexFormat")
-      .addSelect("Domain.home", "domainHome")
       .addSelect("concat(Domain.home,index_url)", "url")
       .addSelect("index_path", "indexPath")
       .addSelect("next_path", "nextPath")
@@ -165,16 +138,5 @@ export class ScraperService {
       .addSelect("image_path", "imagePath")
       .where({ id })
       .getRawOne<ISetting>();
-  }
-
-  private getLinksByDomain(domainId: number) {
-    return this.linkRepo
-      .createQueryBuilder("Link")
-      .innerJoin("Link.domain", "Domain")
-      .select("Link.id", "id")
-      .addSelect("Link.domain_id", "domainId")
-      .addSelect("Link.scraped", "scraped")
-      .where({ domainId, scraped: false })
-      .getRawMany<ILink>();
   }
 }

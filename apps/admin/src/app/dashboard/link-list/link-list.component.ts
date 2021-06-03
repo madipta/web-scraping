@@ -128,9 +128,9 @@ export class LinkListComponent implements OnInit {
     const result = await this.scraperService.scrapContent(linkId);
     this.msg.remove(msgId);
     if (result.ok) {
-      this.msg.success("Content scraping success!");
+      this.msg.success("Scraping content job created!");
     } else {
-      this.msg.error("Content scraping failed!");
+      this.msg.error("Create content scraping job failed!");
     }
     this.refreshData();
   }

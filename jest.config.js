@@ -7,5 +7,6 @@ module.exports = {
     "<rootDir>/apps/public",
     "<rootDir>/apps/api/public",
     "<rootDir>/libs/gql",
+    "<rootDir>/libs/scrape-queue",
   ],
 };

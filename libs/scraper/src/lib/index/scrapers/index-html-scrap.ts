@@ -30,7 +30,7 @@ export class IndexHtmlScrap implements IIndexScrap {
           urls.push(url);
           data.push({
             url,
-            domainId: setting.id,
+            domainId: setting.domainId,
             title,
           });
         }

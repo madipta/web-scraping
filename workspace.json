@@ -470,6 +470,31 @@
           }
         }
       }
+    },
+    "scrape-queue": {
+      "root": "libs/scrape-queue",
+      "sourceRoot": "libs/scrape-queue/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/scrape-queue/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/scrape-queue"
+          ],
+          "options": {
+            "jestConfig": "libs/scrape-queue/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   }
 }

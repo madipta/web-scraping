@@ -7,9 +7,15 @@ services:
       - 8080:8080
   pg:
     image: "postgres:alpine"
-    env_file:
-      - docker-compose.env
     ports:
       - 5432:5432
     volumes:
       - ./tmp/pg:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${DB_MAIN_DATABASE}
+      POSTGRES_USER: ${DB_MAIN_USER}
+      POSTGRES_PASSWORD: ${DB_MAIN_PASSWORD}
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379

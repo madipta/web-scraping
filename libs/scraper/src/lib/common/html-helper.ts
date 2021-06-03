@@ -32,8 +32,10 @@ export class HtmlHelper {
           }
         }
         const dtText = new Date(this.$.text(el));
-        if (dtText) {
-          return dtText;
+        if (Object.prototype.toString.call(dtText) === "[object Date]") {
+          if (!isNaN(dtText.getTime())) {
+            return dtText;
+          }
         }
       }
     }

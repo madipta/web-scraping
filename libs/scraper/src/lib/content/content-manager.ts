@@ -5,13 +5,13 @@ import { ISetting } from "../common/setting.interface";
 
 export class ContentManager {
   errorLoadingSubject = new Subject();
-  successLoadingSubject = new Subject();
+  errorLoading$ = this.errorLoadingSubject.asObservable();
   errorScrapingSubject = new Subject();
+  errorScraping$ = this.errorScrapingSubject.asObservable();
+  successLoadingSubject = new Subject();
+  successLoading$ = this.successLoadingSubject.asObservable();
   contentAddSubject = new Subject<IContent>();
   contentAdd$ = this.contentAddSubject.asObservable();
-  errorLoading$ = this.errorLoadingSubject.asObservable();
-  successLoading$ = this.successLoadingSubject.asObservable();
-  errorScraping$ = this.errorScrapingSubject.asObservable();
 
   constructor(private setting: ISetting) {}
 

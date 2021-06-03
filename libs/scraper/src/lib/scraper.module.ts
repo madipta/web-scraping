@@ -1,20 +1,10 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import {
-  OrmModule,
-  Domain,
-  Link,
-  Content,
-  DomainSetting,
-} from "@web-scraping/orm";
+import { OrmModule } from "@web-scraping/orm";
 import { ScraperService } from "./scraper.service";
 
 @Module({
-  imports: [
-    OrmModule,
-    TypeOrmModule.forFeature([Domain, DomainSetting, Link, Content]),
-  ],
+  imports: [OrmModule, OrmModule.Register()],
   providers: [ScraperService],
   exports: [ScraperService],
 })
-export class WebScraperModule {}
+export class ScraperModule {}
