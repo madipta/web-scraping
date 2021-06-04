@@ -43,8 +43,10 @@ export class ScraperResolver {
   ): Promise<BaseResult> {
     try {
       const links = await this.linkRepo.find({
-        domainId: dto.id,
-        scraped: false,
+        where: {
+          domainId: dto.id,
+          scraped: null,
+        },
       });
       links.forEach((link) => {
         this.scrapeQueue.add("content", { id: link.id });

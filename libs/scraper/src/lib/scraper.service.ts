@@ -62,12 +62,27 @@ export class ScraperService {
         throw new Error("Setting not found!");
       }
       const cs = new ContentManager(setting);
-      cs.errorLoading$.subscribe(() => {
+      const job = await this.scrapeJobRepo.save({
+        linkId,
+        status: "created",
+      });
+      cs.errorLoading$.subscribe(async () => {
         this.linkRepo.update(
           { id: setting.linkId },
           { scraped: true, broken: true }
         );
+        await this.scrapeJobRepo.update(
+          { id: job.id },
+          { status: "loading failed" }
+        );
         throw new Error("Error loading page content!");
+      });
+      cs.errorScraping$.subscribe(async () => {
+        await this.scrapeJobRepo.update(
+          { id: job.id },
+          { status: "scraping failed" }
+        );
+        throw new Error("Error scraping content!");
       });
       cs.successLoading$.subscribe(() => {
         this.linkRepo.update(
@@ -75,15 +90,13 @@ export class ScraperService {
           { scraped: true, broken: false }
         );
       });
-      cs.errorScraping$.subscribe(() => {
-        throw new Error("Error scraping content!");
-      });
       cs.contentAdd$.subscribe(async (data) => {
         if (await this.contentRepo.count({ id: linkId })) {
           await this.contentRepo.update({ id: linkId }, data);
         } else {
           await this.contentRepo.save({ ...data, id: linkId });
         }
+        await this.scrapeJobRepo.update({ id: job.id }, { status: "success" });
       });
       await cs.manage();
       return { ok: true };
