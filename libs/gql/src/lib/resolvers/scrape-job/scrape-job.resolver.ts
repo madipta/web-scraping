@@ -64,7 +64,6 @@ export class ScrapeJobResolver {
       resultBuilder
         .addSelect("ScrapeJob.status", "status")
         .addSelect("ScrapeJob.created_at", "createdAt")
-        .addSelect("ScrapeJob.started_at", "startedAt")
         .addSelect("ScrapeJob.finishedAt", "finishedAt")
         .orderBy(orderBy)
         .offset((pageIndex - 1) * pageSize)

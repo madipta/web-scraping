@@ -5,6 +5,5 @@ export interface IScrapeJob {
   linkId: number;
   status: ScrapeJobStatusType;
   createdAt?: Date;
-  startedAt?: Date;
   finishedAt?: Date;
 }

@@ -1,7 +1,7 @@
 <nz-layout>
   <nz-header nzTheme="dark">
     <nz-row>
-      <nz-col [nzSpan]="4" style="color: aliceblue; font-size: 1.4rem;">
+      <nz-col [nzSpan]="4" style="color: aliceblue; font-size: 1.4rem">
         <b>Web Scraper</b>
       </nz-col>
       <nz-col [nzSpan]="16" [nzOffset]="1">
@@ -29,29 +29,32 @@
     </nz-row>
   </nz-header>
   <nz-content>
-    <nz-row style="padding: 16px 0 32px">
-      <nz-col [nzSpan]="3" [nzOffset]="12">
-        <nz-statistic [nzValue]="9999999" [nzTitle]="'Jobs'"></nz-statistic>
-      </nz-col>
-      <nz-col [nzSpan]="3">
-        <nz-statistic
-          [nzValue]="888"
-          [nzTitle]="'Loading Error'"
-        ></nz-statistic>
-      </nz-col>
-      <nz-col [nzSpan]="3">
-        <nz-statistic
-          [nzValue]="999"
-          [nzTitle]="'Scraping Error'"
-        ></nz-statistic>
-      </nz-col>
-      <nz-col [nzSpan]="3">
-        <nz-statistic [nzValue]="666666" [nzTitle]="'Success'"></nz-statistic>
-      </nz-col>
-    </nz-row>
+    <div class="dashboard-stats">
+      <div class="dashboard-stat">
+        <nz-statistic [nzValue]="0" nzTitle="Domains"></nz-statistic>
+      </div>
+      <div class="dashboard-stat">
+        <nz-statistic [nzValue]="0" nzTitle="Contents"></nz-statistic>
+      </div>
+      <div class="dashboard-stat">
+        <nz-statistic [nzValue]="0" nzTitle="Queues"></nz-statistic>
+      </div>
+      <div class="dashboard-stat">
+        <nz-statistic [nzValue]="0" nzTitle="Loading Error"></nz-statistic>
+      </div>
+      <div class="dashboard-stat">
+        <nz-statistic [nzValue]="0" nzTitle="Scraping Error"></nz-statistic>
+      </div>
+      <div class="dashboard-stat">
+        <nz-statistic [nzValue]="0" nzTitle="Success"></nz-statistic>
+      </div>
+    </div>
     <div class="inner-content">
       <router-outlet></router-outlet>
     </div>
   </nz-content>
-  <nz-footer>Web Scraper ©2021 Implement By Madipta</nz-footer>
+  <nz-footer
+    >Web Scraper ©2021 Implement By
+    <a href="https://madipta.github.io" target="_blank">Madipta</a></nz-footer
+  >
 </nz-layout>

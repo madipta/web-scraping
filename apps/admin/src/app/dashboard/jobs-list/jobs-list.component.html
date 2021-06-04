@@ -36,7 +36,6 @@
       <th nzColumnKey="title" [nzSortFn]="true">title</th>
       <th>Status</th>
       <th>Created At</th>
-      <th>Started At</th>
       <th>Finished At</th>
     </tr>
   </thead>
@@ -46,9 +45,8 @@
         <a [href]="data.url" target="_blank">{{ data.title }}</a>
       </td>
       <td>{{ data.status }}</td>
-      <td>{{ data.createdAt }}</td>
-      <td>{{ data.startedAt }}</td>
-      <td>{{ data.finishedAt }}</td>
+      <td>{{ data.createdAt | date:"YYYY-MM-dd hh:mm:ss"}}</td>
+      <td>{{ data.finishedAt | date:"YYYY-MM-dd hh:mm:ss"}}</td>
     </tr>
   </tbody>
 </nz-table>

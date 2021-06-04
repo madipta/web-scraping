@@ -1,7 +1,7 @@
 import { InjectQueue } from "@nestjs/bull";
 import { Args, Mutation, Resolver } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Link } from "@web-scraping/orm";
+import { Link, ScrapeJob } from "@web-scraping/orm";
 import { Queue } from "bull";
 import { Repository } from "typeorm";
 import { AutoNumberInput } from "../core/auto-number-input";
@@ -12,7 +12,9 @@ export class ScraperResolver {
   constructor(
     @InjectQueue("scrape") private readonly scrapeQueue: Queue,
     @InjectRepository(Link)
-    private readonly linkRepo: Repository<Link>
+    private readonly linkRepo: Repository<Link>,
+    @InjectRepository(ScrapeJob)
+    private readonly scrapeJobRepo: Repository<ScrapeJob>
   ) {}
 
   @Mutation(() => BaseResult)
@@ -30,7 +32,11 @@ export class ScraperResolver {
     @Args("input") dto: AutoNumberInput
   ): Promise<BaseResult> {
     try {
-      this.scrapeQueue.add("content", { id: dto.id });
+      const { id: jobId } = await this.scrapeJobRepo.save({
+        linkId: dto.id,
+        status: "created",
+      });
+      this.scrapeQueue.add("content", { id: dto.id, jobId });
       return { ok: true };
     } catch {
       return { ok: false };

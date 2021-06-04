@@ -55,48 +55,24 @@ export class ScraperService {
     }
   }
 
-  async content(linkId: number) {
+  async content(linkId: number, jobId: string) {
     try {
       const setting = await this.getSettingByLink(linkId);
       if (!setting) {
         throw new Error("Setting not found!");
       }
       const cs = new ContentManager(setting);
-      const job = await this.scrapeJobRepo.save({
-        linkId,
-        status: "created",
-      });
       cs.errorLoading$.subscribe(async () => {
-        this.linkRepo.update(
-          { id: setting.linkId },
-          { scraped: true, broken: true }
-        );
-        await this.scrapeJobRepo.update(
-          { id: job.id },
-          { status: "loading failed" }
-        );
-        throw new Error("Error loading page content!");
+        await this.errorLoading(linkId, jobId);
       });
       cs.errorScraping$.subscribe(async () => {
-        await this.scrapeJobRepo.update(
-          { id: job.id },
-          { status: "scraping failed" }
-        );
-        throw new Error("Error scraping content!");
+        await this.errorScraping(linkId, jobId);
       });
-      cs.successLoading$.subscribe(() => {
-        this.linkRepo.update(
-          { id: setting.linkId },
-          { scraped: true, broken: false }
-        );
+      cs.successLoading$.subscribe(async () => {
+        await this.successLoading(linkId);
       });
       cs.contentAdd$.subscribe(async (data) => {
-        if (await this.contentRepo.count({ id: linkId })) {
-          await this.contentRepo.update({ id: linkId }, data);
-        } else {
-          await this.contentRepo.save({ ...data, id: linkId });
-        }
-        await this.scrapeJobRepo.update({ id: job.id }, { status: "success" });
+        await this.contentAdd(linkId, jobId, data);
       });
       await cs.manage();
       return { ok: true };
@@ -104,6 +80,48 @@ export class ScraperService {
       console.error(e);
       return { ok: false, error: "Scrap content failed!" };
     }
+  }
+
+  private async contentAdd(linkId, jobId, data) {
+    if (await this.contentRepo.count({ id: linkId })) {
+      await this.contentRepo.update({ id: linkId }, data);
+    } else {
+      await this.contentRepo.save({ ...data, id: linkId });
+    }
+    await this.scrapeJobRepo
+      .createQueryBuilder()
+      .update()
+      .set({
+        status: "success",
+        finishedAt: () => "Now()",
+      })
+      .where(`id=:id`, { id: jobId })
+      .execute();
+  }
+
+  private async errorLoading(linkId, jobId) {
+    this.linkRepo.update({ id: linkId }, { scraped: false, broken: true });
+    await this.scrapeJobRepo.update(
+      { id: jobId },
+      { status: "loading failed" }
+    );
+    throw new Error("Error loading page content!");
+  }
+
+  private async errorScraping(linkId, jobId) {
+    this.linkRepo.update({ id: linkId }, { scraped: false, broken: false });
+    await this.scrapeJobRepo.update(
+      { id: jobId },
+      { status: "scraping failed" }
+    );
+    throw new Error("Error scraping content!");
+  }
+
+  private async successLoading(linkId) {
+    await this.linkRepo.update(
+      { id: linkId },
+      { scraped: true, broken: false }
+    );
   }
 
   private getSettingByLink(linkId: number) {

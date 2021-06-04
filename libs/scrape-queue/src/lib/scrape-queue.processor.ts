@@ -13,6 +13,7 @@ export class ScrapeQueueProcessor {
   
   @Process("content")
   async scrapeContent(job: Job) {
-    return await this.scraper.content(job.data.id);
+    const { id, jobId } = job.data;
+    return await this.scraper.content(id, jobId);
   }
 }

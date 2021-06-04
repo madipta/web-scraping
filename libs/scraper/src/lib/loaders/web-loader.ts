@@ -7,9 +7,9 @@ export class WebLoader implements IScrapeLoader<string> {
       console.time(url);
       const response = await axios.get(url, {
         timeout: 15000,
-        validateStatus: () => {
-          return true;
-        },
+        // validateStatus: () => {
+        //   return true;
+        // },
       });
       console.timeEnd(url);
       return response.data;

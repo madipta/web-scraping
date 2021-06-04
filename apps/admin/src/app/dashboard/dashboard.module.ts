@@ -51,12 +51,6 @@ const routes: Routes = [
         loadChildren: async () =>
           (await import("./jobs-list/jobs-list.module")).JobsListModule,
       },
-      {
-        path: "jobs-settings",
-        loadChildren: async () =>
-          (await import("./jobs-settings/jobs-settings.module"))
-            .JobsSettingsModule,
-      },
     ],
   },
 ];

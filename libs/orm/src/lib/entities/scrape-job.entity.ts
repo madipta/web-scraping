@@ -37,10 +37,6 @@ export class ScrapeJob implements IScrapeJob {
   createdAt?: Date;
 
   @Field(() => Date, { nullable: true })
-  @Column({ name: "started_at", nullable: true })
-  startedAt?: Date;
-
-  @Field(() => Date, { nullable: true })
   @Column({ name: "finished_at", nullable: true })
   finishedAt?: Date;
 

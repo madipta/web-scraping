@@ -1,8 +1,20 @@
-
 nz-header {
   z-index: 9;
 }
 
 nz-page-header.ant-page-header {
   padding: 16px 0;
+}
+
+.dashboard-stats {
+  display: flex;
+  padding: 16px 0 32px;
+}
+
+.dashboard-stat {
+  background-color: #fff;
+  padding: 8px 16px;
+  margin: 0 5px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
 }
