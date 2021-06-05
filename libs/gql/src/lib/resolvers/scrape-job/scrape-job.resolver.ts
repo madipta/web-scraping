@@ -63,9 +63,7 @@ export class ScrapeJobResolver {
         .select("ScrapeJob.id", "id")
         .addSelect("Link.title", "title")
         .addSelect("Link.url", "url")
-        .where("status=:status", { status });
-        console.log(status);
-        
+        .where("status=:status", { status });        
       if (search) {
         builder.andWhere("url ILIKE :search OR title ILIKE :search", {
           search: `%${search}%`,
