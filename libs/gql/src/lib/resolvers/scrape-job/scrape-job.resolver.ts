@@ -1,6 +1,7 @@
 import {
   Args,
   Field,
+  InputType,
   ObjectType,
   Parent,
   Query,
@@ -12,6 +13,12 @@ import { Link, RefineSortParam, ScrapeJob } from "@web-scraping/orm";
 import { Repository } from "typeorm";
 import { PageListInput } from "../core/page-list-input";
 import { PageListResult } from "../core/page-list-result";
+
+@InputType()
+export class ScrapeJobPageListInput extends PageListInput {
+  @Field(() => String, { nullable: false })
+  status: string;
+}
 
 @ObjectType()
 export class ScrapeJobPagelistItem extends ScrapeJob {
@@ -28,6 +35,12 @@ export class ScrapeJobPageListResult extends PageListResult {
   result?: ScrapeJobPagelistItem[];
 }
 
+@InputType()
+export class GetScrapeJobCountnput {
+  @Field(() => String)
+  status: string;
+}
+
 @Resolver(() => ScrapeJob)
 export class ScrapeJobResolver {
   constructor(
@@ -39,19 +52,22 @@ export class ScrapeJobResolver {
 
   @Query(() => ScrapeJobPageListResult)
   async scrapeJobPagelist(
-    @Args("input") dto: PageListInput
+    @Args("input") dto: ScrapeJobPageListInput
   ): Promise<ScrapeJobPageListResult> {
-    const { pageIndex, pageSize, search, sortBy, sortOrder } = dto;
-    const orderBy = RefineSortParam(sortBy ?? "status", sortOrder);
+    const { status, pageIndex, pageSize, search, sortBy, sortOrder } = dto;
+    const orderBy = RefineSortParam(sortBy ?? "title", sortOrder);
     const queryBuilder = () => {
       const builder = this.scrapJobRepo
         .createQueryBuilder("ScrapeJob")
         .innerJoin("ScrapeJob.link", "Link")
         .select("ScrapeJob.id", "id")
         .addSelect("Link.title", "title")
-        .addSelect("Link.url", "url");
+        .addSelect("Link.url", "url")
+        .where("status=:status", { status });
+        console.log(status);
+        
       if (search) {
-        builder.where("url ILIKE :search OR title ILIKE :search", {
+        builder.andWhere("url ILIKE :search OR title ILIKE :search", {
           search: `%${search}%`,
         });
       }
@@ -74,6 +90,13 @@ export class ScrapeJobResolver {
       console.error(error);
       return { ok: false, error };
     }
+  }
+
+  @Query(() => Number)
+  async getScrapeJobCount(
+    @Args("input") { status }: GetScrapeJobCountnput
+  ): Promise<number> {
+    return this.scrapJobRepo.count({ select: ["status"], where: { status } });
   }
 
   @ResolveField()

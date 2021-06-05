@@ -103,6 +103,11 @@ export class ContentResolver {
     }
   }
 
+  @Query(() => Number)
+  async getContentCount(): Promise<number> {
+    return this.contentRepo.count({ select: ["id"] });
+  }
+
   @ResolveField()
   async link(@Parent() content: Content) {
     return this.domainRepo.findOne({ id: content.domainId });

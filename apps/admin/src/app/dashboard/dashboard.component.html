@@ -1,26 +1,10 @@
 <nz-layout>
   <nz-header nzTheme="dark">
     <nz-row>
-      <nz-col [nzSpan]="4" style="color: aliceblue; font-size: 1.4rem">
+      <nz-col [nzSpan]="12" style="color: aliceblue; font-size: 1.3em">
         <b>Web Scraper</b>
       </nz-col>
-      <nz-col [nzSpan]="16" [nzOffset]="1">
-        <ul nz-menu nzMode="horizontal" nzTheme="dark" style="border: none">
-          <li nz-menu-item>
-            <i nz-icon nzType="cloud"></i>
-            <span><a routerLink="domain-list">Domain</a></span>
-          </li>
-          <li nz-menu-item>
-            <i nz-icon nzType="solution"></i>
-            <span><a routerLink="content-list">Content List</a></span>
-          </li>
-          <li nz-menu-item>
-            <i nz-icon nzType="setting"></i>
-            <span><a routerLink="jobs-list">Jobs</a></span>
-          </li>
-        </ul>
-      </nz-col>
-      <nz-col [nzSpan]="3" style="text-align: right">
+      <nz-col [nzSpan]="12" style="text-align: right">
         <a (click)="router.navigate([''])" style="margin-right: 16px">
           <i nz-icon nzType="poweroff" nz-tooltip nzTooltipTitle="scrap"></i>
           <span style="padding-left: 4px">Signout</span>
@@ -30,24 +14,52 @@
   </nz-header>
   <nz-content>
     <div class="dashboard-stats">
-      <div class="dashboard-stat">
-        <nz-statistic [nzValue]="0" nzTitle="Domains"></nz-statistic>
-      </div>
-      <div class="dashboard-stat">
-        <nz-statistic [nzValue]="0" nzTitle="Contents"></nz-statistic>
-      </div>
-      <div class="dashboard-stat">
-        <nz-statistic [nzValue]="0" nzTitle="Queues"></nz-statistic>
-      </div>
-      <div class="dashboard-stat">
-        <nz-statistic [nzValue]="0" nzTitle="Loading Error"></nz-statistic>
-      </div>
-      <div class="dashboard-stat">
-        <nz-statistic [nzValue]="0" nzTitle="Scraping Error"></nz-statistic>
-      </div>
-      <div class="dashboard-stat">
-        <nz-statistic [nzValue]="0" nzTitle="Success"></nz-statistic>
-      </div>
+      <a routerLink="domain-list" class="dashboard-stat">
+        <div class="dashboard-stat-title">Domains</div>
+        <i nz-icon nzType="cloud" nzTheme="twotone"></i>
+        <span class="dashboard-stat-value">{{ domainCount }}</span>
+      </a>
+      <a routerLink="content-list" class="dashboard-stat">
+        <div class="dashboard-stat-title">Contents</div>
+        <i nz-icon nzType="book" nzTheme="twotone"></i>
+        <span class="dashboard-stat-value">{{ contentCount }}</span>
+      </a>
+      <a
+        routerLink="jobs-list"
+        [queryParams]="{ status: 'created' }"
+        class="dashboard-stat"
+      >
+        <div class="dashboard-stat-title">Queues</div>
+        <i nz-icon nzType="schedule" nzTheme="twotone"></i>
+        <span class="dashboard-stat-value">{{ queuesCount }}</span>
+      </a>
+      <a
+        routerLink="jobs-list"
+        [queryParams]="{ status: 'loading-error' }"
+        class="dashboard-stat"
+      >
+        <div class="dashboard-stat-title">Loading Error</div>
+        <i nz-icon nzType="bug" nzTheme="twotone"></i>
+        <span class="dashboard-stat-value">{{ loadingErrorCount }}</span>
+      </a>
+      <a
+        routerLink="jobs-list"
+        [queryParams]="{ status: 'scraping-error' }"
+        class="dashboard-stat"
+      >
+        <div class="dashboard-stat-title">Scraping Error</div>
+        <i nz-icon nzType="bug" nzTheme="twotone"></i>
+        <span class="dashboard-stat-value">{{ scrapingErrorCount }}</span>
+      </a>
+      <a
+        routerLink="jobs-list"
+        [queryParams]="{ status: 'success' }"
+        class="dashboard-stat"
+      >
+        <div class="dashboard-stat-title">Success</div>
+        <i nz-icon nzType="star" nzTheme="twotone"></i>
+        <span class="dashboard-stat-value">{{ successCount }}</span>
+      </a>
     </div>
     <div class="inner-content">
       <router-outlet></router-outlet>

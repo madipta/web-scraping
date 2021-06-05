@@ -1,4 +1,4 @@
-<nz-page-header nzTitle="Domain List" style="margin-bottom: 40px">
+<nz-page-header nzTitle="Domain List">
   <nz-page-header-extra>
     <a
       nz-tooltip
@@ -11,7 +11,7 @@
   </nz-page-header-extra>
 </nz-page-header>
 
-<div style="display: flex; margin-bottom: 10px">
+<div class="grid-search">
   <div style="flex: 1 1 0%"></div>
   <div style="display: flex">
     <nz-input-group nzPrefixIcon="filter">
@@ -79,7 +79,9 @@
           nz-tooltip
           nzTooltipTitle="delete"
           nz-popconfirm
-          [nzPopconfirmTitle]="'Are you sure delete ' + (data.home | domainName) + '?'"
+          [nzPopconfirmTitle]="
+            'Are you sure delete ' + (data.home | domainName) + '?'
+          "
           nzPopconfirmPlacement="left"
           nzOkText="Delete"
           nzCancelText="Cancel"

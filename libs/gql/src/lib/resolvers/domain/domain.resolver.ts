@@ -172,6 +172,11 @@ export class DomainResolver {
     }
   }
 
+  @Query(() => Number)
+  async getDomainCount(): Promise<number> {
+    return this.domainRepo.count({ select: ["id"] });
+  }
+
   @ResolveField()
   async setting(@Parent() domain: Domain) {
     return this.settingRepo.findOne({ id: domain.id });

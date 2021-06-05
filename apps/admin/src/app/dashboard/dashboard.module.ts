@@ -1,12 +1,11 @@
 import { NgModule } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
 import { RouterModule, Routes } from "@angular/router";
+import { NzIconModule } from "ng-zorro-antd/icon";
+import { NzGridModule } from "ng-zorro-antd/grid";
 import { NzLayoutModule } from "ng-zorro-antd/layout";
 import { NzMenuModule } from "ng-zorro-antd/menu";
-import { NzIconModule } from "ng-zorro-antd/icon";
 import { DashboardComponent } from "./dashboard.component";
-import { NzStatisticModule } from "ng-zorro-antd/statistic";
-import { NzGridModule } from "ng-zorro-antd/grid";
 
 const routes: Routes = [
   {
@@ -64,7 +63,6 @@ const routes: Routes = [
     NzGridModule,
     NzMenuModule,
     NzIconModule,
-    NzStatisticModule
   ],
 })
 export class DashboardModule {}

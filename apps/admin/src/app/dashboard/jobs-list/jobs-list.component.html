@@ -1,9 +1,6 @@
-<nz-page-header
-  nzTitle="Scrape Job List"
-  style="margin-bottom: 40px"
-></nz-page-header>
+<nz-page-header nzTitle="Scrape Job List"></nz-page-header>
 
-<div style="display: flex; margin-bottom: 10px">
+<div class="grid-search">
   <div style="flex: 1 1 0%"></div>
   <div style="display: flex">
     <nz-input-group nzPrefixIcon="filter">
@@ -21,7 +18,7 @@
 
 <nz-table
   nzShowSizeChanger
-  nzSize="middle"
+  nzSize="small"
   [nzData]="scrapeJobList"
   [nzFrontPagination]="false"
   [nzLoading]="loading"
@@ -33,7 +30,8 @@
 >
   <thead>
     <tr>
-      <th nzColumnKey="title" [nzSortFn]="true">title</th>
+      <th nzColumnKey="url" [nzSortFn]="true">URL</th>
+      <th nzColumnKey="title" [nzSortFn]="true">Title</th>
       <th>Status</th>
       <th>Created At</th>
       <th>Finished At</th>
@@ -42,8 +40,9 @@
   <tbody>
     <tr *ngFor="let data of scrapeJobList">
       <td>
-        <a [href]="data.url" target="_blank">{{ data.title }}</a>
+        <a [href]="data.url" target="_blank">{{ data.url | link }}</a>
       </td>
+      <td>{{ data.title }}</td>
       <td>{{ data.status }}</td>
       <td>{{ data.createdAt | date:"YYYY-MM-dd hh:mm:ss"}}</td>
       <td>{{ data.finishedAt | date:"YYYY-MM-dd hh:mm:ss"}}</td>

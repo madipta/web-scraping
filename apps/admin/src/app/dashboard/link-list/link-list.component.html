@@ -1,8 +1,4 @@
-<nz-page-header
-  nzBackIcon
-  style="margin-bottom: 40px"
-  [nzTitle]="domain?.home | domainName"
->
+<nz-page-header nzBackIcon [nzTitle]="domain?.home | domainName">
   <nz-page-header-extra>
     <a nz-tooltip nzTooltipTitle="prompt text" (click)="scrapAll()">
       <i nz-icon nzType="robot"></i>
@@ -11,7 +7,7 @@
   </nz-page-header-extra>
 </nz-page-header>
 
-<div style="display: flex; margin-bottom: 10px">
+<div class="grid-search">
   <div style="flex: 1 1 0%"></div>
   <div style="display: flex">
     <nz-input-group nzPrefixIcon="filter">

@@ -29,7 +29,7 @@ export class ScrapeJob implements IScrapeJob {
   linkId: number;
 
   @Field(() => String)
-  @Column({ length: 10, default: "created" })
+  @Column({ length: 15, default: "created" })
   status: ScrapeJobStatusType;
 
   @Field(() => Date, { nullable: true })
