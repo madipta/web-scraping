@@ -18,6 +18,7 @@ import { NzRadioModule } from "ng-zorro-antd/radio";
 import { ChecklistComponent } from "./components/checklist/checklist.component";
 import { DomainNamePipe } from "./pipes/domain-name.pipe";
 import { UrlPathPipe } from "./pipes/url-path.pipe";
+import { LinkPipe } from './pipes/link.pipe';
 
 const modules = [
   CommonModule,
@@ -39,10 +40,10 @@ const modules = [
   NzRadioModule,
 ];
 
-const declarations = [DomainNamePipe, ChecklistComponent, UrlPathPipe];
+const declarations = [DomainNamePipe, ChecklistComponent, LinkPipe, UrlPathPipe];
 
 @NgModule({
-  declarations: [...declarations],
+  declarations: [...declarations, LinkPipe],
   imports: [...modules],
   exports: [...modules, ...declarations],
 })

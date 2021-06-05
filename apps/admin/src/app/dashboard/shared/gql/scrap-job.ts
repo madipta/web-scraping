@@ -2,6 +2,7 @@ import { gql } from "apollo-angular";
 
 export const SCRAP_JOB_PAGE_LIST_QUERY = gql`
   query(
+    $status: String!
     $pageIndex: Int
     $pageSize: Int
     $search: String
@@ -10,6 +11,7 @@ export const SCRAP_JOB_PAGE_LIST_QUERY = gql`
   ) {
     scrapeJobPagelist(
       input: {
+        status: $status
         pageIndex: $pageIndex
         pageSize: $pageSize
         search: $search
@@ -29,5 +31,11 @@ export const SCRAP_JOB_PAGE_LIST_QUERY = gql`
         finishedAt
       }
     }
+  }
+`;
+
+export const SCRAP_JOB_COUNT_QUERY = gql`
+  query($status: String!) {
+    getScrapeJobCount(input: { status: $status })
   }
 `;

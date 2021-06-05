@@ -43,3 +43,9 @@ export const GET_CONTENT_QUERY = gql`
     }
   }
 `;
+
+export const GET_CONTENT_COUNT_QUERY = gql`
+  query {
+    getContentCount
+  }
+`;

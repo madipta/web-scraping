@@ -5,6 +5,7 @@ import {
   CREATE_DOMAIN_MUTATION,
   DELETE_DOMAIN_MUTATION,
   DOMAIN_PAGE_LIST_QUERY,
+  GET_DOMAIN_COUNT_QUERY,
   GET_DOMAIN_QUERY,
   UPDATE_DOMAIN_MUTATION,
 } from "../gql/domain";
@@ -54,6 +55,19 @@ export class DomainService {
       .pipe(
         take(1),
         map((obj) => obj.data["getDomainById"])
+      )
+      .toPromise();
+  }
+
+  async getCount(): Promise<number> {
+    return this.apollo
+      .query({
+        query: GET_DOMAIN_COUNT_QUERY,
+        fetchPolicy: "no-cache",
+      })
+      .pipe(
+        take(1),
+        map((obj) => obj.data["getDomainCount"])
       )
       .toPromise();
   }
