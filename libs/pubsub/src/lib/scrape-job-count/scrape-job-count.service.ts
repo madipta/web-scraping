@@ -45,8 +45,7 @@ export class ScrapeJobCountService {
 
   async publishScrapeJobCount() {
     const result = await this.getScrapeJobCount();
-    const res = this.redisPubsub.emit(this.JOB_NAME, result);
-    console.log("publishScrapeJobCount", res);
+    this.redisPubsub.emit(this.JOB_NAME, result);
     pubSub.publish(this.JOB_NAME, {
       scrapeJobCount: result,
     });
