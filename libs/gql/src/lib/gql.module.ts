@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
+import { PubSubModule } from "@web-scraping/pubsub";
 import { OrmModule } from "@web-scraping/orm";
 import { ScrapeQueueModule } from "@web-scraping/scrape-queue";
 import { join } from "path";
@@ -27,6 +28,7 @@ import { ScrapeJobResolver } from "./resolvers/scrape-job/scrape-job.resolver";
         autoSchemaFile: join(process.cwd(), "dist/schema.gql"),
       }),
     }),
+    PubSubModule
   ],
   providers: [
     ContentResolver,

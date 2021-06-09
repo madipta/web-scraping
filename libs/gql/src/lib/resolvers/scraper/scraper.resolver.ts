@@ -1,6 +1,7 @@
 import { InjectQueue } from "@nestjs/bull";
-import { Args, Mutation, Resolver } from "@nestjs/graphql";
+import { Args, Mutation, Resolver, Subscription } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
+import { ScrapeJobCount, ScrapeJobCountService } from "@web-scraping/pubsub";
 import { Link, ScrapeJob } from "@web-scraping/orm";
 import { Queue } from "bull";
 import { Repository } from "typeorm";
@@ -14,7 +15,8 @@ export class ScraperResolver {
     @InjectRepository(Link)
     private readonly linkRepo: Repository<Link>,
     @InjectRepository(ScrapeJob)
-    private readonly scrapeJobRepo: Repository<ScrapeJob>
+    private readonly scrapeJobRepo: Repository<ScrapeJob>,
+    private readonly scrapeJobCountService: ScrapeJobCountService
   ) {}
 
   @Mutation(() => BaseResult)
@@ -37,6 +39,7 @@ export class ScraperResolver {
         status: "created",
       });
       this.scrapeQueue.add("content", { id: dto.id, jobId });
+      this.scrapeJobCountService.publishScrapeJobCount();
       return { ok: true };
     } catch {
       return { ok: false };
@@ -55,11 +58,16 @@ export class ScraperResolver {
         },
       });
       links.forEach((link) => {
-        this.scrapeQueue.add("content", { id: link.id });
+        this.scrapeContent({ id: link.id });
       });
       return { ok: true };
     } catch {
       return { ok: false };
     }
+  }
+
+  @Subscription(() => ScrapeJobCount)
+  scrapeJobCount() {
+    return this.scrapeJobCountService.asyncIteratorScrapeJobCount();
   }
 }

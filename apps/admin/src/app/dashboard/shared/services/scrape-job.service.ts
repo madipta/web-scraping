@@ -4,6 +4,7 @@ import { map, take } from "rxjs/operators";
 import { GqlScrapeJobPageList } from "../gql/dto/scrap-job.dto";
 import {
   SCRAP_JOB_COUNT_QUERY,
+  SCRAP_JOB_COUNT_SUBSCRIPTION,
   SCRAP_JOB_PAGE_LIST_QUERY,
 } from "../gql/scrap-job";
 
@@ -46,5 +47,13 @@ export class ScrapeJobService {
         map((obj) => obj.data["getScrapeJobCount"])
       )
       .toPromise();
+  }
+
+  subscribeCount() {
+    return this.apollo
+      .subscribe({
+        query: SCRAP_JOB_COUNT_SUBSCRIPTION,
+        fetchPolicy: "no-cache",
+      }).pipe(map(obj=> obj.data["scrapeJobCount"]));
   }
 }

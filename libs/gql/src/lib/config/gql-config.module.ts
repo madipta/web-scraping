@@ -11,7 +11,7 @@ const config = () => ({
 
 const schema = Joi.object({
   GQL_PLAYGROUND: Joi.string().default("false"),
-  GQL_SUBCRIPTION: Joi.string().default("false"),
+  GQL_SUBCRIPTION: Joi.string().default("true"),
 });
 
 @Module({

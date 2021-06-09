@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { ScrapeJobCountService } from "@web-scraping/pubsub";
 import { Link, Content, DomainSetting, ScrapeJob } from "@web-scraping/orm";
 import { Subscription } from "rxjs";
 import { Repository } from "typeorm";
@@ -18,7 +19,8 @@ export class ScraperService {
     @InjectRepository(DomainSetting)
     private readonly settingRepo: Repository<DomainSetting>,
     @InjectRepository(ScrapeJob)
-    private readonly scrapeJobRepo: Repository<ScrapeJob>
+    private readonly scrapeJobRepo: Repository<ScrapeJob>,
+    private readonly scrapeJobCountService: ScrapeJobCountService
   ) {}
 
   async index(domainId: number) {
@@ -97,6 +99,7 @@ export class ScraperService {
       })
       .where(`id=:id`, { id: jobId })
       .execute();
+    this.scrapeJobCountService.publishScrapeJobCount();
   }
 
   private async errorLoading(linkId, jobId) {
@@ -105,6 +108,7 @@ export class ScraperService {
       { id: jobId },
       { status: "loading failed" }
     );
+    this.scrapeJobCountService.publishScrapeJobCount();
     throw new Error("Error loading page content!");
   }
 
@@ -114,6 +118,7 @@ export class ScraperService {
       { id: jobId },
       { status: "scraping failed" }
     );
+    this.scrapeJobCountService.publishScrapeJobCount();
     throw new Error("Error scraping content!");
   }
 

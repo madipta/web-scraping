@@ -39,3 +39,15 @@ export const SCRAP_JOB_COUNT_QUERY = gql`
     getScrapeJobCount(input: { status: $status })
   }
 `;
+
+export const SCRAP_JOB_COUNT_SUBSCRIPTION = gql`
+  subscription {
+    scrapeJobCount {
+      content
+      created
+      loadingError
+      scrapingError
+      success
+    }
+  }
+`;

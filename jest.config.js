@@ -8,5 +8,6 @@ module.exports = {
     "<rootDir>/apps/api/public",
     "<rootDir>/libs/gql",
     "<rootDir>/libs/scrape-queue",
+    "<rootDir>/libs/pubsub",
   ],
 };

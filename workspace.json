@@ -495,6 +495,31 @@
           }
         }
       }
+    },
+    "pubsub": {
+      "root": "libs/pubsub",
+      "sourceRoot": "libs/pubsub/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/pubsub/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/pubsub"
+          ],
+          "options": {
+            "jestConfig": "libs/pubsub/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   }
 }
