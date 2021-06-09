@@ -118,9 +118,13 @@ export class LinkListComponent implements OnInit {
 
   async scrapAll() {
     const msgId = this.msg.loading("progress...", { nzDuration: 0 }).messageId;
-    await this.scraperService.scrapeContentByDomain(this.domain.id);
+    const result = await this.scraperService.scrapeContentByDomain(this.domain.id);
     this.msg.remove(msgId);
-    this.refreshData();
+    if (result.ok) {
+      this.msg.success("Scraping content job created!");
+    } else {
+      this.msg.error("Create content scraping job failed!");
+    }
   }
 
   async scrapOne(linkId: number) {
