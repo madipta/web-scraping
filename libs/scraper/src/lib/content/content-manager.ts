@@ -26,14 +26,18 @@ export class ContentManager {
   }
 
   async manage() {
-    const responseText = await this.load(this.setting.url);
-    if (!responseText) {
+    let responseText: string;
+    try {
+      responseText = await this.load(this.setting.url);
+    } catch {
       this.errorLoadingSubject.next();
       return;
     }
     this.successLoadingSubject.next();
-    const content = await this.scrap(responseText);
-    if (!content) {
+    let content: IContent;
+    try {
+      content = await this.scrap(responseText);
+    } catch {
       this.errorScrapingSubject.next();
       return;
     }

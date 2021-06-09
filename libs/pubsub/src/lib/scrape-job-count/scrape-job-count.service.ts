@@ -24,9 +24,9 @@ export class ScrapeJobCountService {
       UNION ALL
       SELECT COUNT(id) FROM scrape_job where status = 'created'
       UNION ALL
-      SELECT COUNT(id) FROM scrape_job where status = 'loading-error'
+      SELECT COUNT(id) FROM scrape_job where status = 'loading-failed'
       UNION ALL
-      SELECT COUNT(id) FROM scrape_job where status = 'scraping-error'
+      SELECT COUNT(id) FROM scrape_job where status = 'scraping-failed'
       UNION ALL
       SELECT COUNT(id) FROM scrape_job where status = 'success'
   `);

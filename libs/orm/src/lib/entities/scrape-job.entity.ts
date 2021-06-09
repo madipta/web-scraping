@@ -12,8 +12,8 @@ import { Link } from "./link.entity";
 
 export type ScrapeJobStatusType =
   | "created"
-  | "loading failed"
-  | "scraping failed"
+  | "loading-failed"
+  | "scraping-failed"
   | "success";
 
 @InputType("AbstractScrapeJobInputType", { isAbstract: true })

@@ -31,8 +31,8 @@ export class DashboardComponent implements OnInit {
     this.domainCount = await this.domainService.getCount();
     this.contentCount = await this.contentService.getCount();
     this.queuesCount = await this.jobService.getCount("created");
-    this.loadingErrorCount = await this.jobService.getCount("loading-error");
-    this.scrapingErrorCount = await this.jobService.getCount("scraping-error");
+    this.loadingErrorCount = await this.jobService.getCount("loading-failed");
+    this.scrapingErrorCount = await this.jobService.getCount("scraping-failed");
     this.successCount = await this.jobService.getCount("success");
     this.wsService.JobCount$.subscribe(({ data }) => {
       this.contentCount = data.content;

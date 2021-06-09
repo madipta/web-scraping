@@ -106,20 +106,18 @@ export class ScraperService {
     this.linkRepo.update({ id: linkId }, { scraped: false, broken: true });
     await this.scrapeJobRepo.update(
       { id: jobId },
-      { status: "loading failed" }
+      { status: "loading-failed" }
     );
     this.scrapeJobCountService.publishScrapeJobCount();
-    throw new Error("Error loading page content!");
   }
 
   private async errorScraping(linkId, jobId) {
     this.linkRepo.update({ id: linkId }, { scraped: false, broken: false });
     await this.scrapeJobRepo.update(
       { id: jobId },
-      { status: "scraping failed" }
+      { status: "scraping-failed" }
     );
     this.scrapeJobCountService.publishScrapeJobCount();
-    throw new Error("Error scraping content!");
   }
 
   private async successLoading(linkId) {
