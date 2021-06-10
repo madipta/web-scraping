@@ -1,5 +1,5 @@
 import { IContent } from "@web-scraping/orm";
-import { Subject } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 import { ContentLoaders, ContentScrapers } from "../common/constants";
 import { ISetting } from "../common/setting.interface";
 

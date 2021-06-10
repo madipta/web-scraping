@@ -1,6 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ScrapeJobCountService } from "@web-scraping/pubsub";
+import {
+  ScrapeJobCountService,
+  ScrapeJobFinishService,
+} from "@web-scraping/pubsub";
 import { Link, Content, DomainSetting, ScrapeJob } from "@web-scraping/orm";
 import { Subscription } from "rxjs";
 import { Repository } from "typeorm";
@@ -20,7 +23,8 @@ export class ScraperService {
     private readonly settingRepo: Repository<DomainSetting>,
     @InjectRepository(ScrapeJob)
     private readonly scrapeJobRepo: Repository<ScrapeJob>,
-    private readonly scrapeJobCountService: ScrapeJobCountService
+    private readonly scrapeJobCountService: ScrapeJobCountService,
+    private readonly scrapeJobFinishService: ScrapeJobFinishService
   ) {}
 
   async index(domainId: number) {
@@ -44,6 +48,7 @@ export class ScraperService {
       console.error(e);
       return { ok: false, error: "Scrap index failed!" };
     } finally {
+      this.scrapeJobFinishService.scrapeIndexJobFinished();
       if (subs && !subs.closed) {
         subs.unsubscribe();
       }
@@ -58,22 +63,26 @@ export class ScraperService {
   }
 
   async content(linkId: number, jobId: string) {
+    let errorLoading: Subscription;
+    let errorScraping: Subscription;
+    let successLoading: Subscription;
+    let contentAdd: Subscription;
     try {
       const setting = await this.getSettingByLink(linkId);
       if (!setting) {
         throw new Error("Setting not found!");
       }
       const cs = new ContentManager(setting);
-      cs.errorLoading$.subscribe(async () => {
+      errorLoading = cs.errorLoading$.subscribe(async () => {
         await this.errorLoading(linkId, jobId);
       });
-      cs.errorScraping$.subscribe(async () => {
+      errorScraping = cs.errorScraping$.subscribe(async () => {
         await this.errorScraping(linkId, jobId);
       });
-      cs.successLoading$.subscribe(async () => {
+      successLoading = cs.successLoading$.subscribe(async () => {
         await this.successLoading(linkId);
       });
-      cs.contentAdd$.subscribe(async (data) => {
+      contentAdd = cs.contentAdd$.subscribe(async (data) => {
         await this.contentAdd(linkId, jobId, data);
       });
       await cs.manage();
@@ -81,6 +90,20 @@ export class ScraperService {
     } catch (e) {
       console.error(e);
       return { ok: false, error: "Scrap content failed!" };
+    } finally {
+      this.scrapeJobFinishService.scrapeContentJobFinished();
+      if (errorLoading) {
+        errorLoading.unsubscribe();
+      }
+      if (errorScraping) {
+        errorScraping.unsubscribe();
+      }
+      if (successLoading) {
+        successLoading.unsubscribe();
+      }
+      if (contentAdd) {
+        contentAdd.unsubscribe();
+      }
     }
   }
 

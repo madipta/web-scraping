@@ -77,8 +77,9 @@ export class DomainListComponent {
     const result = await this.domainService.delete({ id });
     this.msg.remove(msgId);
     if (result.ok) {
-      this.msg.success("Deleted!");
-      this.refreshData();
+      this.msg.success("Scraping index job created!");
+    } else {
+      this.msg.error("Index scraping job failed!");
     }
   }
 
@@ -87,11 +88,8 @@ export class DomainListComponent {
     const result = await this.scraperService.scrapIndex(id);
     this.msg.remove(msgId);
     if (result.ok) {
-      this.msg.success("Index scraping success!");
-    } else {
-      this.msg.error("Index scraping failed!");
+      this.refreshData();
     }
-    this.refreshData();
   }
 
   gotoLinks(data: GqlDomainPageListResult) {
