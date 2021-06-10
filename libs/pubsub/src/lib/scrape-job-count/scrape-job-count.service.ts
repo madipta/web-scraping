@@ -4,15 +4,17 @@ import { ScrapeJob } from "@web-scraping/orm";
 import { PubSub } from "graphql-subscriptions";
 import { RedisClient } from "redis";
 import { Repository } from "typeorm";
+import {
+  PUBSUB_EVENTS,
+  PUBSUB_PROVIDER,
+} from "../pub-sub.constants";
 
-const pubSub = new PubSub();
+const gqlPubSub = new PubSub();
 
 @Injectable()
 export class ScrapeJobCountService {
-  readonly JOB_NAME = "ScrapeJobCount";
-
   constructor(
-    @Inject("REDIS_PUB")
+    @Inject(PUBSUB_PROVIDER)
     private readonly redisPubsub: RedisClient,
     @InjectRepository(ScrapeJob)
     private readonly scrapeJobRepo: Repository<ScrapeJob>
@@ -44,15 +46,18 @@ export class ScrapeJobCountService {
   }
 
   async publishScrapeJobCount() {
-    const result = await this.getScrapeJobCount();
-    this.redisPubsub.emit(this.JOB_NAME, result);
-    pubSub.publish(this.JOB_NAME, {
-      scrapeJobCount: result,
+    const data = await this.getScrapeJobCount();
+    this.redisPubsub.emit(PUBSUB_EVENTS.JOB, {
+      event: "jobCount",
+      data,
     });
-    return result;
+    gqlPubSub.publish(PUBSUB_EVENTS.JOB, {
+      scrapeJobCount: data,
+    });
+    return data;
   }
 
   asyncIteratorScrapeJobCount() {
-    return pubSub.asyncIterator(this.JOB_NAME);
+    return gqlPubSub.asyncIterator(PUBSUB_EVENTS.JOB);
   }
 }

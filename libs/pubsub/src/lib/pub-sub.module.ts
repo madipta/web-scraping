@@ -1,10 +1,12 @@
 import { Module } from "@nestjs/common";
 import { OrmModule } from "@web-scraping/orm";
 import * as redis from "redis";
+import { PUBSUB_PROVIDER } from "./pub-sub.constants";
 import { ScrapeJobCountService } from "./scrape-job-count/scrape-job-count.service";
+import { ScrapeJobFinishService } from "./scrape-job-finish/scrape-job-finish.service";
 
-const RedisPublisherProvider = {
-  provide: "REDIS_PUB",
+const RedisPubSubClientProvider = {
+  provide: PUBSUB_PROVIDER,
   useFactory: async () => {
     return redis.createClient({
       host: "localhost",
@@ -13,19 +15,15 @@ const RedisPublisherProvider = {
   },
 };
 
-const RedisSubcriberProvider = {
-  provide: "REDIS_SUB",
-  useFactory: async () => {
-    return redis.createClient({
-      host: "localhost",
-      port: 6379,
-    });
-  },
-};
+const providers = [
+  RedisPubSubClientProvider,
+  ScrapeJobCountService,
+  ScrapeJobFinishService,
+];
 
 @Module({
   imports: [OrmModule, OrmModule.Register()],
-  providers: [RedisPublisherProvider, RedisSubcriberProvider, ScrapeJobCountService],
-  exports: [RedisPublisherProvider, RedisSubcriberProvider, ScrapeJobCountService],
+  providers: [...providers],
+  exports: [...providers],
 })
 export class PubSubModule {}

@@ -2,11 +2,10 @@ import { Inject, OnModuleInit } from "@nestjs/common";
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
-  SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  WsResponse,
 } from "@nestjs/websockets";
+import { PUBSUB_EVENTS, PUBSUB_PROVIDER } from "@web-scraping/pubsub";
 import { RedisClient } from "redis";
 import { Server } from "ws";
 
@@ -17,7 +16,9 @@ export class PubSubWsGateway
   server: Server;
   clients = [];
 
-  constructor(@Inject("REDIS_PUB") private readonly redisSub: RedisClient) {}
+  constructor(
+    @Inject(PUBSUB_PROVIDER) private readonly redisSub: RedisClient
+  ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   handleConnection(client: unknown, ..._args: unknown[]) {
@@ -29,16 +30,10 @@ export class PubSubWsGateway
   }
 
   onModuleInit() {
-    this.redisSub.on("ScrapeJobCount", (data) => {
-      const res = { event: "jobCount", data };
+    this.redisSub.on(PUBSUB_EVENTS.JOB, (data) => {
       this.clients.forEach((clien) => {
-        clien.send(JSON.stringify(res));
+        clien.send(JSON.stringify(data));
       });
     });
-  }
-
-  @SubscribeMessage("jobCount")
-  handleJobCount(data): WsResponse<string> {
-    return { event: "jobCount", data };
   }
 }
