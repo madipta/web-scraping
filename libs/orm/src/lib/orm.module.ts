@@ -1,7 +1,14 @@
 import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Content, Domain, DomainSetting, Link, ScrapeJob } from "./entities";
+import {
+  Content,
+  Domain,
+  DomainSetting,
+  Link,
+  ScrapeJob,
+  User,
+} from "./entities";
 import { OrmConfigModule } from "./config/orm-config.module";
 
 @Module({
@@ -30,6 +37,7 @@ export class OrmModule {
       DomainSetting,
       Link,
       ScrapeJob,
+      User,
     ]);
   }
 }
