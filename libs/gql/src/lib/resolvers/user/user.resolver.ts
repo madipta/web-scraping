@@ -10,6 +10,7 @@ import {
   Resolver,
 } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
+import { JwtService } from "@web-scraping/auth";
 import { User } from "@web-scraping/orm";
 import { Repository } from "typeorm";
 import { BaseResult } from "../core/base-result";
@@ -38,6 +39,7 @@ export class GetByUserNameInput extends PickType(User, ["userName"]) {}
 @Resolver(() => User)
 export class UserResolver {
   constructor(
+    private readonly jwtService: JwtService,
     @InjectRepository(User) private readonly userRepo: Repository<User>
   ) {}
 
@@ -122,7 +124,7 @@ export class UserResolver {
       if (!result.checkPassword(password)) {
         return { ok: false, error: "Wrong password!" };
       }
-      return { ok: true, token: "XXX" };
+      return { ok: true, token: this.jwtService.sign(userName) };
     } catch (e) {
       console.error(e);
       return { ok: false, error: "User login failed!" };

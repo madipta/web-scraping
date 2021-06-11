@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
+import { AuthModule } from "@web-scraping/auth";
 import { PubSubModule } from "@web-scraping/pubsub";
 import { OrmModule } from "@web-scraping/orm";
 import { ScrapeQueueModule } from "@web-scraping/scrape-queue";
@@ -12,12 +13,13 @@ import { DomainSettingResolver } from "./resolvers/domain-setting/domain-setting
 import { ContentResolver } from "./resolvers/content/content.resolver";
 import { ScraperResolver } from "./resolvers/scraper/scraper.resolver";
 import { ScrapeJobResolver } from "./resolvers/scrape-job/scrape-job.resolver";
-import { UserResolver } from './resolvers/user/user.resolver';
+import { UserResolver } from "./resolvers/user/user.resolver";
 
 @Module({
   imports: [
     OrmModule,
     OrmModule.Register(),
+    AuthModule,
     ScrapeQueueModule,
     ScrapeQueueModule.Register(),
     GraphQLModule.forRootAsync({
@@ -29,7 +31,7 @@ import { UserResolver } from './resolvers/user/user.resolver';
         autoSchemaFile: join(process.cwd(), "dist/schema.gql"),
       }),
     }),
-    PubSubModule
+    PubSubModule,
   ],
   providers: [
     ContentResolver,
