@@ -9,5 +9,6 @@ module.exports = {
     "<rootDir>/libs/gql",
     "<rootDir>/libs/scrape-queue",
     "<rootDir>/libs/pubsub",
+    "<rootDir>/libs/auth",
   ],
 };
