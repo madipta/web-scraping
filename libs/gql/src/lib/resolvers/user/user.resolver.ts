@@ -20,6 +20,12 @@ export class UserResult extends BaseResult {
   result?: User;
 }
 
+@ObjectType()
+export class UserLoginResult extends BaseResult {
+  @Field(() => String, { nullable: true })
+  token?: string;
+}
+
 @InputType()
 export class UserCreateInput extends OmitType(User, [
   "createdAt",
@@ -103,13 +109,20 @@ export class UserResolver {
     }
   }
 
-  @Query(() => UserResult)
-  async userLogin(@Args("input") dto: UserCreateInput): Promise<UserResult> {
+  @Query(() => UserLoginResult)
+  async userLogin(@Args("input") dto: UserCreateInput): Promise<UserLoginResult> {
     try {
+      const { password } = dto;
       let { userName } = dto;
       userName = userName.toLowerCase();
       const result = await this.userRepo.findOne({ userName });
-      return { ok: true, result };
+      if (!result) {
+        return { ok: false, error: "User not found!" };
+      }
+      if (!result.checkPassword(password)) {
+        return { ok: false, error: "Wrong password!" };
+      }
+      return { ok: true, token: "XXX" };
     } catch (e) {
       console.error(e);
       return { ok: false, error: "User login failed!" };

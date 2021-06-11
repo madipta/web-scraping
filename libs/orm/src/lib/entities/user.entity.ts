@@ -38,4 +38,8 @@ export class User implements IUser {
       this.password = await bcrypt.hash(this.password, 10);
     }
   }
+
+  checkPassword(passwordInput: string) {
+    return bcrypt.compareSync(passwordInput, this.password);
+  }
 }
