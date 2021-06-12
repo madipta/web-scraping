@@ -8,22 +8,19 @@ import { Link, Content, DomainSetting, ScrapeJob } from "@web-scraping/orm";
 import { Subscription } from "rxjs";
 import { Repository } from "typeorm";
 import { ISetting } from "./common/setting.interface";
-import { ContentManager } from "./content/content-manager";
+import { ContentManagerService } from "./content/content-manager";
 import { IndexManager } from "./index/index-manager";
 import { IIndexScrapResult } from "./index/scrapers/index-scrap.interface";
 
 @Injectable()
 export class ScraperService {
   constructor(
+    private readonly contentManagerService: ContentManagerService,
     @InjectRepository(Link)
     private readonly linkRepo: Repository<Link>,
-    @InjectRepository(Content)
-    private readonly contentRepo: Repository<Content>,
     @InjectRepository(DomainSetting)
     private readonly settingRepo: Repository<DomainSetting>,
     @InjectRepository(ScrapeJob)
-    private readonly scrapeJobRepo: Repository<ScrapeJob>,
-    private readonly scrapeJobCountService: ScrapeJobCountService,
     private readonly scrapeJobFinishService: ScrapeJobFinishService
   ) {}
 
@@ -63,91 +60,17 @@ export class ScraperService {
   }
 
   async content(linkId: number, jobId: string) {
-    let errorLoading: Subscription;
-    let errorScraping: Subscription;
-    let successLoading: Subscription;
-    let contentAdd: Subscription;
     try {
       const setting = await this.getSettingByLink(linkId);
       if (!setting) {
         throw new Error("Setting not found!");
       }
-      const cs = new ContentManager(setting);
-      errorLoading = cs.errorLoading$.subscribe(async () => {
-        await this.errorLoading(linkId, jobId);
-      });
-      errorScraping = cs.errorScraping$.subscribe(async () => {
-        await this.errorScraping(linkId, jobId);
-      });
-      successLoading = cs.successLoading$.subscribe(async () => {
-        await this.successLoading(linkId);
-      });
-      contentAdd = cs.contentAdd$.subscribe(async (data) => {
-        await this.contentAdd(linkId, jobId, data);
-      });
-      await cs.manage();
+      await this.contentManagerService.manage(setting, linkId, jobId);
       return { ok: true };
     } catch (e) {
       console.error(e);
       return { ok: false, error: "Scrap content failed!" };
-    } finally {
-      this.scrapeJobFinishService.scrapeContentJobFinished();
-      if (errorLoading) {
-        errorLoading.unsubscribe();
-      }
-      if (errorScraping) {
-        errorScraping.unsubscribe();
-      }
-      if (successLoading) {
-        successLoading.unsubscribe();
-      }
-      if (contentAdd) {
-        contentAdd.unsubscribe();
-      }
     }
-  }
-
-  private async contentAdd(linkId, jobId, data) {
-    if (await this.contentRepo.count({ id: linkId })) {
-      await this.contentRepo.update({ id: linkId }, data);
-    } else {
-      await this.contentRepo.save({ ...data, id: linkId });
-    }
-    await this.scrapeJobRepo
-      .createQueryBuilder()
-      .update()
-      .set({
-        status: "success",
-        finishedAt: () => "Now()",
-      })
-      .where(`id=:id`, { id: jobId })
-      .execute();
-    this.scrapeJobCountService.publishScrapeJobCount();
-  }
-
-  private async errorLoading(linkId, jobId) {
-    this.linkRepo.update({ id: linkId }, { scraped: false, broken: true });
-    await this.scrapeJobRepo.update(
-      { id: jobId },
-      { status: "loading-failed" }
-    );
-    this.scrapeJobCountService.publishScrapeJobCount();
-  }
-
-  private async errorScraping(linkId, jobId) {
-    this.linkRepo.update({ id: linkId }, { scraped: false, broken: false });
-    await this.scrapeJobRepo.update(
-      { id: jobId },
-      { status: "scraping-failed" }
-    );
-    this.scrapeJobCountService.publishScrapeJobCount();
-  }
-
-  private async successLoading(linkId) {
-    await this.linkRepo.update(
-      { id: linkId },
-      { scraped: true, broken: false }
-    );
   }
 
   private getSettingByLink(linkId: number) {

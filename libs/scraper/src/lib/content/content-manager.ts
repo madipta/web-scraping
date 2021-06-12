@@ -1,46 +1,39 @@
+import { Injectable } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import { IContent } from "@web-scraping/orm";
-import { Subject, Subscription } from "rxjs";
 import { ContentLoaders, ContentScrapers } from "../common/constants";
 import { ISetting } from "../common/setting.interface";
 
-export class ContentManager {
-  errorLoadingSubject = new Subject();
-  errorLoading$ = this.errorLoadingSubject.asObservable();
-  errorScrapingSubject = new Subject();
-  errorScraping$ = this.errorScrapingSubject.asObservable();
-  successLoadingSubject = new Subject();
-  successLoading$ = this.successLoadingSubject.asObservable();
-  contentAddSubject = new Subject<IContent>();
-  contentAdd$ = this.contentAddSubject.asObservable();
+@Injectable()
+export class ContentManagerService {
+  constructor(private eventEmitter: EventEmitter2) {}
 
-  constructor(private setting: ISetting) {}
-
-  async load(url: string) {
-    const loader = ContentLoaders[this.setting.scrapArticleMethod];
-    return loader.load(url);
+  private async load(setting: ISetting) {
+    const loader = ContentLoaders[setting.scrapArticleMethod];
+    return loader.load(setting.url);
   }
 
-  async scrap(text: string) {
-    const scraper = new ContentScrapers[this.setting.scrapArticleFormat]();
-    return scraper.scrap(text, this.setting);
+  private async scrap(setting: ISetting, text: string) {
+    const scraper = new ContentScrapers[setting.scrapArticleFormat]();
+    return scraper.scrap(text, setting);
   }
 
-  async manage() {
+  async manage(setting: ISetting, linkId: number, jobId: string) {
     let responseText: string;
     try {
-      responseText = await this.load(this.setting.url);
+      responseText = await this.load(setting);
     } catch {
-      this.errorLoadingSubject.next();
+      this.eventEmitter.emit("error.loading", { linkId, jobId });
       return;
     }
-    this.successLoadingSubject.next();
+    this.eventEmitter.emit("success.loading", { linkId });
     let content: IContent;
     try {
-      content = await this.scrap(responseText);
+      content = await this.scrap(setting, responseText);
     } catch {
-      this.errorScrapingSubject.next();
+      this.eventEmitter.emit("error.scraping", { linkId, jobId });
       return;
     }
-    this.contentAddSubject.next(content);
+    this.eventEmitter.emit("success.scraping", { linkId, jobId, content });
   }
 }
