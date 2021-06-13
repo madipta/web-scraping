@@ -1,12 +1,8 @@
-import { IndexManager } from "../index-manager";
+import { IndexManagerService } from "../index-manager";
 import { ILooper } from "./looper.interface";
 
 export class PagingLooper implements ILooper {
-  manager: IndexManager = null;
-
-  constructor(manager) {
-    this.manager = manager;
-  }
+  constructor(public manager: IndexManagerService) {}
 
   async run() {
     let page = 1;
@@ -25,7 +21,7 @@ export class PagingLooper implements ILooper {
       try {
         const res = await this.manager.load(url);
         links = await this.manager.scrap(res);
-        this.manager.linkAddSubject.next(links);
+        this.manager.addLinks(links);
         errorCount = 0;
       } catch (error) {
         page--;

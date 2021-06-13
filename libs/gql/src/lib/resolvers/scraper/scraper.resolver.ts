@@ -1,28 +1,27 @@
-import { InjectQueue } from "@nestjs/bull";
 import { Args, Mutation, Resolver, Subscription } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ScrapeJobCount, ScrapeJobCountService } from "@web-scraping/pubsub";
-import { Link, ScrapeJob } from "@web-scraping/orm";
-import { Queue } from "bull";
+import { Link, ScrapeJob, ScrapeJobStatus } from "@web-scraping/orm";
 import { Repository } from "typeorm";
 import { AutoNumberInput } from "../core/auto-number-input";
 import { BaseResult } from "../core/base-result";
+import { ScrapeQueueService } from "@web-scraping/scrape-queue";
 
 @Resolver()
 export class ScraperResolver {
   constructor(
-    @InjectQueue("scrape") private readonly scrapeQueue: Queue,
     @InjectRepository(Link)
     private readonly linkRepo: Repository<Link>,
     @InjectRepository(ScrapeJob)
     private readonly scrapeJobRepo: Repository<ScrapeJob>,
-    private readonly scrapeJobCountService: ScrapeJobCountService
+    private readonly scrapeJobCountService: ScrapeJobCountService,
+    private readonly scrapeQueueService: ScrapeQueueService
   ) {}
 
   @Mutation(() => BaseResult)
   async scrapeIndex(@Args("input") dto: AutoNumberInput): Promise<BaseResult> {
     try {
-      this.scrapeQueue.add("index", { id: dto.id });
+      this.scrapeQueueService.addIndex(dto.id);
       return { ok: true };
     } catch {
       return { ok: false };
@@ -36,9 +35,9 @@ export class ScraperResolver {
     try {
       const { id: jobId } = await this.scrapeJobRepo.save({
         linkId: dto.id,
-        status: "created",
+        status: ScrapeJobStatus.created,
       });
-      this.scrapeQueue.add("content", { id: dto.id, jobId });
+      this.scrapeQueueService.addContent(dto.id, jobId);
       this.scrapeJobCountService.publishScrapeJobCount();
       return { ok: true };
     } catch {

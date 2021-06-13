@@ -5,6 +5,7 @@ import { OrmModule } from "@web-scraping/orm";
 import { ScraperService } from "./scraper.service";
 import { ContentManagerService } from "./content/content-manager";
 import { ScraperEvent } from "./scraper.event";
+import { IndexManagerService } from "./index/index-manager";
 
 @Module({
   imports: [
@@ -13,7 +14,12 @@ import { ScraperEvent } from "./scraper.event";
     OrmModule.Register(),
     PubSubModule,
   ],
-  providers: [ContentManagerService, ScraperEvent, ScraperService],
+  providers: [
+    IndexManagerService,
+    ContentManagerService,
+    ScraperEvent,
+    ScraperService,
+  ],
   exports: [ScraperService],
 })
 export class ScraperModule {}

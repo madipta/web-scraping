@@ -11,7 +11,8 @@ export class JwtMiddleware implements NestMiddleware {
   constructor(
     private readonly config: ConfigService,
     private readonly jwtService: JwtService,
-    @InjectRepository(User) private readonly userRepo: Repository<User>
+    @InjectRepository(User)
+    private readonly userRepo: Repository<User>
   ) {}
   async use(req: Request, res: Response, next: NextFunction) {
     const headerKey = this.config.get("jwt_header_key");

@@ -3,6 +3,7 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { IContent } from "@web-scraping/orm";
 import { ContentLoaders, ContentScrapers } from "../common/constants";
 import { ISetting } from "../common/setting.interface";
+import { ScrapeEvents } from "../scraper.event";
 
 @Injectable()
 export class ContentManagerService {
@@ -23,17 +24,21 @@ export class ContentManagerService {
     try {
       responseText = await this.load(setting);
     } catch {
-      this.eventEmitter.emit("error.loading", { linkId, jobId });
+      this.eventEmitter.emit(ScrapeEvents.ErrorLoading, { linkId, jobId });
       return;
     }
-    this.eventEmitter.emit("success.loading", { linkId });
+    this.eventEmitter.emit(ScrapeEvents.SuccessLoading, { linkId });
     let content: IContent;
     try {
       content = await this.scrap(setting, responseText);
     } catch {
-      this.eventEmitter.emit("error.scraping", { linkId, jobId });
+      this.eventEmitter.emit(ScrapeEvents.ErrorScraping, { linkId, jobId });
       return;
     }
-    this.eventEmitter.emit("success.scraping", { linkId, jobId, content });
+    this.eventEmitter.emit(ScrapeEvents.SuccessScraping, {
+      linkId,
+      jobId,
+      content,
+    });
   }
 }

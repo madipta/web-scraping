@@ -1,6 +1,6 @@
-import { IndexManager } from "../index-manager";
+import { IndexManagerService } from "../index-manager";
 
 export interface ILooper {
-  manager: IndexManager;
+  manager: IndexManagerService;
   run(): Promise<boolean>;
 }

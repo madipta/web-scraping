@@ -21,7 +21,6 @@ import { UserResolver } from "./resolvers/user/user.resolver";
     OrmModule.Register(),
     AuthModule,
     ScrapeQueueModule,
-    ScrapeQueueModule.Register(),
     GraphQLModule.forRootAsync({
       imports: [GqlConfigModule],
       inject: [ConfigService],

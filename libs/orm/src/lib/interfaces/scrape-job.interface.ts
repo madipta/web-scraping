@@ -1,9 +1,9 @@
-import { ScrapeJobStatusType } from "../entities/scrape-job.entity";
+import { ScrapeJobStatus } from "../entities/scrape-job.entity";
 
 export interface IScrapeJob {
   id: string;
   linkId: number;
-  status: ScrapeJobStatusType;
+  status: ScrapeJobStatus;
   createdAt?: Date;
   finishedAt?: Date;
 }

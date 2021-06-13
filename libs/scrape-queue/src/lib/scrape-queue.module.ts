@@ -3,7 +3,9 @@ import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ScraperModule } from "@web-scraping/scraper";
 import { ScrapeQueueConfigModule } from "./config/config.module";
+import { SCRAPE_QUEUE_NAME } from "./scrape-queue.constants";
 import { ScrapeQueueProcessor } from "./scrape-queue.processor";
+import { ScrapeQueueService } from "./scrape-queue.service";
 
 @Module({
   imports: [
@@ -18,13 +20,11 @@ import { ScrapeQueueProcessor } from "./scrape-queue.processor";
         },
       }),
     }),
+    BullModule.registerQueue({
+      name: SCRAPE_QUEUE_NAME,
+    }),
   ],
-  providers: [ScrapeQueueProcessor],
+  providers: [ScrapeQueueProcessor, ScrapeQueueService],
+  exports: [ScrapeQueueService],
 })
-export class ScrapeQueueModule {
-  static Register() {
-    return BullModule.registerQueue({
-      name: "scrape",
-    });
-  }
-}
+export class ScrapeQueueModule {}

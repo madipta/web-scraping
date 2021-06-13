@@ -1,61 +1,33 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import {
-  ScrapeJobCountService,
-  ScrapeJobFinishService,
-} from "@web-scraping/pubsub";
-import { Link, Content, DomainSetting, ScrapeJob } from "@web-scraping/orm";
-import { Subscription } from "rxjs";
+import { Link, DomainSetting } from "@web-scraping/orm";
 import { Repository } from "typeorm";
 import { ISetting } from "./common/setting.interface";
 import { ContentManagerService } from "./content/content-manager";
-import { IndexManager } from "./index/index-manager";
-import { IIndexScrapResult } from "./index/scrapers/index-scrap.interface";
+import { IndexManagerService } from "./index/index-manager";
 
 @Injectable()
 export class ScraperService {
   constructor(
-    private readonly contentManagerService: ContentManagerService,
     @InjectRepository(Link)
     private readonly linkRepo: Repository<Link>,
     @InjectRepository(DomainSetting)
     private readonly settingRepo: Repository<DomainSetting>,
-    @InjectRepository(ScrapeJob)
-    private readonly scrapeJobFinishService: ScrapeJobFinishService
+    private readonly indexManagerService: IndexManagerService,
+    private readonly contentManagerService: ContentManagerService,
   ) {}
 
   async index(domainId: number) {
-    let subs: Subscription;
     try {
       const setting = await this.getSetting(domainId);
       if (!setting) {
         throw new Error("Setting not found!");
       }
-      const cs = new IndexManager(setting);
-      subs = cs.linksAdd$.subscribe(async (links) => {
-        await Promise.all(
-          links.map(async (link) => {
-            this.linkUpsert(link);
-          })
-        );
-      });
-      await cs.manage();
+      await this.indexManagerService.manage(setting);
       return { ok: true };
     } catch (e) {
       console.error(e);
       return { ok: false, error: "Scrap index failed!" };
-    } finally {
-      this.scrapeJobFinishService.scrapeIndexJobFinished();
-      if (subs && !subs.closed) {
-        subs.unsubscribe();
-      }
-    }
-  }
-
-  async linkUpsert(link: IIndexScrapResult) {
-    const count = await this.linkRepo.count({ url: link.url });
-    if (!count) {
-      this.linkRepo.save({ ...link });
     }
   }
 

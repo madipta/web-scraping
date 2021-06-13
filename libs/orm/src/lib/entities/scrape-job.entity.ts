@@ -1,4 +1,9 @@
-import { Field, InputType, ObjectType } from "@nestjs/graphql";
+import {
+  Field,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from "@nestjs/graphql";
 import {
   Column,
   CreateDateColumn,
@@ -10,11 +15,14 @@ import {
 import type { ILink, IScrapeJob } from "../interfaces";
 import { Link } from "./link.entity";
 
-export type ScrapeJobStatusType =
-  | "created"
-  | "loading-failed"
-  | "scraping-failed"
-  | "success";
+export enum ScrapeJobStatus {
+  created = "created",
+  loadingFailed = "loading-failed",
+  scrapingFailed = "scraping-failed",
+  success = "success",
+}
+
+registerEnumType(ScrapeJobStatus, { name: "ScrapeJobStatus" });
 
 @InputType("AbstractScrapeJobInputType", { isAbstract: true })
 @ObjectType()
@@ -29,8 +37,12 @@ export class ScrapeJob implements IScrapeJob {
   linkId: number;
 
   @Field(() => String)
-  @Column({ length: 15, default: "created" })
-  status: ScrapeJobStatusType;
+  @Column({
+    type: "enum",
+    enum: ScrapeJobStatus,
+    default: ScrapeJobStatus.created,
+  })
+  status: ScrapeJobStatus;
 
   @Field(() => Date, { nullable: true })
   @CreateDateColumn({ name: "created_at", default: () => "CURRENT_TIMESTAMP" })

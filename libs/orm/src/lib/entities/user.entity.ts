@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType } from "@nestjs/graphql";
+import { Field, InputType, ObjectType, registerEnumType } from "@nestjs/graphql";
 import * as bcrypt from "bcrypt";
 import {
   BeforeInsert,
@@ -11,6 +11,13 @@ import {
 } from "typeorm";
 import { IUser } from "../interfaces";
 
+export enum UserRole {
+  admin = 'admin',
+  staff = 'staff',
+}
+
+registerEnumType(UserRole, { name: 'UserRole' });
+
 @InputType("UserInputType", { isAbstract: true })
 @ObjectType()
 @Entity()
@@ -22,6 +29,10 @@ export class User implements IUser {
   @Field(() => String, { nullable: false })
   @Column({ type: "char", length: 60 })
   password: string;
+
+  @Column({ type: 'enum', enum: UserRole })
+  @Field(() => UserRole)
+  role: UserRole;
 
   @Field(() => Date)
   @CreateDateColumn({ name: "created_at", default: () => "CURRENT_TIMESTAMP" })
