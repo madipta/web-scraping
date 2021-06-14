@@ -12,7 +12,7 @@ import {
   Resolver,
 } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
-import { JwtService } from "@web-scraping/auth";
+import { JwtService, Role } from "@web-scraping/auth";
 import { User, UserRole } from "@web-scraping/orm";
 import { Repository } from "typeorm";
 import { BaseResult } from "../core/base-result";
@@ -102,6 +102,7 @@ export class UserResolver {
     }
   }
 
+  @Role("admin")
   @Mutation(() => UserResult)
   async createUser(@Args("input") dto: UserCreateInput): Promise<UserResult> {
     try {
@@ -121,6 +122,7 @@ export class UserResolver {
     }
   }
 
+  @Role("Any")
   @Mutation(() => UserResult)
   async updateUser(@Args("input") dto: UserUpdateInput): Promise<UserResult> {
     try {
@@ -143,6 +145,7 @@ export class UserResolver {
     }
   }
 
+  @Role("admin")
   @Mutation(() => UserResult)
   async deleteUser(
     @Args("input") dto: GetByUserNameInput

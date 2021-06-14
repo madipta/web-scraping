@@ -13,6 +13,7 @@ import {
   Resolver,
 } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Role } from "@web-scraping/auth";
 import { Domain, DomainSetting } from "@web-scraping/orm";
 import { Repository } from "typeorm";
 import { AutoNumberInput } from "../core/auto-number-input";
@@ -39,6 +40,7 @@ export class DomainSettingResolver {
     private readonly settingRepo: Repository<DomainSetting>
   ) {}
 
+  @Role("admin")
   @Mutation(() => DomainSettingResult)
   async updateDomainSetting(
     @Args("input") dto: DomainSettingUpdateInput

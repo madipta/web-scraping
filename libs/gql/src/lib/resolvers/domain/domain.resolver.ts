@@ -15,6 +15,7 @@ import {
   Resolver,
 } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Role } from "@web-scraping/auth";
 import {
   Content,
   Domain,
@@ -70,6 +71,7 @@ export class DomainResolver {
     private readonly contentRepo: Repository<Content>
   ) {}
 
+  @Role("admin")
   @Mutation(() => DomainResult)
   async createDomain(
     @Args("input") dto: DomainCreateInput
@@ -87,6 +89,7 @@ export class DomainResolver {
     }
   }
 
+  @Role("admin")
   @Mutation(() => DomainResult)
   async updateDomain(
     @Args("input") dto: DomainUpdateInput
@@ -104,6 +107,7 @@ export class DomainResolver {
     }
   }
 
+  @Role("admin")
   @Mutation(() => DomainResult)
   async deleteDomain(
     @Args("input") dto: AutoNumberInput

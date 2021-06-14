@@ -11,6 +11,7 @@ import {
   Resolver,
 } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Role } from "@web-scraping/auth";
 import { Content, Domain, Link, RefineSortParam } from "@web-scraping/orm";
 import { Brackets, Repository } from "typeorm";
 import { AutoNumberInput } from "../core/auto-number-input";
@@ -47,6 +48,7 @@ export class LinkResolver {
     private readonly linkRepo: Repository<Link>
   ) {}
 
+  @Role("admin")
   @Mutation(() => LinkResult)
   async deleteLink(@Args("input") dto: AutoNumberInput): Promise<LinkResult> {
     try {
