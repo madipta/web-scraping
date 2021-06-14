@@ -2,16 +2,18 @@ import {
   Args,
   Field,
   InputType,
+  IntersectionType,
   Mutation,
   ObjectType,
   OmitType,
+  PartialType,
   PickType,
   Query,
   Resolver,
 } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
 import { JwtService } from "@web-scraping/auth";
-import { User } from "@web-scraping/orm";
+import { User, UserRole } from "@web-scraping/orm";
 import { Repository } from "typeorm";
 import { BaseResult } from "../core/base-result";
 
@@ -20,6 +22,13 @@ export class UserResult extends BaseResult {
   @Field(() => User, { nullable: true })
   result?: User;
 }
+
+@InputType()
+export class UserLoginInput extends OmitType(User, [
+  "role",
+  "createdAt",
+  "updatedAt",
+]) {}
 
 @ObjectType()
 export class UserLoginResult extends BaseResult {
@@ -34,14 +43,64 @@ export class UserCreateInput extends OmitType(User, [
 ]) {}
 
 @InputType()
+export class UserUpdateInput extends IntersectionType(
+  PickType(User, ["userName"]),
+  PartialType(UserCreateInput)
+) {}
+
+@InputType()
 export class GetByUserNameInput extends PickType(User, ["userName"]) {}
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(
     private readonly jwtService: JwtService,
-    @InjectRepository(User) private readonly userRepo: Repository<User>
+    @InjectRepository(User)
+    private readonly userRepo: Repository<User>
   ) {}
+
+  @Query(() => UserLoginResult)
+  async userLogin(
+    @Args("input") dto: UserLoginInput
+  ): Promise<UserLoginResult> {
+    try {
+      const { password } = dto;
+      let { userName } = dto;
+      userName = userName.toLowerCase();
+      if ((await this.userRepo.count({})) === 0) {
+        // if user table are empty create new user as admin
+        await this.userRepo.save(
+          this.userRepo.create({ userName, password, role: UserRole.admin })
+        );
+      }
+      const result = await this.userRepo.findOne({ userName });
+      if (!result) {
+        return { ok: false, error: "User not found!" };
+      }
+      if (!result.checkPassword(password)) {
+        return { ok: false, error: "Wrong password!" };
+      }
+      return { ok: true, token: this.jwtService.sign(userName) };
+    } catch (e) {
+      console.error(e);
+      return { ok: false, error: "User login failed!" };
+    }
+  }
+
+  @Query(() => UserResult)
+  async getUserById(
+    @Args("input") dto: GetByUserNameInput
+  ): Promise<UserResult> {
+    try {
+      let { userName } = dto;
+      userName = userName.toLowerCase();
+      const result = await this.userRepo.findOne({ userName });
+      return { ok: true, result };
+    } catch (e) {
+      console.error(e);
+      return { ok: false, error: "Get User failed!" };
+    }
+  }
 
   @Mutation(() => UserResult)
   async createUser(@Args("input") dto: UserCreateInput): Promise<UserResult> {
@@ -63,7 +122,7 @@ export class UserResolver {
   }
 
   @Mutation(() => UserResult)
-  async updateUser(@Args("input") dto: UserCreateInput): Promise<UserResult> {
+  async updateUser(@Args("input") dto: UserUpdateInput): Promise<UserResult> {
     try {
       let { userName } = dto;
       userName = userName.toLowerCase();
@@ -74,6 +133,7 @@ export class UserResolver {
           error: "User not found!",
         };
       }
+      user.role = dto.role;
       user.password = dto.password;
       const result = await this.userRepo.save(user);
       return { ok: true, result };
@@ -84,7 +144,9 @@ export class UserResolver {
   }
 
   @Mutation(() => UserResult)
-  async deleteUser(@Args("input") dto: UserCreateInput): Promise<UserResult> {
+  async deleteUser(
+    @Args("input") dto: GetByUserNameInput
+  ): Promise<UserResult> {
     try {
       let { userName } = dto;
       userName = userName.toLowerCase();
@@ -93,41 +155,6 @@ export class UserResolver {
     } catch (e) {
       console.error(e);
       return { ok: false, error: "Delete user failed!" };
-    }
-  }
-
-  @Query(() => UserResult)
-  async getUserById(
-    @Args("input") dto: GetByUserNameInput
-  ): Promise<UserResult> {
-    try {
-      let { userName } = dto;
-      userName = userName.toLowerCase();
-      const result = await this.userRepo.findOne({ userName });
-      return { ok: true, result };
-    } catch (e) {
-      console.error(e);
-      return { ok: false, error: "Get User failed!" };
-    }
-  }
-
-  @Query(() => UserLoginResult)
-  async userLogin(@Args("input") dto: UserCreateInput): Promise<UserLoginResult> {
-    try {
-      const { password } = dto;
-      let { userName } = dto;
-      userName = userName.toLowerCase();
-      const result = await this.userRepo.findOne({ userName });
-      if (!result) {
-        return { ok: false, error: "User not found!" };
-      }
-      if (!result.checkPassword(password)) {
-        return { ok: false, error: "Wrong password!" };
-      }
-      return { ok: true, token: this.jwtService.sign(userName) };
-    } catch (e) {
-      console.error(e);
-      return { ok: false, error: "User login failed!" };
     }
   }
 }

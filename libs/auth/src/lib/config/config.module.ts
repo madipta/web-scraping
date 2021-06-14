@@ -12,7 +12,7 @@ const config = () => ({
 
 const schema = Joi.object({
   JWT_PRIVATE_KEY: Joi.string().required(),
-  JWT_HEADER_KEY: Joi.string().default("bearer"),
+  JWT_HEADER_KEY: Joi.string().default("Authorization"),
   JWT_PAYLOAD_ID: Joi.string().default("userName"),
 });
 
