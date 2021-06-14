@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
-import { tap } from "rxjs/operators";
+import { AuthService } from "./shared/services/auth.service";
 import { ContentService } from "./shared/services/content.service";
 import { DomainService } from "./shared/services/domain.service";
 import { ScrapeJobService } from "./shared/services/scrape-job.service";
@@ -24,6 +24,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     public router: Router,
+    private authService: AuthService,
     private wsService: WsService,
     private domainService: DomainService,
     private contentService: ContentService,
@@ -45,12 +46,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.loadingErrorCount = await this.jobService.getCount("loading-failed");
     this.scrapingErrorCount = await this.jobService.getCount("scraping-failed");
     this.successCount = await this.jobService.getCount("success");
-    this.wsService.connection.subscribe((obs) => {
+    this.jobCountSubscription = this.wsService.connection.subscribe((obs) => {
       const { event, data } = obs;
       if (event === "jobCount") {
         this.updateJobCount(data);
       }
     });
+  }
+
+  signout() {
+    this.authService.logout();
+    this.router.navigate([""]);
   }
 
   ngOnDestroy(): void {

@@ -1,5 +1,4 @@
 import { NgModule } from "@angular/core";
-import { HttpClientModule } from "@angular/common/http";
 import { RouterModule, Routes } from "@angular/router";
 import { NzIconModule } from "ng-zorro-antd/icon";
 import { NzGridModule } from "ng-zorro-antd/grid";
@@ -50,6 +49,7 @@ const routes: Routes = [
         loadChildren: async () =>
           (await import("./jobs-list/jobs-list.module")).JobsListModule,
       },
+      { path: "**", redirectTo: "domain-list", pathMatch: "full" },
     ],
   },
 ];
@@ -57,7 +57,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [DashboardComponent],
   imports: [
-    HttpClientModule,
     RouterModule.forChild(routes),
     NzLayoutModule,
     NzGridModule,

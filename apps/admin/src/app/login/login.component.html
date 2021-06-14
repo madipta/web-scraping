@@ -1,1 +1,19 @@
-<p>login works!</p>
+<div class="login_page">
+  <form class="login_form">
+    <h1>Please Sign In</h1>
+    <input
+      #txtUsername
+      type="text"
+      placeholder="USERNAME  admin, joe etc"
+      class="py-3 px-3 border border-gray-400 mb-2"
+    />
+    <input
+      #txtPassword
+      type="password"
+      placeholder="PASSWORD  any"
+      class="py-3 px-3 border border-gray-400 mb-4"
+    />
+    <button (click)="login($event)">Sign In</button>
+    <p class="login_error">{{ error$ | async }}</p>
+  </form>
+</div>
