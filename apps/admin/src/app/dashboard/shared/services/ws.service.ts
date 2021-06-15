@@ -3,7 +3,7 @@ import { EMPTY } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
 
-type WsReturnType = { event: string; data: unknown };
+export type WsReturnType = { event: string; data: unknown };
 
 @Injectable({
   providedIn: "root",
@@ -13,7 +13,12 @@ export class WsService {
   private endpoint = "ws://localhost:8000";
 
   get connection() {
-    if (!this.socket$ || this.socket$.closed) {
+    if (
+      !this.socket$ ||
+      this.socket$.closed ||
+      this.socket$.isStopped ||
+      this.socket$.hasError
+    ) {
       this.socket$ = webSocket(this.endpoint);
     }
     return this.socket$.pipe(
@@ -22,5 +27,10 @@ export class WsService {
         return EMPTY;
       })
     );
+  }
+
+  close() {
+    this.socket$.unsubscribe();
+    this.socket$ = null;
   }
 }

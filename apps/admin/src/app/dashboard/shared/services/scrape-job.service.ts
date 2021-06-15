@@ -3,6 +3,7 @@ import { Apollo } from "apollo-angular";
 import { map, take } from "rxjs/operators";
 import { GqlScrapeJobPageList } from "../gql/dto/scrap-job.dto";
 import {
+  SCRAP_INIT_JOB_COUNT_SUBSCRIPTION,
   SCRAP_JOB_COUNT_QUERY,
   SCRAP_JOB_COUNT_SUBSCRIPTION,
   SCRAP_JOB_PAGE_LIST_QUERY,
@@ -25,7 +26,14 @@ export class ScrapeJobService {
     return this.apollo
       .query({
         query: SCRAP_JOB_PAGE_LIST_QUERY,
-        variables: { status, pageIndex, pageSize, sortField, sortOrder, search },
+        variables: {
+          status,
+          pageIndex,
+          pageSize,
+          sortField,
+          sortOrder,
+          search,
+        },
         fetchPolicy: "no-cache",
       })
       .pipe(
@@ -49,11 +57,21 @@ export class ScrapeJobService {
       .toPromise();
   }
 
+  initJobCount() {
+    this.apollo
+      .query({
+        query: SCRAP_INIT_JOB_COUNT_SUBSCRIPTION,
+        fetchPolicy: "no-cache",
+      })
+      .subscribe();
+  }
+
   subscribeCount() {
     return this.apollo
       .subscribe({
         query: SCRAP_JOB_COUNT_SUBSCRIPTION,
         fetchPolicy: "no-cache",
-      }).pipe(map(obj=> obj.data["scrapeJobCount"]));
+      })
+      .pipe(map((obj) => obj.data["scrapeJobCount"]));
   }
 }

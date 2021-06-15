@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver, Subscription } from "@nestjs/graphql";
+import { Args, Mutation, Query, Resolver, Subscription } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ScrapeJobCount, ScrapeJobCountService } from "@web-scraping/pubsub";
 import { Link, ScrapeJob, ScrapeJobStatus } from "@web-scraping/orm";
@@ -17,6 +17,12 @@ export class ScraperResolver {
     private readonly scrapeJobCountService: ScrapeJobCountService,
     private readonly scrapeQueueService: ScrapeQueueService
   ) {}
+
+  @Query(() => Boolean)
+  async initJobCount() {
+    await this.scrapeJobCountService.publishScrapeJobCount();
+    return true;
+  }
 
   @Mutation(() => BaseResult)
   async scrapeIndex(@Args("input") dto: AutoNumberInput): Promise<BaseResult> {

@@ -5,6 +5,7 @@ import { NzGridModule } from "ng-zorro-antd/grid";
 import { NzLayoutModule } from "ng-zorro-antd/layout";
 import { NzMenuModule } from "ng-zorro-antd/menu";
 import { DashboardComponent } from "./dashboard.component";
+import { CommonModule } from "@angular/common";
 
 const routes: Routes = [
   {
@@ -57,6 +58,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [DashboardComponent],
   imports: [
+    CommonModule,
     RouterModule.forChild(routes),
     NzLayoutModule,
     NzGridModule,

@@ -3,7 +3,8 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
-import { filter } from "rxjs/operators";
+import { combineLatest, Subscription } from "rxjs";
+import { filter, map } from "rxjs/operators";
 import { GqlGetDomainResult } from "../shared/gql/dto/domain.dto";
 import { GqlLinkPageListResult } from "../shared/gql/dto/link.dto";
 import { DomainService } from "../shared/services/domain.service";
@@ -25,6 +26,7 @@ export class LinkListComponent implements OnInit {
   sortField = "title";
   sortOrder = "asc";
   search = "";
+  routeSubcription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,17 +39,18 @@ export class LinkListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParams
-      .pipe(filter((params) => params.id))
-      .subscribe(async (params) => {
-        if (!params?.id) {
-          this.location.back();
-          return;
-        }
-        this.domain = await this.getDomain(+params.id);
-        if (this.domain) {
-          this.refreshData();
-        }
+    this.routeSubcription = combineLatest([
+      this.route.params,
+      this.route.queryParams,
+    ])
+      .pipe(
+        map(([, query]) => {
+          return query.id;
+        })
+      )
+      .subscribe(async (id) => {
+        this.domain = await this.getDomain(+id);
+        this.refreshData();
       });
   }
 
@@ -118,7 +121,9 @@ export class LinkListComponent implements OnInit {
 
   async scrapAll() {
     const msgId = this.msg.loading("progress...", { nzDuration: 0 }).messageId;
-    const result = await this.scraperService.scrapeContentByDomain(this.domain.id);
+    const result = await this.scraperService.scrapeContentByDomain(
+      this.domain.id
+    );
     this.msg.remove(msgId);
     if (result.ok) {
       this.msg.success("Scraping content job created!");

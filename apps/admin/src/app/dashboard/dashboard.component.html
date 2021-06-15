@@ -13,7 +13,7 @@
     </nz-row>
   </nz-header>
   <nz-content>
-    <div class="dashboard-stats">
+    <div class="dashboard-stats" *ngIf="(jobCount$ | async) as jobCount">
       <a routerLink="domain-list" class="dashboard-stat">
         <div class="dashboard-stat-title">Domains</div>
         <i nz-icon nzType="cloud" nzTheme="twotone"></i>
@@ -22,7 +22,7 @@
       <a routerLink="content-list" class="dashboard-stat">
         <div class="dashboard-stat-title">Contents</div>
         <i nz-icon nzType="book" nzTheme="twotone"></i>
-        <span class="dashboard-stat-value">{{ contentCount }}</span>
+        <span class="dashboard-stat-value">{{ jobCount.content }}</span>
       </a>
       <a
         routerLink="jobs-list"
@@ -31,7 +31,7 @@
       >
         <div class="dashboard-stat-title">Queues</div>
         <i nz-icon nzType="schedule" nzTheme="twotone"></i>
-        <span class="dashboard-stat-value">{{ queuesCount }}</span>
+        <span class="dashboard-stat-value">{{ jobCount.created }}</span>
       </a>
       <a
         routerLink="jobs-list"
@@ -40,7 +40,7 @@
       >
         <div class="dashboard-stat-title">Loading Error</div>
         <i nz-icon nzType="bug" nzTheme="twotone"></i>
-        <span class="dashboard-stat-value">{{ loadingErrorCount }}</span>
+        <span class="dashboard-stat-value">{{ jobCount.loadingError }}</span>
       </a>
       <a
         routerLink="jobs-list"
@@ -49,7 +49,7 @@
       >
         <div class="dashboard-stat-title">Scraping Error</div>
         <i nz-icon nzType="bug" nzTheme="twotone"></i>
-        <span class="dashboard-stat-value">{{ scrapingErrorCount }}</span>
+        <span class="dashboard-stat-value">{{ jobCount.scrapingError }}</span>
       </a>
       <a
         routerLink="jobs-list"
@@ -58,7 +58,7 @@
       >
         <div class="dashboard-stat-title">Success</div>
         <i nz-icon nzType="star" nzTheme="twotone"></i>
-        <span class="dashboard-stat-value">{{ successCount }}</span>
+        <span class="dashboard-stat-value">{{ jobCount.success }}</span>
       </a>
     </div>
     <div class="inner-content">

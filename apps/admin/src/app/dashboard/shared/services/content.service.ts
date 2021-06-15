@@ -8,9 +8,7 @@ import {
 } from "../gql/content";
 import { GqlContentPageList, GqlGetContent } from "../gql/dto/content.dto";
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable({ providedIn: "root" })
 export class ContentService {
   constructor(private apollo: Apollo) {}
 

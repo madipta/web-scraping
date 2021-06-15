@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { Subscription } from "rxjs";
+import { Observable } from "rxjs";
+import { filter, map } from "rxjs/operators";
 import { AuthService } from "./shared/services/auth.service";
-import { ContentService } from "./shared/services/content.service";
 import { DomainService } from "./shared/services/domain.service";
 import { ScrapeJobService } from "./shared/services/scrape-job.service";
 import { WsService } from "./shared/services/ws.service";
@@ -12,7 +12,7 @@ import { WsService } from "./shared/services/ws.service";
   templateUrl: "./dashboard.component.html",
   styleUrls: ["./dashboard.component.css"],
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit {
   isCollapsed = false;
   domainCount = 0;
   contentCount = 0;
@@ -20,48 +20,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
   loadingErrorCount = 0;
   scrapingErrorCount = 0;
   successCount = 0;
-  jobCountSubscription: Subscription;
+  jobCount$: Observable<any>;
 
   constructor(
     public router: Router,
     private authService: AuthService,
     private wsService: WsService,
     private domainService: DomainService,
-    private contentService: ContentService,
     private jobService: ScrapeJobService
   ) {}
 
-  updateJobCount(data) {
-    this.contentCount = data.content;
-    this.queuesCount = data.created;
-    this.loadingErrorCount = data.loadingError;
-    this.scrapingErrorCount = data.scrapingError;
-    this.successCount = data.success;
-  }
-
   async ngOnInit() {
     this.domainCount = await this.domainService.getCount();
-    this.contentCount = await this.contentService.getCount();
-    this.queuesCount = await this.jobService.getCount("created");
-    this.loadingErrorCount = await this.jobService.getCount("loading-failed");
-    this.scrapingErrorCount = await this.jobService.getCount("scraping-failed");
-    this.successCount = await this.jobService.getCount("success");
-    this.jobCountSubscription = this.wsService.connection.subscribe((obs) => {
-      const { event, data } = obs;
-      if (event === "jobCount") {
-        this.updateJobCount(data);
-      }
-    });
+    this.jobCount$ = this.wsService.connection.pipe(
+      filter((v) => v.data && v.event === "jobCount"),
+      map((v) => v.data)
+    );
+    this.jobService.initJobCount();
   }
 
   signout() {
     this.authService.logout();
     this.router.navigate([""]);
-  }
-
-  ngOnDestroy(): void {
-    if (this.jobCountSubscription) {
-      this.jobCountSubscription.unsubscribe();
-    }
   }
 }
