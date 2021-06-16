@@ -13,13 +13,7 @@ import { WsService } from "./shared/services/ws.service";
   styleUrls: ["./dashboard.component.css"],
 })
 export class DashboardComponent implements OnInit {
-  isCollapsed = false;
   domainCount = 0;
-  contentCount = 0;
-  queuesCount = 0;
-  loadingErrorCount = 0;
-  scrapingErrorCount = 0;
-  successCount = 0;
   jobCount$: Observable<any>;
 
   constructor(
@@ -41,6 +35,6 @@ export class DashboardComponent implements OnInit {
 
   signout() {
     this.authService.logout();
-    this.router.navigate([""]);
+    this.router.navigate(["login"]);
   }
 }
