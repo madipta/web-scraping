@@ -4,10 +4,7 @@ import { ScrapeJob } from "@web-scraping/orm";
 import { PubSub } from "graphql-subscriptions";
 import { RedisClient } from "redis";
 import { Repository } from "typeorm";
-import {
-  PUBSUB_EVENTS,
-  PUBSUB_PROVIDER,
-} from "../pub-sub.constants";
+import { PUBSUB_EVENTS, PUBSUB_PROVIDER } from "../pub-sub.constants";
 
 const gqlPubSub = new PubSub();
 
@@ -22,6 +19,8 @@ export class ScrapeJobCountService {
 
   async getScrapeJobCountQuery() {
     return this.scrapeJobRepo.query(`
+      SELECT COUNT(id) FROM domain
+      UNION ALL
       SELECT COUNT(id) FROM content
       UNION ALL
       SELECT COUNT(id) FROM scrape_job where status = 'created'
@@ -37,11 +36,12 @@ export class ScrapeJobCountService {
   async getScrapeJobCount() {
     const res: { count: number }[] = await this.getScrapeJobCountQuery();
     return {
-      content: res[0].count,
-      created: res[1].count,
-      loadingError: res[2].count,
-      scrapingError: res[3].count,
-      success: res[4].count,
+      domain: res[0].count,
+      content: res[1].count,
+      created: res[2].count,
+      loadingError: res[3].count,
+      scrapingError: res[4].count,
+      success: res[5].count,
     };
   }
 
