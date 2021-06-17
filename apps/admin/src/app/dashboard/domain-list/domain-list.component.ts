@@ -1,25 +1,23 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { DomainService } from "../shared/services/domain.service";
 import { GqlDomainPageListResult } from "../shared/gql/dto/domain.dto";
 import { ScraperService } from "../shared/services/scraper.service";
+import { Pager, NzDataPaginator } from "../shared/services/nz-data-paginator";
 
 @Component({
   selector: "web-scraping-domain-list",
   templateUrl: "./domain-list.component.html",
   styleUrls: ["./domain-list.component.scss"],
 })
-export class DomainListComponent {
+export class DomainListComponent implements OnInit {
   total = 1;
   domainList: GqlDomainPageListResult[] = [];
   loading = true;
-  pageIndex = 1;
-  pageSize = 20;
-  sortField = "home";
-  sortOrder = "asc";
-  search = "";
+  pager: Pager;
+  pagination = new NzDataPaginator({ sortField: "home" });
 
   constructor(
     public router: Router,
@@ -28,48 +26,29 @@ export class DomainListComponent {
     private scraperService: ScraperService
   ) {}
 
-  refreshData() {
-    this.loadData(
-      1,
-      this.pageSize,
-      this.sortField,
-      this.sortOrder,
-      this.search
-    );
+  async ngOnInit() {
+    this.pagination.pager$.subscribe(async (pager) => {
+      this.pager = pager;
+      this.loading = true;
+      const res = await this.domainService.fetchList(
+        pager.pageIndex,
+        pager.pageSize,
+        pager.sortField,
+        pager.sortOrder,
+        pager.search
+      );
+      this.loading = false;
+      this.total = res.total;
+      this.domainList = res.result;
+    });
   }
 
-  async loadData(
-    pageIndex: number,
-    pageSize: number,
-    sortField: string | null,
-    sortOrder: string | null,
-    search: string | null
-  ) {
-    this.loading = true;
-    this.pageIndex = pageIndex;
-    this.pageSize = pageSize;
-    this.sortField = sortField;
-    this.sortOrder = sortOrder;
-    this.search = search;
-    const res = await this.domainService.fetchList(
-      pageIndex,
-      pageSize,
-      sortField,
-      sortOrder,
-      search
-    );
-    this.loading = false;
-    this.total = res.total;
-    this.domainList = res.result;
+  search(search: string) {
+    this.pagination.search(search);
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
-    const { pageSize, pageIndex, sort } = params;
-    const defaultSort = { key: this.sortField, value: this.sortOrder };
-    const currentSort = sort.find((item) => item.value !== null) || defaultSort;
-    const sortField = currentSort.key || defaultSort.key;
-    const sortOrder = currentSort.value || defaultSort.value;
-    this.loadData(pageIndex, pageSize, sortField, sortOrder, this.search);
+    this.pagination.onQueryParamsChange(params);
   }
 
   async delete(id) {
@@ -88,15 +67,11 @@ export class DomainListComponent {
     const result = await this.scraperService.scrapIndex(id);
     this.msg.remove(msgId);
     if (result.ok) {
-      this.refreshData();
+      this.pagination.first();
     }
   }
 
   gotoLinks(data: GqlDomainPageListResult) {
-    if (!+data.linksCount) {
-      this.msg.error("Links not scraped yet!");
-      return;
-    }
     this.router.navigate(["dashboard", "link-list"], {
       queryParams: { id: data.id },
     });
