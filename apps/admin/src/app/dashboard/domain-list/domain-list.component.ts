@@ -30,13 +30,7 @@ export class DomainListComponent implements OnInit {
     this.pagination.pager$.subscribe(async (pager) => {
       this.pager = pager;
       this.loading = true;
-      const res = await this.domainService.fetchList(
-        pager.pageIndex,
-        pager.pageSize,
-        pager.sortField,
-        pager.sortOrder,
-        pager.search
-      );
+      const res = await this.domainService.fetchList(pager);
       this.loading = false;
       this.total = res.total;
       this.domainList = res.result;

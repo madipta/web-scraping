@@ -23,13 +23,7 @@ export class ContentListComponent implements OnInit {
     this.pagination.pager$.subscribe(async (pager) => {
       this.pager = pager;
       this.loading = true;
-      const res = await this.contentService.fetchList(
-        pager.pageIndex,
-        pager.pageSize,
-        pager.sortField,
-        pager.sortOrder,
-        pager.search
-      );
+      const res = await this.contentService.fetchList(pager);
       this.loading = false;
       this.total = res.total;
       this.contentList = res.result;

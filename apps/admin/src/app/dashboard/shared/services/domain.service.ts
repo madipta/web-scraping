@@ -18,6 +18,7 @@ import {
   GqlUpdateDomainInput,
   GqlUpdateDomainResult,
 } from "../gql/dto/domain.dto";
+import { Pager } from "./nz-data-paginator";
 
 @Injectable({
   providedIn: "root",
@@ -25,13 +26,8 @@ import {
 export class DomainService {
   constructor(private apollo: Apollo) {}
 
-  async fetchList(
-    pageIndex: number,
-    pageSize: number,
-    sortField: string | null,
-    sortOrder: string | null,
-    search: string | null
-  ): Promise<GqlDomainPageList> {
+  async fetchList(pager: Pager): Promise<GqlDomainPageList> {
+    const { pageIndex, pageSize, sortField, sortOrder, search } = pager;
     return this.apollo
       .query({
         query: DOMAIN_PAGE_LIST_QUERY,

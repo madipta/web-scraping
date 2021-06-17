@@ -7,18 +7,14 @@ import {
   GET_CONTENT_QUERY,
 } from "../gql/content";
 import { GqlContentPageList, GqlGetContent } from "../gql/dto/content.dto";
+import { Pager } from "./nz-data-paginator";
 
 @Injectable({ providedIn: "root" })
 export class ContentService {
   constructor(private apollo: Apollo) {}
 
-  fetchList(
-    pageIndex: number,
-    pageSize: number,
-    sortField: string | null,
-    sortOrder: string | null,
-    search: string | null
-  ): Promise<GqlContentPageList> {
+  fetchList(pager: Pager): Promise<GqlContentPageList> {
+    const { pageIndex, pageSize, sortField, sortOrder, search } = pager;
     return this.apollo
       .query({
         query: CONTENT_PAGE_LIST_QUERY,
