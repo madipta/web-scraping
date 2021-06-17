@@ -77,9 +77,9 @@ export class DomainListComponent {
     const result = await this.domainService.delete({ id });
     this.msg.remove(msgId);
     if (result.ok) {
-      this.msg.success("Scraping index job created!");
+      this.msg.success("Domain deleted!");
     } else {
-      this.msg.error("Index scraping job failed!");
+      this.msg.error("Deleting domain failed!");
     }
   }
 
