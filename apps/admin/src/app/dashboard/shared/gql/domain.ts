@@ -102,9 +102,3 @@ export const DELETE_DOMAIN_MUTATION = gql`
     }
   }
 `;
-
-export const GET_DOMAIN_COUNT_QUERY = gql`
-  query {
-    getDomainCount
-  }
-`;
