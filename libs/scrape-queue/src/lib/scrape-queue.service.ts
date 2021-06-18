@@ -11,7 +11,7 @@ export class ScrapeQueueService {
   ) {}
 
   addIndex(id) {
-    this.queue.add(ScrapeQueue.content, { id });
+    this.queue.add(ScrapeQueue.index, { id });
   }
 
   addContent(id, jobId) {
