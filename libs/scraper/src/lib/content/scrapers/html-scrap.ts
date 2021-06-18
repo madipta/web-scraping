@@ -10,7 +10,7 @@ export class HtmlScrap implements IContentScrap {
     data.domainId = setting.domainId;
     data.text = $.getText(setting.articlePath);
     data.imageHtml = $.getImageHtml(setting.imagePath);
-    data.title = $.getText(setting.headerPath);
+    data.header = $.getText(setting.headerPath);
     data.category = $.getText(setting.categoryPath);
     data.publishDate = $.getTimestamp(setting.publishDatePath);
     return data;

@@ -21,7 +21,7 @@ export class ScraperService {
     try {
       const setting = await this.getSetting(domainId);
       if (!setting) {
-        throw new Error("Setting not found!");
+        throw new Error("[ScraperService | index] Setting not found!");
       }
       await this.indexManagerService.manage(setting);
       return { ok: true };
@@ -35,7 +35,7 @@ export class ScraperService {
     try {
       const setting = await this.getSettingByLink(linkId);
       if (!setting) {
-        throw new Error("Setting not found!");
+        throw new Error("[ScraperService | content] SSetting not found!");
       }
       await this.contentManagerService.manage(setting, linkId, jobId);
       return { ok: true };

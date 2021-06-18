@@ -74,6 +74,8 @@ export class ScraperEvent {
 
   @OnEvent(ScrapeEvents.SuccessScraping)
   async onSuccessScraping({ linkId, jobId, content }) {
+    const { title } = await this.linkRepo.findOne(linkId);
+    content = { ...content, title };
     if (await this.contentRepo.count({ id: linkId })) {
       await this.contentRepo.update({ id: linkId }, content);
     } else {
