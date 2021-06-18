@@ -4,12 +4,12 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { combineLatest, Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { GqlGetDomainResult } from "../shared/gql/dto/domain.dto";
 import { GqlLinkPageListResult } from "../shared/gql/dto/link.dto";
 import { DomainService } from "../shared/services/domain.service";
 import { LinkService } from "../shared/services/link.service";
-import { Pager, NzDataPaginator } from "../shared/services/nz-data-paginator";
+import { NzDataPaginator } from "../shared/services/nz-data-paginator";
 import { ScraperService } from "../shared/services/scraper.service";
 
 @Component({
@@ -22,8 +22,8 @@ export class LinkListComponent implements OnInit, OnDestroy {
   total = 1;
   linkList: GqlLinkPageListResult[] = [];
   loading = true;
-  pager: Pager;
   paginator = new NzDataPaginator({ sortField: "title" });
+  pager = this.paginator.getPager();
   notifier = new Subject();
 
   constructor(
@@ -38,25 +38,25 @@ export class LinkListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     combineLatest([this.route.params, this.route.queryParams])
-      .pipe(takeUntil(this.notifier))
+      .pipe(take(1))
       .subscribe(async ([, query]) => {
         this.domain = await this.getDomain(+query.id);
-      });
-    this.paginator.pager$
-      .pipe(takeUntil(this.notifier))
-      .subscribe(async (pager) => {
-        this.pager = pager;
-        if (!this.domain) {
-          return;
-        }
-        this.loading = true;
-        const res = await this.linkService.fetchList(
-          this.pager,
-          this.domain.id
-        );
-        this.loading = false;
-        this.total = res.total;
-        this.linkList = res.result;
+        this.paginator.pager$
+          .pipe(takeUntil(this.notifier))
+          .subscribe(async (pager) => {
+            this.pager = pager;
+            if (!this.domain) {
+              return;
+            }
+            this.loading = true;
+            const res = await this.linkService.fetchList(
+              this.pager,
+              this.domain.id
+            );
+            this.loading = false;
+            this.total = res.total;
+            this.linkList = res.result;
+          });
       });
   }
 

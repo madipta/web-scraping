@@ -35,6 +35,10 @@ export class NzDataPaginator {
     this.first();
   }
 
+  getPager() {
+    return { ...this.pager };
+  }
+
   setPager(pager: Pager) {
     this.pager = pager;
     this.subject.next(this.pager);

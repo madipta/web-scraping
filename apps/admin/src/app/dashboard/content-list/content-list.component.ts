@@ -5,7 +5,7 @@ import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { GqlContentPageListResult } from "../shared/gql/dto/content.dto";
 import { ContentService } from "../shared/services/content.service";
-import { NzDataPaginator, Pager } from "../shared/services/nz-data-paginator";
+import { NzDataPaginator } from "../shared/services/nz-data-paginator";
 
 @Component({
   selector: "web-scraping-content-list",
@@ -16,8 +16,8 @@ export class ContentListComponent implements OnInit, OnDestroy {
   total = 1;
   contentList: GqlContentPageListResult[] = [];
   loading = true;
-  pager: Pager;
   paginator = new NzDataPaginator({ sortField: "Link.title" });
+  pager = this.paginator.getPager();
   notifier = new Subject();
 
   constructor(public router: Router, private contentService: ContentService) {}

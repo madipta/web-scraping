@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { combineLatest, Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { GqlScrapeJobPageListResult } from "../shared/gql/dto/scrap-job.dto";
-import { Pager, NzDataPaginator } from "../shared/services/nz-data-paginator";
+import { NzDataPaginator } from "../shared/services/nz-data-paginator";
 import { ScrapeJobService } from "../shared/services/scrape-job.service";
 
 @Component({
@@ -17,8 +17,8 @@ export class JobsListComponent implements OnInit, OnDestroy {
   scrapeJobList: GqlScrapeJobPageListResult[] = [];
   loading = true;
   jobStatus: string;
-  pager: Pager;
   paginator = new NzDataPaginator({ sortField: "title" });
+  pager = this.paginator.getPager();
   notifier = new Subject();
 
   constructor(
@@ -29,23 +29,22 @@ export class JobsListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     combineLatest([this.route.params, this.route.queryParams])
-      .pipe(takeUntil(this.notifier))
+      .pipe(take(1))
       .subscribe(([, query]) => {
         this.jobStatus = query.status;
-        this.paginator.first();
-      });
-    this.paginator.pager$
-      .pipe(takeUntil(this.notifier))
-      .subscribe(async (pager) => {
-        this.pager = pager;
-        this.loading = true;
-        const res = await this.scrapJobService.fetchList(
-          this.pager,
-          this.jobStatus
-        );
-        this.loading = false;
-        this.total = res.total;
-        this.scrapeJobList = res.result;
+        this.paginator.pager$
+          .pipe(takeUntil(this.notifier))
+          .subscribe(async (pager) => {
+            this.pager = pager;
+            this.loading = true;
+            const res = await this.scrapJobService.fetchList(
+              this.pager,
+              this.jobStatus
+            );
+            this.loading = false;
+            this.total = res.total;
+            this.scrapeJobList = res.result;
+          });
       });
   }
 

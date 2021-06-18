@@ -1,23 +1,26 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
-import { DomainService } from "../shared/services/domain.service";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import { GqlDomainPageListResult } from "../shared/gql/dto/domain.dto";
+import { DomainService } from "../shared/services/domain.service";
+import { NzDataPaginator } from "../shared/services/nz-data-paginator";
 import { ScraperService } from "../shared/services/scraper.service";
-import { Pager, NzDataPaginator } from "../shared/services/nz-data-paginator";
 
 @Component({
   selector: "web-scraping-domain-list",
   templateUrl: "./domain-list.component.html",
   styleUrls: ["./domain-list.component.scss"],
 })
-export class DomainListComponent implements OnInit {
+export class DomainListComponent implements OnInit, OnDestroy {
   total = 1;
   domainList: GqlDomainPageListResult[] = [];
   loading = true;
-  pager: Pager;
-  pagination = new NzDataPaginator({ sortField: "home" });
+  paginator = new NzDataPaginator({ sortField: "home" });
+  pager = this.paginator.getPager();
+  notifier = new Subject();
 
   constructor(
     public router: Router,
@@ -27,32 +30,40 @@ export class DomainListComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.pagination.pager$.subscribe(async (pager) => {
-      this.pager = pager;
-      this.loading = true;
-      const res = await this.domainService.fetchList(pager);
-      this.loading = false;
-      this.total = res.total;
-      this.domainList = res.result;
-    });
+    this.paginator.pager$
+      .pipe(takeUntil(this.notifier))
+      .subscribe(async (pager) => {
+        this.pager = pager;
+        this.loading = true;
+        const res = await this.domainService.fetchList(pager);
+        this.loading = false;
+        this.total = res.total;
+        this.domainList = res.result;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.notifier.next();
+    this.notifier.complete();
   }
 
   search(search: string) {
-    this.pagination.search(search);
+    this.paginator.search(search);
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
-    this.pagination.onQueryParamsChange(params);
+    this.paginator.onQueryParamsChange(params);
   }
 
   async delete(id) {
     const msgId = this.msg.loading("progress...", { nzDuration: 0 }).messageId;
     const result = await this.domainService.delete({ id });
     this.msg.remove(msgId);
-    if (result.ok) {
-      this.msg.success("Domain deleted!");
-    } else {
+    if (!result.ok) {
       this.msg.error("Deleting domain failed!");
+    } else {
+      this.msg.success("Domain deleted!");
+      this.paginator.refresh();
     }
   }
 
@@ -61,7 +72,7 @@ export class DomainListComponent implements OnInit {
     const result = await this.scraperService.scrapIndex(id);
     this.msg.remove(msgId);
     if (result.ok) {
-      this.pagination.first();
+      this.paginator.refresh();
     }
   }
 
