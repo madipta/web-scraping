@@ -8,6 +8,7 @@ import {
   SCRAP_JOB_COUNT_SUBSCRIPTION,
   SCRAP_JOB_PAGE_LIST_QUERY,
 } from "../gql/scrap-job";
+import { Pager } from "./nz-data-paginator";
 
 @Injectable({
   providedIn: "root",
@@ -15,14 +16,8 @@ import {
 export class ScrapeJobService {
   constructor(private apollo: Apollo) {}
 
-  async fetchList(
-    status: string,
-    pageIndex: number,
-    pageSize: number,
-    sortField: string | null,
-    sortOrder: string | null,
-    search: string | null
-  ): Promise<GqlScrapeJobPageList> {
+  async fetchList(pager: Pager, status: string): Promise<GqlScrapeJobPageList> {
+    const { pageIndex, pageSize, sortField, sortOrder, search } = pager;
     return this.apollo
       .query({
         query: SCRAP_JOB_PAGE_LIST_QUERY,

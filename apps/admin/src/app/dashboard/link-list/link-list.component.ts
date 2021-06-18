@@ -1,14 +1,14 @@
 import { Location } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { combineLatest, Subscription } from "rxjs";
-import { filter, map } from "rxjs/operators";
 import { GqlGetDomainResult } from "../shared/gql/dto/domain.dto";
 import { GqlLinkPageListResult } from "../shared/gql/dto/link.dto";
 import { DomainService } from "../shared/services/domain.service";
 import { LinkService } from "../shared/services/link.service";
+import { Pager, NzDataPaginator } from "../shared/services/nz-data-paginator";
 import { ScraperService } from "../shared/services/scraper.service";
 
 @Component({
@@ -16,16 +16,13 @@ import { ScraperService } from "../shared/services/scraper.service";
   templateUrl: "./link-list.component.html",
   styleUrls: ["./link-list.component.scss"],
 })
-export class LinkListComponent implements OnInit {
+export class LinkListComponent implements OnInit, OnDestroy {
   domain: GqlGetDomainResult;
   total = 1;
   linkList: GqlLinkPageListResult[] = [];
   loading = true;
-  pageIndex = 1;
-  pageSize = 20;
-  sortField = "title";
-  sortOrder = "asc";
-  search = "";
+  pager: Pager;
+  paginator = new NzDataPaginator({ sortField: "title" });
   routeSubcription: Subscription;
 
   constructor(
@@ -42,16 +39,32 @@ export class LinkListComponent implements OnInit {
     this.routeSubcription = combineLatest([
       this.route.params,
       this.route.queryParams,
-    ])
-      .pipe(
-        map(([, query]) => {
-          return query.id;
-        })
-      )
-      .subscribe(async (id) => {
-        this.domain = await this.getDomain(+id);
-        this.refreshData();
-      });
+    ]).subscribe(async ([, query]) => {
+      this.domain = await this.getDomain(+query.id);
+    });
+    this.paginator.pager$.subscribe(async (pager) => {
+      this.pager = pager;
+      this.loading = true;
+      const res = await this.linkService.fetchList(
+        this.pager,
+        this.domain.id
+      );
+      this.loading = false;
+      this.total = res.total;
+      this.linkList = res.result;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.routeSubcription.unsubscribe();
+  }
+
+  search(search: string) {
+    this.paginator.search(search);
+  }
+
+  onQueryParamsChange(params: NzTableQueryParams): void {
+    this.paginator.onQueryParamsChange(params);
   }
 
   async getDomain(id: number) {
@@ -64,56 +77,11 @@ export class LinkListComponent implements OnInit {
     return null;
   }
 
-  refreshData() {
-    this.loadData(
-      1,
-      this.pageSize,
-      this.sortField,
-      this.sortOrder,
-      this.search
-    );
-  }
-
-  async loadData(
-    pageIndex: number,
-    pageSize: number,
-    sortField: string | null,
-    sortOrder: string | null,
-    search: string | null
-  ) {
-    this.loading = true;
-    this.pageIndex = pageIndex;
-    this.pageSize = pageSize;
-    this.sortField = sortField;
-    this.sortOrder = sortOrder;
-    this.search = search;
-    const res = await this.linkService.fetchList(
-      this.domain.id,
-      pageIndex,
-      pageSize,
-      sortField,
-      sortOrder,
-      search
-    );
-    this.loading = false;
-    this.total = res.total;
-    this.linkList = res.result;
-  }
-
-  onQueryParamsChange(params: NzTableQueryParams): void {
-    const { pageSize, pageIndex, sort } = params;
-    const defaultSort = { key: this.sortField, value: this.sortOrder };
-    const currentSort = sort.find((item) => item.value !== null) || defaultSort;
-    const sortField = currentSort.key || defaultSort.key;
-    const sortOrder = currentSort.value || defaultSort.value;
-    this.loadData(pageIndex, pageSize, sortField, sortOrder, this.search);
-  }
-
   async delete(id) {
     const result = await this.linkService.delete(id);
     if (result.ok) {
       this.msg.success("Deleted!");
-      this.refreshData();
+      this.paginator.refresh();
     } else {
       this.msg.error("Delete failed!");
     }
@@ -130,6 +98,7 @@ export class LinkListComponent implements OnInit {
     } else {
       this.msg.error("Create content scraping job failed!");
     }
+    this.paginator.refresh();
   }
 
   async scrapOne(linkId: number) {
@@ -141,7 +110,7 @@ export class LinkListComponent implements OnInit {
     } else {
       this.msg.error("Create content scraping job failed!");
     }
-    this.refreshData();
+    this.paginator.refresh();
   }
 
   gotoContent(data: GqlLinkPageListResult) {

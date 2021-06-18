@@ -15,12 +15,12 @@ export class ContentListComponent implements OnInit {
   contentList: GqlContentPageListResult[] = [];
   loading = true;
   pager: Pager;
-  pagination = new NzDataPaginator({ sortField: "Link.title" });
+  paginator = new NzDataPaginator({ sortField: "Link.title" });
 
   constructor(public router: Router, private contentService: ContentService) {}
 
   async ngOnInit() {
-    this.pagination.pager$.subscribe(async (pager) => {
+    this.paginator.pager$.subscribe(async (pager) => {
       this.pager = pager;
       this.loading = true;
       const res = await this.contentService.fetchList(pager);
@@ -31,10 +31,10 @@ export class ContentListComponent implements OnInit {
   }
 
   search(search: string) {
-    this.pagination.search(search);
+    this.paginator.search(search);
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
-    this.pagination.onQueryParamsChange(params);
+    this.paginator.onQueryParamsChange(params);
   }
 }

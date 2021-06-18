@@ -26,23 +26,17 @@ export class NzDataPaginator {
     this.subject.next(this.pager);
   }
 
+  refresh() {
+    this.subject.next(this.pager);
+  }
+
   search(search: string) {
     this.pager.search = search;
     this.first();
   }
 
-  setPager(
-    pageIndex: number,
-    pageSize: number,
-    sortField: string | null,
-    sortOrder: string | null,
-    search: string | null
-  ) {
-    this.pager.pageIndex = pageIndex;
-    this.pager.pageSize = pageSize;
-    this.pager.sortField = sortField;
-    this.pager.sortOrder = sortOrder;
-    this.pager.search = search;
+  setPager(pager: Pager) {
+    this.pager = pager;
     this.subject.next(this.pager);
   }
 
@@ -55,6 +49,12 @@ export class NzDataPaginator {
     const currentSort = sort.find((item) => item.value !== null) || defaultSort;
     const sortField = currentSort.key || defaultSort.key;
     const sortOrder = currentSort.value || defaultSort.value;
-    this.setPager(pageIndex, pageSize, sortField, sortOrder, this.pager.search);
+    this.setPager({
+      pageIndex,
+      pageSize,
+      sortField,
+      sortOrder,
+      search: this.pager.search,
+    });
   }
 }

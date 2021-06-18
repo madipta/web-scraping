@@ -3,6 +3,7 @@ import { Apollo } from "apollo-angular";
 import { map, take } from "rxjs/operators";
 import { GqlDeleteLinkResult, GqlLinkPageList } from "../gql/dto/link.dto";
 import { DELETE_LINK_MUTATION, LINK_PAGE_LIST_QUERY } from "../gql/link";
+import { Pager } from "./nz-data-paginator";
 
 @Injectable({
   providedIn: "root",
@@ -10,14 +11,8 @@ import { DELETE_LINK_MUTATION, LINK_PAGE_LIST_QUERY } from "../gql/link";
 export class LinkService {
   constructor(private apollo: Apollo) {}
 
-  fetchList(
-    domainId: number,
-    pageIndex: number,
-    pageSize: number,
-    sortField: string,
-    sortOrder: string,
-    search: string | null
-  ): Promise<GqlLinkPageList> {
+  fetchList(pager: Pager, domainId: number): Promise<GqlLinkPageList> {
+    const { pageIndex, pageSize, sortField, sortOrder, search } = pager;
     return this.apollo
       .query({
         query: LINK_PAGE_LIST_QUERY,
@@ -55,13 +50,13 @@ export class LinkService {
     // return await this.http
     //   .post<BaseResponse>(this.linkScrapUrl, { linkId })
     //   .toPromise();
-    throw "Not Implemented!"
+    throw "Not Implemented!";
   }
 
   async scrapAllContent(domainId: number) {
     // return await this.http
     //   .post(this.linkScrapAllUrl, { domainId: `${domainId}` })
     //   .toPromise();
-    throw "Not Implemented!"
+    throw "Not Implemented!";
   }
 }

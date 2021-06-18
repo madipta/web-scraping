@@ -9,7 +9,7 @@
     <button
       nz-button
       nzType="primary"
-      (click)="search = txtSearch.value; refreshData()"
+      (click)="search(txtSearch.value)"
     >
       <i nz-icon nzType="search" nzTheme="outline"></i>Filter
     </button>
@@ -23,8 +23,8 @@
   [nzFrontPagination]="false"
   [nzLoading]="loading"
   [nzTotal]="total"
-  [nzPageSize]="pageSize"
-  [nzPageIndex]="pageIndex"
+  [nzPageSize]="pager.pageSize"
+  [nzPageIndex]="pager.pageIndex"
   [nzShowSizeChanger]="false"
   (nzQueryParams)="onQueryParamsChange($event)"
 >
