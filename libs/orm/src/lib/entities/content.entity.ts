@@ -26,6 +26,10 @@ export class Content implements IContent {
   domainId: number;
 
   @Field(() => String, { nullable: true })
+  @Column({ nullable: true, type: "character varying", length: 2048 })
+  title?: string | null;
+
+  @Field(() => String, { nullable: true })
   @Column({ nullable: true, type: "text" })
   text?: string | null;
 
@@ -43,7 +47,7 @@ export class Content implements IContent {
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true, type: "character varying", length: 2048 })
-  title?: string | null;
+  header?: string | null;
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true, type: "character varying", length: 2048 })

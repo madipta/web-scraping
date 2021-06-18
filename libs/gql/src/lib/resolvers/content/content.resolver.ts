@@ -80,7 +80,7 @@ export class ContentResolver {
         .createQueryBuilder("Content")
         .select("Content.id", "id");
       if (search) {
-        builder.where("text ILIKE :search", { search: `%${search}%` });
+        builder.where("search_vector @@ plainto_tsquery(:search)", { search: `%${search}%` });
       }
       return builder;
     };
