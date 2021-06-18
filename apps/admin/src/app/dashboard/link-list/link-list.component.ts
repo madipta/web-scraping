@@ -3,7 +3,8 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
-import { combineLatest, Subscription } from "rxjs";
+import { combineLatest, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import { GqlGetDomainResult } from "../shared/gql/dto/domain.dto";
 import { GqlLinkPageListResult } from "../shared/gql/dto/link.dto";
 import { DomainService } from "../shared/services/domain.service";
@@ -23,7 +24,7 @@ export class LinkListComponent implements OnInit, OnDestroy {
   loading = true;
   pager: Pager;
   paginator = new NzDataPaginator({ sortField: "title" });
-  routeSubcription: Subscription;
+  notifier = new Subject();
 
   constructor(
     private route: ActivatedRoute,
@@ -36,27 +37,32 @@ export class LinkListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.routeSubcription = combineLatest([
-      this.route.params,
-      this.route.queryParams,
-    ]).subscribe(async ([, query]) => {
-      this.domain = await this.getDomain(+query.id);
-    });
-    this.paginator.pager$.subscribe(async (pager) => {
-      this.pager = pager;
-      this.loading = true;
-      const res = await this.linkService.fetchList(
-        this.pager,
-        this.domain.id
-      );
-      this.loading = false;
-      this.total = res.total;
-      this.linkList = res.result;
-    });
+    combineLatest([this.route.params, this.route.queryParams])
+      .pipe(takeUntil(this.notifier))
+      .subscribe(async ([, query]) => {
+        this.domain = await this.getDomain(+query.id);
+      });
+    this.paginator.pager$
+      .pipe(takeUntil(this.notifier))
+      .subscribe(async (pager) => {
+        this.pager = pager;
+        if (!this.domain) {
+          return;
+        }
+        this.loading = true;
+        const res = await this.linkService.fetchList(
+          this.pager,
+          this.domain.id
+        );
+        this.loading = false;
+        this.total = res.total;
+        this.linkList = res.result;
+      });
   }
 
   ngOnDestroy(): void {
-    this.routeSubcription.unsubscribe();
+    this.notifier.next();
+    this.notifier.complete();
   }
 
   search(search: string) {
