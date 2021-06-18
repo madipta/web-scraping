@@ -71,8 +71,10 @@ export class DomainListComponent implements OnInit, OnDestroy {
     const msgId = this.msg.loading("progress...", { nzDuration: 0 }).messageId;
     const result = await this.scraperService.scrapIndex(id);
     this.msg.remove(msgId);
-    if (result.ok) {
-      this.paginator.refresh();
+    if (!result.ok) {
+      this.msg.error("Scraping domain failed!");
+    } else {
+      this.msg.success("Domain scraping job added!");
     }
   }
 
