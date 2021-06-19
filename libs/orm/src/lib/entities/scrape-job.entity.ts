@@ -32,9 +32,9 @@ export class ScrapeJob implements IScrapeJob {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Field(() => Number)
-  @Column({ name: "link_id", type: "bigint" })
-  linkId: number;
+  @Field(() => String)
+  @Column({ unique: true, type: "character varying", length: 2048 })
+  url: string;
 
   @Field(() => String)
   @Column({
@@ -51,9 +51,4 @@ export class ScrapeJob implements IScrapeJob {
   @Field(() => Date, { nullable: true })
   @Column({ name: "finished_at", nullable: true })
   finishedAt?: Date;
-
-  @Field(() => Link, { nullable: true })
-  @ManyToOne(() => Link, (link) => link.id)
-  @JoinColumn({ name: "link_id", referencedColumnName: "id" })
-  link: ILink;
 }

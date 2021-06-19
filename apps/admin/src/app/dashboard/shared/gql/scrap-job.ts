@@ -25,7 +25,6 @@ export const SCRAP_JOB_PAGE_LIST_QUERY = gql`
       result {
         id
         url
-        title
         status
         createdAt
         finishedAt

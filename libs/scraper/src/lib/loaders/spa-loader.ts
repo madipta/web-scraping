@@ -16,7 +16,7 @@ export class SpaLoader implements IScrapeLoader<string> {
       await page.waitForTimeout(200);
       return text;
     } catch (e) {
-      console.error(e);      
+      console.error("[SpaLoader | load] loading-failed", e);
       throw `[SPA LOADER ERROR] ${url}`;
     } finally {
       await browser.close();

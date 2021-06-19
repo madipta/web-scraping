@@ -15,7 +15,7 @@ export class WebLoader implements IScrapeLoader<string> {
       return response.data;
     } catch (e) {
       console.timeEnd(url);
-      console.error("loading-failed");
+      console.error("[WebLoader | load] loading-failed", e);
       throw `[WEB LOADER ERROR] ${url}`;
     }
   }

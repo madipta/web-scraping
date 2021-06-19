@@ -45,8 +45,8 @@ export class ScraperEvent {
   }
 
   @OnEvent(ScrapeEvents.ErrorLoading)
-  async onErrorLoading({ linkId, jobId }) {
-    this.linkRepo.update({ id: linkId }, { scraped: false, broken: true });
+  async onErrorLoading({ url, jobId }) {
+    this.linkRepo.update({ url }, { scraped: false, broken: true });
     await this.scrapeJobRepo.update(
       { id: jobId },
       { status: ScrapeJobStatus.loadingFailed }
@@ -55,16 +55,16 @@ export class ScraperEvent {
   }
 
   @OnEvent(ScrapeEvents.SuccessLoading)
-  async onSuccessLoading({ linkId }) {
+  async onSuccessLoading({ url }) {
     await this.linkRepo.update(
-      { id: linkId },
+      { url },
       { scraped: true, broken: false }
     );
   }
 
   @OnEvent(ScrapeEvents.ErrorScraping)
-  async onErrorScraping({ linkId, jobId }) {
-    this.linkRepo.update({ id: linkId }, { scraped: false, broken: false });
+  async onErrorScraping({ url, jobId }) {
+    this.linkRepo.update({ url }, { scraped: false, broken: false });
     await this.scrapeJobRepo.update(
       { id: jobId },
       { status: ScrapeJobStatus.scrapingFailed }
@@ -73,8 +73,8 @@ export class ScraperEvent {
   }
 
   @OnEvent(ScrapeEvents.SuccessScraping)
-  async onSuccessScraping({ linkId, jobId, content }) {
-    const { title } = await this.linkRepo.findOne(linkId);
+  async onSuccessScraping({ url, jobId, content }) {
+    const { id: linkId, title } = await this.linkRepo.findOne({ url });
     content = { ...content, title };
     if (await this.contentRepo.count({ id: linkId })) {
       await this.contentRepo.update({ id: linkId }, content);

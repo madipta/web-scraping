@@ -39,8 +39,9 @@ export class ScraperResolver {
     @Args("input") dto: AutoNumberInput
   ): Promise<BaseResult> {
     try {
+      const link = await this.linkRepo.findOne(dto.id);
       const { id: jobId } = await this.scrapeJobRepo.save({
-        linkId: dto.id,
+        url: link.url, 
         status: ScrapeJobStatus.created,
       });
       this.scrapeQueueService.addContent(dto.id, jobId);

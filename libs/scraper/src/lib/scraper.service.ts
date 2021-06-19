@@ -37,7 +37,8 @@ export class ScraperService {
       if (!setting) {
         throw new Error("[ScraperService | content] SSetting not found!");
       }
-      await this.contentManagerService.manage(setting, linkId, jobId);
+      const { url } = await this.linkRepo.findOne(linkId);
+      await this.contentManagerService.manage(setting, url, jobId);
       return { ok: true };
     } catch (e) {
       console.error(e);

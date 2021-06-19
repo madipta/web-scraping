@@ -3,13 +3,11 @@ import {
   Field,
   InputType,
   ObjectType,
-  Parent,
   Query,
-  ResolveField,
   Resolver,
 } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Link, RefineSortParam, ScrapeJob } from "@web-scraping/orm";
+import { RefineSortParam, ScrapeJob } from "@web-scraping/orm";
 import { Repository } from "typeorm";
 import { PageListInput } from "../core/page-list-input";
 import { PageListResult } from "../core/page-list-result";
@@ -21,18 +19,9 @@ export class ScrapeJobPageListInput extends PageListInput {
 }
 
 @ObjectType()
-export class ScrapeJobPagelistItem extends ScrapeJob {
-  @Field(() => String, { nullable: true })
-  title?: string;
-
-  @Field(() => String, { nullable: true })
-  url?: string;
-}
-
-@ObjectType()
 export class ScrapeJobPageListResult extends PageListResult {
-  @Field(() => [ScrapeJobPagelistItem], { nullable: true })
-  result?: ScrapeJobPagelistItem[];
+  @Field(() => [ScrapeJob], { nullable: true })
+  result?: ScrapeJob[];
 }
 
 @InputType()
@@ -44,8 +33,6 @@ export class GetScrapeJobCountnput {
 @Resolver(() => ScrapeJob)
 export class ScrapeJobResolver {
   constructor(
-    @InjectRepository(Link)
-    private readonly linkRepo: Repository<Link>,
     @InjectRepository(ScrapeJob)
     private readonly scrapJobRepo: Repository<ScrapeJob>
   ) {}
@@ -55,17 +42,15 @@ export class ScrapeJobResolver {
     @Args("input") dto: ScrapeJobPageListInput
   ): Promise<ScrapeJobPageListResult> {
     const { status, pageIndex, pageSize, search, sortBy, sortOrder } = dto;
-    const orderBy = RefineSortParam(sortBy ?? "title", sortOrder);
+    const orderBy = RefineSortParam(sortBy ?? "created_at", sortOrder);
     const queryBuilder = () => {
       const builder = this.scrapJobRepo
         .createQueryBuilder("ScrapeJob")
-        .innerJoin("ScrapeJob.link", "Link")
         .select("ScrapeJob.id", "id")
-        .addSelect("Link.title", "title")
-        .addSelect("Link.url", "url")
+        .addSelect("ScrapeJob.url", "url")
         .where("status=:status", { status });        
       if (search) {
-        builder.andWhere("url ILIKE :search OR title ILIKE :search", {
+        builder.andWhere("url ILIKE :search", {
           search: `%${search}%`,
         });
       }
@@ -95,10 +80,5 @@ export class ScrapeJobResolver {
     @Args("input") { status }: GetScrapeJobCountnput
   ): Promise<number> {
     return this.scrapJobRepo.count({ select: ["status"], where: { status } });
-  }
-
-  @ResolveField()
-  async link(@Parent() scrapjob: ScrapeJob) {
-    return this.linkRepo.findOne({ id: scrapjob.linkId });
   }
 }

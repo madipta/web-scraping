@@ -19,24 +19,24 @@ export class ContentManagerService {
     return scraper.scrap(text, setting);
   }
 
-  async manage(setting: ISetting, linkId: number, jobId: string) {
+  async manage(setting: ISetting, url: string, jobId: string) {
     let responseText: string;
     try {
       responseText = await this.load(setting);
     } catch {
-      this.eventEmitter.emit(ScrapeEvents.ErrorLoading, { linkId, jobId });
+      this.eventEmitter.emit(ScrapeEvents.ErrorLoading, { url, jobId });
       return;
     }
-    this.eventEmitter.emit(ScrapeEvents.SuccessLoading, { linkId });
+    this.eventEmitter.emit(ScrapeEvents.SuccessLoading, { url });
     let content: IContent;
     try {
       content = await this.scrap(setting, responseText);
     } catch {
-      this.eventEmitter.emit(ScrapeEvents.ErrorScraping, { linkId, jobId });
+      this.eventEmitter.emit(ScrapeEvents.ErrorScraping, { url, jobId });
       return;
     }
     this.eventEmitter.emit(ScrapeEvents.SuccessScraping, {
-      linkId,
+      url,
       jobId,
       content,
     });

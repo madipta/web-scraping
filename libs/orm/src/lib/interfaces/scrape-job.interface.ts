@@ -2,7 +2,7 @@ import { ScrapeJobStatus } from "../entities/scrape-job.entity";
 
 export interface IScrapeJob {
   id: string;
-  linkId: number;
+  url: string;
   status: ScrapeJobStatus;
   createdAt?: Date;
   finishedAt?: Date;

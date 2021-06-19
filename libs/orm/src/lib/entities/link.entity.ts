@@ -5,15 +5,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import type { IContent, IDomain, ILink, IScrapeJob } from "../interfaces";
+import type { IContent, IDomain, ILink } from "../interfaces";
 import { Content } from "./content.entity";
 import { Domain } from "./domain.entity";
-import { ScrapeJob } from "./scrape-job.entity";
 
 @InputType("LinkEntity", { isAbstract: true })
 @ObjectType()
@@ -62,8 +60,4 @@ export class Link implements ILink {
 
   @OneToOne(() => Content, (content) => content.link, { onDelete: "CASCADE" })
   content: IContent;
-
-  @Field(() => [ScrapeJob])
-  @OneToMany(() => ScrapeJob, (job) => job.link)
-  contents: IScrapeJob[];
 }

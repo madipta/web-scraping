@@ -8,7 +8,6 @@ export type GqlScrapeJobPageList = {
 export type GqlScrapeJobPageListResult = {
   id?: string;
   url?: string;
-  title?: string;
   createdAt?: Date;
   startedAt?: Date;
   finishedAt?: Date;

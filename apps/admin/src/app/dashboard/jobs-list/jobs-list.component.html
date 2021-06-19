@@ -31,10 +31,9 @@
   <thead>
     <tr>
       <th nzColumnKey="url" [nzSortFn]="true">URL</th>
-      <th nzColumnKey="title" [nzSortFn]="true">Title</th>
       <th>Status</th>
-      <th>Created At</th>
-      <th>Finished At</th>
+      <th nzColumnKey="created_at" [nzSortFn]="true">Created At</th>
+      <th nzColumnKey="finished_at" [nzSortFn]="true">Finished At</th>
     </tr>
   </thead>
   <tbody>
@@ -42,7 +41,6 @@
       <td>
         <a [href]="data.url" target="_blank">{{ data.url | link }}</a>
       </td>
-      <td>{{ data.title }}</td>
       <td>{{ data.status }}</td>
       <td>{{ data.createdAt | date:"YYYY-MM-dd HH:mm:ss"}}</td>
       <td>{{ data.finishedAt | date:"YYYY-MM-dd HH:mm:ss"}}</td>
