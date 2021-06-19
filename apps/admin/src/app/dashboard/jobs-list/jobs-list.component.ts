@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { combineLatest, Subject } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
+import { takeUntil } from "rxjs/operators";
 import { GqlScrapeJobPageListResult } from "../shared/gql/dto/scrap-job.dto";
 import { NzDataPaginator } from "../shared/services/nz-data-paginator";
 import { ScrapeJobService } from "../shared/services/scrape-job.service";
@@ -29,7 +29,7 @@ export class JobsListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     combineLatest([this.route.params, this.route.queryParams])
-      .pipe(take(1))
+      .pipe(takeUntil(this.notifier))
       .subscribe(([, query]) => {
         this.jobStatus = query.status;
         this.paginator.pager$
