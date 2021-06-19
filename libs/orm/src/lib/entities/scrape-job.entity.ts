@@ -33,7 +33,7 @@ export class ScrapeJob implements IScrapeJob {
   id: string;
 
   @Field(() => String)
-  @Column({ unique: true, type: "character varying", length: 2048 })
+  @Column({ type: "character varying", length: 2048 })
   url: string;
 
   @Field(() => String)

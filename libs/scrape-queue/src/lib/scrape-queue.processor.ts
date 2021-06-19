@@ -9,7 +9,8 @@ export class ScrapeQueueProcessor {
 
   @Process(ScrapeQueue.index)
   async scrapeIndex(job: Job) {
-    return await this.scraper.index(job.data.id);
+    const { id, jobId } = job.data;
+    return await this.scraper.index(id, jobId);
   }
 
   @Process(ScrapeQueue.content)

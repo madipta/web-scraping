@@ -2,10 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Link, Content, ScrapeJob, ScrapeJobStatus } from "@web-scraping/orm";
-import {
-  ScrapeJobCountService,
-  ScrapeJobFinishService,
-} from "@web-scraping/pubsub";
+import { ScrapeJobCountService } from "@web-scraping/pubsub";
 import { Repository } from "typeorm";
 import { IIndexScrapResult } from "./index/scrapers/index-scrap.interface";
 
@@ -26,7 +23,6 @@ export class ScraperEvent {
     private readonly contentRepo: Repository<Content>,
     @InjectRepository(ScrapeJob)
     private readonly scrapeJobRepo: Repository<ScrapeJob>,
-    private readonly scrapeJobFinishService: ScrapeJobFinishService,
     private readonly scrapeJobCountService: ScrapeJobCountService
   ) {}
 
@@ -40,8 +36,6 @@ export class ScraperEvent {
         }
       })
     );
-    this.scrapeJobCountService.publishScrapeJobCount();
-    this.scrapeJobFinishService.scrapeIndexJobFinished();
   }
 
   @OnEvent(ScrapeEvents.ErrorLoading)
@@ -56,10 +50,7 @@ export class ScraperEvent {
 
   @OnEvent(ScrapeEvents.SuccessLoading)
   async onSuccessLoading({ url }) {
-    await this.linkRepo.update(
-      { url },
-      { scraped: true, broken: false }
-    );
+    await this.linkRepo.update({ url }, { scraped: true, broken: false });
   }
 
   @OnEvent(ScrapeEvents.ErrorScraping)
@@ -74,12 +65,15 @@ export class ScraperEvent {
 
   @OnEvent(ScrapeEvents.SuccessScraping)
   async onSuccessScraping({ url, jobId, content }) {
-    const { id: linkId, title } = await this.linkRepo.findOne({ url });
-    content = { ...content, title };
-    if (await this.contentRepo.count({ id: linkId })) {
-      await this.contentRepo.update({ id: linkId }, content);
-    } else {
-      await this.contentRepo.save({ ...content, id: linkId });
+    const link = await this.linkRepo.findOne({ url });
+    if (link) {
+      const { id: linkId, title } = link;
+      content = { ...content, title };
+      if (await this.contentRepo.count({ id: linkId })) {
+        await this.contentRepo.update({ id: linkId }, content);
+      } else {
+        await this.contentRepo.save({ ...content, id: linkId });
+      }
     }
     await this.scrapeJobRepo
       .createQueryBuilder()

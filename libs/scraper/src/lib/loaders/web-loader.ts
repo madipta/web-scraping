@@ -6,7 +6,7 @@ export class WebLoader implements IScrapeLoader<string> {
     try {
       console.time(url);
       const response = await axios.get(url, {
-        timeout: 15000,
+        timeout: 20000,
         // validateStatus: () => {
         //   return true;
         // },
@@ -15,8 +15,7 @@ export class WebLoader implements IScrapeLoader<string> {
       return response.data;
     } catch (e) {
       console.timeEnd(url);
-      console.error("[WebLoader | load] loading-failed", e);
-      throw `[WEB LOADER ERROR] ${url}`;
+      throw `[WebLoader | load] loading-failed ${url}`;
     }
   }
 }

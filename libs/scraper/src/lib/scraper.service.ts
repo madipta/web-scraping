@@ -17,13 +17,13 @@ export class ScraperService {
     private readonly contentManagerService: ContentManagerService,
   ) {}
 
-  async index(domainId: number) {
+  async index(domainId: number, jobId: string) {
     try {
       const setting = await this.getSetting(domainId);
       if (!setting) {
         throw new Error("[ScraperService | index] Setting not found!");
       }
-      await this.indexManagerService.manage(setting);
+      await this.indexManagerService.manage(setting, jobId);
       return { ok: true };
     } catch (e) {
       console.error(e);
