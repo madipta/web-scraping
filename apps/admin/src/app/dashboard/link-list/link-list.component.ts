@@ -104,7 +104,6 @@ export class LinkListComponent implements OnInit, OnDestroy {
     } else {
       this.msg.error("Create content scraping job failed!");
     }
-    this.paginator.refresh();
   }
 
   async scrapOne(linkId: number) {
@@ -116,7 +115,6 @@ export class LinkListComponent implements OnInit, OnDestroy {
     } else {
       this.msg.error("Create content scraping job failed!");
     }
-    this.paginator.refresh();
   }
 
   gotoContent(data: GqlLinkPageListResult) {
