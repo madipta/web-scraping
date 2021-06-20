@@ -45,7 +45,7 @@ export class DomainUpdateComponent implements OnInit {
   async getDomain() {
     const msgId = this.msg.loading("loading...", { nzDuration: 0 }).messageId;
     const domain = await this.domainService.get({ id: this.selectedId });
-    this.form.patchValue(domain["result"]);
+    this.form.patchValue(domain.result);
     this.msg.remove(msgId);
   }
 
@@ -64,11 +64,11 @@ export class DomainUpdateComponent implements OnInit {
     const msgId = this.msg.loading("progress...", { nzDuration: 0 }).messageId;
     const res = await this.domainService.createOrUpdate(values);
     this.msg.remove(msgId);
-    if (res["ok"]) {
+    if (!res.ok) {
+      this.msg.error("Failed!");
+    } else {
       this.msg.success("Success!");
       this.location.back();
-    } else {
-      this.msg.error("Failed!");
     }
   }
 }

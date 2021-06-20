@@ -1,28 +1,9 @@
-export type GqlDomainPageList = {
-  ok: boolean;
-  error?: string;
-  total?: number;
-  result?: GqlDomainPageListResult[];
-};
-
 export type GqlDomainPageListResult = {
   id: number;
   home?: string;
   adminEmail?: string;
   linksCount?: number;
   active?: boolean;
-};
-
-export type GqlGetDomain = {
-  ok: boolean;
-  error?: string;
-  result?: {
-    id: number;
-    home?: string;
-    adminEmail?: string;
-    active?: boolean;
-    disabled?: boolean;
-  };
 };
 
 export type GqlGetDomainResult = {
@@ -40,28 +21,6 @@ export type GqlCreateDomainInput = {
   disabled?: boolean;
 };
 
-export type GqlCreateDomainResult = {
-  ok: boolean;
-  error?: string;
-  result?: {
-    id: number;
-  };
-};
-
-export type GqlUpdateDomainInput = {
+export type GqlUpdateDomainInput = GqlCreateDomainInput & {
   id: number;
-  home?: string;
-  adminEmail?: string;
-  active?: boolean;
-  disabled?: boolean;
-};
-
-export type GqlUpdateDomainResult = {
-  ok: boolean;
-  error?: string;
-};
-
-export type GqlDeleteDomainResult = {
-  ok: boolean;
-  error?: string;
 };

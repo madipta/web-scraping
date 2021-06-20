@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo } from "apollo-angular";
-import { map, take } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import {
   CREATE_DOMAIN_MUTATION,
   DELETE_DOMAIN_MUTATION,
@@ -8,14 +8,12 @@ import {
   GET_DOMAIN_QUERY,
   UPDATE_DOMAIN_MUTATION,
 } from "../gql/domain";
+import { pagelistResultMap, resultMap } from "../gql/dto/base-result.dto";
 import {
   GqlCreateDomainInput,
-  GqlCreateDomainResult,
-  GqlDeleteDomainResult,
-  GqlDomainPageList,
-  GqlGetDomain,
+  GqlDomainPageListResult,
+  GqlGetDomainResult,
   GqlUpdateDomainInput,
-  GqlUpdateDomainResult,
 } from "../gql/dto/domain.dto";
 import { Pager } from "./nz-data-paginator";
 
@@ -25,7 +23,7 @@ import { Pager } from "./nz-data-paginator";
 export class DomainService {
   constructor(private apollo: Apollo) {}
 
-  async fetchList(pager: Pager): Promise<GqlDomainPageList> {
+  async fetchList(pager: Pager) {
     const { pageIndex, pageSize, sortField, sortOrder, search } = pager;
     return this.apollo
       .query({
@@ -34,49 +32,41 @@ export class DomainService {
         fetchPolicy: "no-cache",
       })
       .pipe(
-        take(1),
-        map((obj) => obj.data["domainPagelist"])
+        map((res) =>
+          pagelistResultMap<GqlDomainPageListResult>("domainPagelist", res)
+        )
       )
       .toPromise();
   }
 
-  async get(dto: { id: number }): Promise<GqlGetDomain> {
+  async get(dto: { id: number }) {
     return this.apollo
       .query({
         query: GET_DOMAIN_QUERY,
         variables: { ...dto },
         fetchPolicy: "no-cache",
       })
-      .pipe(
-        take(1),
-        map((obj) => obj.data["getDomainById"])
-      )
+      .pipe(map((res) => resultMap<GqlGetDomainResult>("getDomainById", res)))
       .toPromise();
   }
 
-  async create(dto: GqlCreateDomainInput): Promise<GqlCreateDomainResult> {
+  async create(dto: GqlCreateDomainInput) {
     return this.apollo
       .mutate({
         mutation: CREATE_DOMAIN_MUTATION,
         variables: { ...dto },
       })
-      .pipe(
-        take(1),
-        map((obj) => obj.data["createDomain"])
-      )
+      .pipe(map((res) => resultMap<GqlGetDomainResult>("createDomain", res)))
       .toPromise();
   }
 
-  async update(dto: GqlUpdateDomainInput): Promise<GqlUpdateDomainResult> {
+  async update(dto: GqlUpdateDomainInput) {
     return this.apollo
       .mutate({
         mutation: UPDATE_DOMAIN_MUTATION,
         variables: { ...dto },
       })
-      .pipe(
-        take(1),
-        map((obj) => obj.data["updateDomain"])
-      )
+      .pipe(map((res) => resultMap<GqlGetDomainResult>("updateDomain", res)))
       .toPromise();
   }
 
@@ -87,16 +77,13 @@ export class DomainService {
     return this.create(body);
   }
 
-  async delete(dto: { id: number }): Promise<GqlDeleteDomainResult> {
+  async delete(dto: { id: number }) {
     return this.apollo
       .mutate({
         mutation: DELETE_DOMAIN_MUTATION,
         variables: { ...dto },
       })
-      .pipe(
-        take(1),
-        map((obj) => obj.data["deleteDomain"])
-      )
+      .pipe(map((res) => resultMap<GqlGetDomainResult>("deleteDomain", res)))
       .toPromise();
   }
 }
