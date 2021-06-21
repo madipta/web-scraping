@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
@@ -12,7 +12,7 @@ import { ScraperService } from "../shared/services/scraper.service";
   templateUrl: "./domain-list.component.html",
   styleUrls: ["./domain-list.component.scss"],
 })
-export class DomainListComponent {  
+export class DomainListComponent implements OnInit {
   vm$ = this.domainPagingService.vm$;
 
   constructor(
@@ -22,6 +22,10 @@ export class DomainListComponent {
     private domainPagingService: DomainPagingService,
     private scraperService: ScraperService
   ) {}
+
+  ngOnInit(): void {
+    this.domainPagingService.error$.subscribe((error) => this.msg.error(error));
+  }
 
   search(search: string) {
     this.domainPagingService.search(search);

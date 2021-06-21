@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { BehaviorSubject, combineLatest } from "rxjs";
-import { distinctUntilChanged, map } from "rxjs/operators";
+import { distinctUntilChanged, filter, map } from "rxjs/operators";
 import { BasePagingResult } from "../gql/dto/base-result.dto";
 import { GqlDomainPageListResult } from "../gql/dto/domain.dto";
 import { DomainService } from "./domain.service";
@@ -30,6 +30,7 @@ export class DomainPagingService {
     distinctUntilChanged()
   );
   error$ = this.state$.pipe(
+    filter((state) => !!state.error),
     map((state) => state.error),
     distinctUntilChanged()
   );
@@ -45,13 +46,13 @@ export class DomainPagingService {
   );
 
   constructor(private readonly domainService: DomainService) {
-    this.paginator.pager$.subscribe(async (pager) => {
-      this.loadingSubject.next(true);
-      const res = await this.domainService.fetchList(pager);
-      this.state = res;
-      this.subject.next(res);
-      this.loadingSubject.next(false);
-    });
+    this.paginator.pager$
+      .subscribe(async (pager) => {
+        this.loadingSubject.next(true);
+        const res = await this.domainService.fetchList(pager);
+        this.subject.next(res);
+        this.loadingSubject.next(false);
+      });
   }
 
   search(search: string) {

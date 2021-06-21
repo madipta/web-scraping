@@ -139,6 +139,7 @@ export class DomainResolver {
     }
   }
 
+  @Role("admin", "staff")
   @Query(() => DomainPageListResult)
   async domainPagelist(
     @Args("input") dto: PageListInput

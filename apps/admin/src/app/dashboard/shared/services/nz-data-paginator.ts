@@ -37,8 +37,14 @@ export class NzDataPaginator {
   }
 
   setPager(pager: Pager) {
-    this.pager = pager;
-    this.subject.next(this.pager);
+    for (const key in pager) {
+      if(this.pager[key] === pager[key]) {
+        continue;
+      }
+      this.pager = pager;
+      this.subject.next(this.pager);
+      break;
+    }
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
