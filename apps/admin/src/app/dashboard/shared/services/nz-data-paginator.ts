@@ -1,5 +1,5 @@
 import { NzTableQueryParams } from "ng-zorro-antd/table";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 
 export class Pager {
   pageIndex = 1;
@@ -10,15 +10,12 @@ export class Pager {
 }
 
 export class NzDataPaginator {
-  private pager: Pager;
-  private subject: BehaviorSubject<Pager>;
-  pager$: Observable<Pager>;
+  private pager = new Pager();
+  private subject = new BehaviorSubject(this.pager);
+  pager$ = this.subject.asObservable();
 
   constructor(options: Partial<Pager>) {
-    this.pager = new Pager();
     this.pager = { ...this.pager, ...options };
-    this.subject = new BehaviorSubject(this.pager);
-    this.pager$ = this.subject.asObservable();
   }
 
   first() {
