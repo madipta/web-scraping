@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Apollo } from "apollo-angular";
-import { map, take } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import {
   GET_DOMAIN_SETTING_QUERY,
   UPDATE_DOMAIN_SETTING_MUTATION,
 } from "../gql/domain-setting";
+import { resultMap } from "../gql/dto/base-result.dto";
 import {
-  GqlGetDomainSetting,
+  GqlGetDomainSettingResult,
   GqlUpdateDomainSettingInput,
-  GqlUpdateDomainSettingResult,
 } from "../gql/dto/domain-setting.dto";
 
 @Injectable({
@@ -17,7 +17,7 @@ import {
 export class DomainSettingService {
   constructor(private apollo: Apollo) {}
 
-  async get(dto: { id: number }): Promise<GqlGetDomainSetting> {
+  async get(dto: { id: number }) {
     return this.apollo
       .query({
         query: GET_DOMAIN_SETTING_QUERY,
@@ -25,23 +25,23 @@ export class DomainSettingService {
         fetchPolicy: "no-cache",
       })
       .pipe(
-        take(1),
-        map((obj) => obj.data["getDomainSettingById"])
+        map((res) =>
+          resultMap<GqlGetDomainSettingResult>("getDomainSettingById", res)
+        )
       )
       .toPromise();
   }
 
-  async update(
-    dto: GqlUpdateDomainSettingInput
-  ): Promise<GqlUpdateDomainSettingResult> {
+  async update(dto: GqlUpdateDomainSettingInput) {
     return this.apollo
       .mutate({
         mutation: UPDATE_DOMAIN_SETTING_MUTATION,
         variables: { ...dto },
       })
       .pipe(
-        take(1),
-        map((obj) => obj.data["updateDomainSetting"])
+        map((res) =>
+          resultMap<GqlGetDomainSettingResult>("updateDomainSetting", res)
+        )
       )
       .toPromise();
   }
