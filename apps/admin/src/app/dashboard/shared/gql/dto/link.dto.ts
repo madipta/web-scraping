@@ -1,10 +1,3 @@
-export type GqlLinkPageList = {
-  ok: boolean;
-  error?: string;
-  total?: number;
-  result?: GqlLinkPageListResult[];
-};
-
 export type GqlLinkPageListResult = {
   id: number;
   url?: string;

@@ -1,22 +1,19 @@
 import { Injectable } from "@angular/core";
 import { Apollo } from "apollo-angular";
-import { map, take } from "rxjs/operators";
-import { GqlScrapeJobPageList } from "../gql/dto/scrap-job.dto";
+import { map } from "rxjs/operators";
+import { pagelistResultMap } from "../gql/dto/base-result.dto";
+import { GqlScrapeJobPageListResult } from "../gql/dto/scrap-job.dto";
 import {
   SCRAP_INIT_JOB_COUNT_SUBSCRIPTION,
-  SCRAP_JOB_COUNT_QUERY,
-  SCRAP_JOB_COUNT_SUBSCRIPTION,
   SCRAP_JOB_PAGE_LIST_QUERY,
 } from "../gql/scrap-job";
 import { Pager } from "./nz-data-paginator";
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable({ providedIn: "root" })
 export class ScrapeJobService {
   constructor(private apollo: Apollo) {}
 
-  async fetchList(pager: Pager, status: string): Promise<GqlScrapeJobPageList> {
+  async fetchList(pager: Pager, status: string) {
     const { pageIndex, pageSize, sortField, sortOrder, search } = pager;
     return this.apollo
       .query({
@@ -32,22 +29,9 @@ export class ScrapeJobService {
         fetchPolicy: "no-cache",
       })
       .pipe(
-        take(1),
-        map((obj) => obj.data["scrapeJobPagelist"])
-      )
-      .toPromise();
-  }
-
-  async getCount(status: string): Promise<number> {
-    return this.apollo
-      .query({
-        query: SCRAP_JOB_COUNT_QUERY,
-        variables: { status },
-        fetchPolicy: "no-cache",
-      })
-      .pipe(
-        take(1),
-        map((obj) => obj.data["getScrapeJobCount"])
+        map((res) =>
+          pagelistResultMap<GqlScrapeJobPageListResult>("scrapeJobPagelist", res)
+        )
       )
       .toPromise();
   }
@@ -59,14 +43,5 @@ export class ScrapeJobService {
         fetchPolicy: "no-cache",
       })
       .subscribe();
-  }
-
-  subscribeCount() {
-    return this.apollo
-      .subscribe({
-        query: SCRAP_JOB_COUNT_SUBSCRIPTION,
-        fetchPolicy: "no-cache",
-      })
-      .pipe(map((obj) => obj.data["scrapeJobCount"]));
   }
 }

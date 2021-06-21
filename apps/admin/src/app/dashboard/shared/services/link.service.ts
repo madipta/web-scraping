@@ -1,17 +1,16 @@
 import { Injectable } from "@angular/core";
 import { Apollo } from "apollo-angular";
 import { map, take } from "rxjs/operators";
-import { GqlDeleteLinkResult, GqlLinkPageList } from "../gql/dto/link.dto";
+import { pagelistResultMap, resultMap } from "../gql/dto/base-result.dto";
+import { GqlDeleteLinkResult, GqlLinkPageListResult } from "../gql/dto/link.dto";
 import { DELETE_LINK_MUTATION, LINK_PAGE_LIST_QUERY } from "../gql/link";
 import { Pager } from "./nz-data-paginator";
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable({ providedIn: "root" })
 export class LinkService {
   constructor(private apollo: Apollo) {}
 
-  fetchList(pager: Pager, domainId: number): Promise<GqlLinkPageList> {
+  fetchList(pager: Pager, domainId: number) {
     const { pageIndex, pageSize, sortField, sortOrder, search } = pager;
     return this.apollo
       .query({
@@ -27,36 +26,20 @@ export class LinkService {
         fetchPolicy: "no-cache",
       })
       .pipe(
-        take(1),
-        map((obj) => obj.data["linkPagelist"])
+        map((res) =>
+          pagelistResultMap<GqlLinkPageListResult>("linkPagelist", res)
+        )
       )
       .toPromise();
   }
 
-  async delete(id: number): Promise<GqlDeleteLinkResult> {
+  async delete(id: number) {
     return this.apollo
       .mutate({
         mutation: DELETE_LINK_MUTATION,
         variables: { id },
       })
-      .pipe(
-        take(1),
-        map((obj) => obj.data["deleteLink"])
-      )
+      .pipe(map((res) => resultMap<GqlDeleteLinkResult>("deleteLink", res)))
       .toPromise();
-  }
-
-  async scrapContent(linkId: number) {
-    // return await this.http
-    //   .post<BaseResponse>(this.linkScrapUrl, { linkId })
-    //   .toPromise();
-    throw "Not Implemented!";
-  }
-
-  async scrapAllContent(domainId: number) {
-    // return await this.http
-    //   .post(this.linkScrapAllUrl, { domainId: `${domainId}` })
-    //   .toPromise();
-    throw "Not Implemented!";
   }
 }

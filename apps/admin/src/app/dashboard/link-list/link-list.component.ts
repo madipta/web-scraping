@@ -85,11 +85,11 @@ export class LinkListComponent implements OnInit, OnDestroy {
 
   async delete(id) {
     const result = await this.linkService.delete(id);
-    if (result.ok) {
+    if (!result.ok) {
+      this.msg.error("Delete failed!");
+    } else {
       this.msg.success("Deleted!");
       this.paginator.refresh();
-    } else {
-      this.msg.error("Delete failed!");
     }
   }
 
