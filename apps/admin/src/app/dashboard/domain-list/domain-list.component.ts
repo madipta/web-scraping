@@ -18,7 +18,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
   total = 1;
   domainList: GqlDomainPageListResult[] = [];
   loading = true;
-  paginator = new NzDataPaginator({ sortField: "home" });
+  paginator = new NzDataPaginator({ sortBy: "home" });
   pager = this.paginator.getPager();
   notifier = new Subject();
 

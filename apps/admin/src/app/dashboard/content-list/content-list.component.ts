@@ -17,7 +17,7 @@ export class ContentListComponent implements OnInit, OnDestroy {
   total = 1;
   contentList: GqlContentPageListResult[] = [];
   loading = true;
-  paginator = new NzDataPaginator({ sortField: "Link.title" });
+  paginator = new NzDataPaginator({ sortBy: "Link.title" });
   pager = this.paginator.getPager();
   notifier = new Subject();
 

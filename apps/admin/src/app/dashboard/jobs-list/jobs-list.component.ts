@@ -18,7 +18,7 @@ export class JobsListComponent implements OnInit, OnDestroy {
   scrapeJobList: GqlScrapeJobPageListResult[] = [];
   loading = true;
   jobStatus: string;
-  paginator = new NzDataPaginator({ sortField: "created_at" });
+  paginator = new NzDataPaginator({ sortBy: "created_at" });
   pager = this.paginator.getPager();
   notifier = new Subject();
 

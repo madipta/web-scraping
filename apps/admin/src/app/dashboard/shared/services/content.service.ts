@@ -11,11 +11,11 @@ export class ContentService {
   constructor(private apollo: Apollo) {}
 
   fetchList(pager: Pager) {
-    const { pageIndex, pageSize, sortField, sortOrder, search } = pager;
+    const { pageIndex, pageSize, sortBy, sortOrder, search } = pager;
     return this.apollo
       .query({
         query: CONTENT_PAGE_LIST_QUERY,
-        variables: { pageIndex, pageSize, sortField, sortOrder, search },
+        variables: { pageIndex, pageSize, sortBy, sortOrder, search },
         fetchPolicy: "no-cache",
       })
       .pipe(

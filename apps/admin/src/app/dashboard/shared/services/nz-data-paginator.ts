@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 export class Pager {
   pageIndex = 1;
   pageSize = 20;
-  sortField: string;
+  sortBy: string;
   sortOrder = "asc";
   search: string;
 }
@@ -47,16 +47,16 @@ export class NzDataPaginator {
   onQueryParamsChange(params: NzTableQueryParams): void {
     const { pageSize, pageIndex, sort } = params;
     const defaultSort = {
-      key: this.pager.sortField,
+      key: this.pager.sortBy,
       value: this.pager.sortOrder,
     };
     const currentSort = sort.find((item) => item.value !== null) || defaultSort;
-    const sortField = currentSort.key || defaultSort.key;
+    const sortBy = currentSort.key || defaultSort.key;
     const sortOrder = currentSort.value || defaultSort.value;
     this.setPager({
       pageIndex,
       pageSize,
-      sortField,
+      sortBy,
       sortOrder,
       search: this.pager.search,
     });

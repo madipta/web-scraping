@@ -14,7 +14,7 @@ export class ScrapeJobService {
   constructor(private apollo: Apollo) {}
 
   async fetchList(pager: Pager, status: string) {
-    const { pageIndex, pageSize, sortField, sortOrder, search } = pager;
+    const { pageIndex, pageSize, sortBy, sortOrder, search } = pager;
     return this.apollo
       .query({
         query: SCRAP_JOB_PAGE_LIST_QUERY,
@@ -22,7 +22,7 @@ export class ScrapeJobService {
           status,
           pageIndex,
           pageSize,
-          sortField,
+          sortBy,
           sortOrder,
           search,
         },

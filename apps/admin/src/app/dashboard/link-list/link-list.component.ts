@@ -22,7 +22,7 @@ export class LinkListComponent implements OnInit, OnDestroy {
   total = 1;
   linkList: GqlLinkPageListResult[] = [];
   loading = true;
-  paginator = new NzDataPaginator({ sortField: "title" });
+  paginator = new NzDataPaginator({ sortBy: "title" });
   pager = this.paginator.getPager();
   notifier = new Subject();
 

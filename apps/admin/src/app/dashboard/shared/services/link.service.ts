@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo } from "apollo-angular";
-import { map, take } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { pagelistResultMap, resultMap } from "../gql/dto/base-result.dto";
 import { GqlDeleteLinkResult, GqlLinkPageListResult } from "../gql/dto/link.dto";
 import { DELETE_LINK_MUTATION, LINK_PAGE_LIST_QUERY } from "../gql/link";
@@ -11,7 +11,7 @@ export class LinkService {
   constructor(private apollo: Apollo) {}
 
   fetchList(pager: Pager, domainId: number) {
-    const { pageIndex, pageSize, sortField, sortOrder, search } = pager;
+    const { pageIndex, pageSize, sortBy, sortOrder, search } = pager;
     return this.apollo
       .query({
         query: LINK_PAGE_LIST_QUERY,
@@ -19,7 +19,7 @@ export class LinkService {
           domainId,
           pageIndex,
           pageSize,
-          sortField,
+          sortBy,
           sortOrder,
           search,
         },
