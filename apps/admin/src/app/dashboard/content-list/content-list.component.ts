@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -20,7 +21,11 @@ export class ContentListComponent implements OnInit, OnDestroy {
   pager = this.paginator.getPager();
   notifier = new Subject();
 
-  constructor(public router: Router, private contentService: ContentService) {}
+  constructor(
+    public router: Router,
+    private msg: NzMessageService,
+    private contentService: ContentService
+  ) {}
 
   async ngOnInit() {
     this.paginator.pager$
@@ -32,6 +37,9 @@ export class ContentListComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.total = res.total;
         this.contentList = res.result;
+        if (res.error) {
+          this.msg.error(res.error);
+        }
       });
   }
 

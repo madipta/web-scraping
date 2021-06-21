@@ -43,7 +43,7 @@ export class ContentComponent implements OnInit {
       this.url = result.linkUrl;
       this.title = result.linkTitle;
     } else {
-      this.msg.error("Content failed to open!");
+      this.msg.error(res.error || "Content failed to open!");
       this.location.back();
     }
   }

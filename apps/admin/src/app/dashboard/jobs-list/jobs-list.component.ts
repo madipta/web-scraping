@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { combineLatest, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -24,6 +25,7 @@ export class JobsListComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     public router: Router,
+    private msg: NzMessageService,
     private scrapJobService: ScrapeJobService
   ) {}
 
@@ -44,6 +46,9 @@ export class JobsListComponent implements OnInit, OnDestroy {
             this.loading = false;
             this.total = res.total;
             this.scrapeJobList = res.result;
+            if (res.error) {
+              this.msg.error(res.error);
+            }
           });
       });
   }

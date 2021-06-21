@@ -56,6 +56,9 @@ export class LinkListComponent implements OnInit, OnDestroy {
             this.loading = false;
             this.total = res.total;
             this.linkList = res.result;
+            if (res.error) {
+              this.msg.error(res.error);
+            }
           });
       });
   }
@@ -74,11 +77,11 @@ export class LinkListComponent implements OnInit, OnDestroy {
   }
 
   async getDomain(id: number) {
-    const res = await this.domainService.get({ id });
-    if (res.ok) {
-      return res.result;
+    const result = await this.domainService.get({ id });
+    if (result.ok) {
+      return result.result;
     }
-    this.msg.error("Error getting domain!");
+    this.msg.error(result.error || "Error getting domain!");
     this.location.back();
     return null;
   }
@@ -86,7 +89,7 @@ export class LinkListComponent implements OnInit, OnDestroy {
   async delete(id) {
     const result = await this.linkService.delete(id);
     if (!result.ok) {
-      this.msg.error("Delete failed!");
+      this.msg.error(result.error || "Delete failed!");
     } else {
       this.msg.success("Deleted!");
       this.paginator.refresh();
@@ -102,7 +105,7 @@ export class LinkListComponent implements OnInit, OnDestroy {
     if (result.ok) {
       this.msg.success("Scraping content job created!");
     } else {
-      this.msg.error("Create content scraping job failed!");
+      this.msg.error(result.error || "Create content scraping job failed!");
     }
   }
 
@@ -113,15 +116,11 @@ export class LinkListComponent implements OnInit, OnDestroy {
     if (result.ok) {
       this.msg.success("Scraping content job created!");
     } else {
-      this.msg.error("Create content scraping job failed!");
+      this.msg.error(result.error || "Create content scraping job failed!");
     }
   }
 
   gotoContent(data: GqlLinkPageListResult) {
-    if (!data.scraped) {
-      this.msg.error("Not scraped yet!");
-      return;
-    }
     this.router.navigate(["dashboard", "content"], {
       queryParams: { id: data.id },
     });

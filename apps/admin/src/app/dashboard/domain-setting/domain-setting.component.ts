@@ -58,7 +58,7 @@ export class DomainSettingComponent implements OnInit {
       this.domainHome = res.result.domain?.home;
       this.form.patchValue(res.result);
     } else {
-      this.msg.error("res.error");
+      this.msg.error(res.error || "Domain loading failed!");
       this.location.back();
     }
   }
@@ -72,7 +72,7 @@ export class DomainSettingComponent implements OnInit {
     if (res.ok) {
       this.msg.success(`Saved!`);
     } else {
-      this.msg.error(`failed! \n\n${res.error}`);
+      this.msg.error(res.error || `failed!`);
     }
   }
 }

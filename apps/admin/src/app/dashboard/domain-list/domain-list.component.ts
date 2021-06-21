@@ -39,6 +39,9 @@ export class DomainListComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.total = res.total;
         this.domainList = res.result;
+        if (res.error) {
+          this.msg.error(res.error);
+        }
       });
   }
 
@@ -60,7 +63,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
     const result = await this.domainService.delete({ id });
     this.msg.remove(msgId);
     if (!result.ok) {
-      this.msg.error("Deleting domain failed!");
+      this.msg.error(result.error || "Deleting domain failed!");
     } else {
       this.msg.success("Domain deleted!");
       this.paginator.refresh();
@@ -72,7 +75,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
     const result = await this.scraperService.scrapIndex(id);
     this.msg.remove(msgId);
     if (!result.ok) {
-      this.msg.error("Scraping domain failed!");
+      this.msg.error(result.error || "Scraping domain failed!");
     } else {
       this.msg.success("Domain scraping job added!");
     }
