@@ -65,7 +65,7 @@ export class DomainUpdateComponent implements OnInit {
     const res = await this.domainService.createOrUpdate(values);
     this.msg.remove(msgId);
     if (!res.ok) {
-      this.msg.error("Failed!");
+      this.msg.error(res.error);
     } else {
       this.msg.success("Success!");
       this.location.back();

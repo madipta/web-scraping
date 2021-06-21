@@ -1,5 +1,6 @@
 import { ApolloLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { onError } from "@apollo/client/link/error";
 import { APOLLO_OPTIONS } from "apollo-angular";
 import { HttpLink } from "apollo-angular/http";
 
@@ -20,14 +21,18 @@ function createApollo(httpLink: HttpLink) {
       },
     };
   });
-
+  const errorLink = onError(({ response }) => {
+    const errorMessage = response.errors[0].message;
+    response.errors = null;
+    response.data = { errorMessage };
+  });
   const link = ApolloLink.from([
     basic,
     auth,
+    errorLink,
     httpLink.create({ uri: "http://localhost:3333/graphql" }),
   ]);
   const cache = new InMemoryCache();
-
   return {
     link,
     cache,

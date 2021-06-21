@@ -12,21 +12,15 @@ export type BasePagingResult<T = unknown> = {
 };
 
 export function pagelistResultMap<T>(name: string, val: any): BasePagingResult<T> {
-  if (val.error) {
-    return { ok: false, total:0, result: [], error: val.error.message };
-  }
-  if (val.errors) {
-    return { ok: false, total:0, result: [], error: val.errors[0].message };
+  if (val.data.errorMessage) {
+    return { ok: false, result: [], error: val.data.errorMessage };
   }
   return val.data[name];
 }
 
 export function resultMap<T>(name: string, val: any): BaseResultType<T> {
-  if (val.error) {
-    return { ok: false, result: null, error: val.error.message };
-  }
-  if (val.errors) {
-    return { ok: false, result: null, error: val.errors[0].message };
+  if (val.data.errorMessage) {
+    return { ok: false, result: null, error: val.data.errorMessage };
   }
   return val.data[name];
 }
