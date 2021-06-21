@@ -17,9 +17,7 @@ import {
 } from "../gql/dto/domain.dto";
 import { Pager } from "./nz-data-paginator";
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable({ providedIn: "root" })
 export class DomainService {
   constructor(private apollo: Apollo) {}
 

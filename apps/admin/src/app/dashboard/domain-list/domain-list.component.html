@@ -17,112 +17,108 @@
     <nz-input-group nzPrefixIcon="filter">
       <input nz-input placeholder="filter by domain name" #txtSearch />
     </nz-input-group>
-    <button
-      nz-button
-      nzType="primary"
-      (click)="search(txtSearch.value)"
-    >
+    <button nz-button nzType="primary" (click)="search(txtSearch.value)">
       <i nz-icon nzType="search" nzTheme="outline"></i>Filter
     </button>
   </div>
 </div>
 
-<nz-table
-  nzShowSizeChanger
-  nzSize="small"
-  [nzData]="domainList"
-  [nzFrontPagination]="false"
-  [nzLoading]="loading"
-  [nzTotal]="total"
-  [nzPageSize]="pager.pageSize"
-  [nzPageIndex]="pager.pageIndex"
-  [nzShowSizeChanger]="false"
-  (nzQueryParams)="onQueryParamsChange($event)"
->
-  <thead>
-    <tr>
-      <th nzColumnKey="home" [nzSortFn]="true">Domain</th>
-      <th>Admin Email</th>
-      <th style="text-align: center">Links</th>
-      <th style="text-align: center">Active</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of domainList">
-      <td>
-        <a [href]="data.home" target="_blank">{{ data.home | domainName }}</a>
-      </td>
-      <td>{{ data.adminEmail }}</td>
-      <td style="text-align: center">
-        <a (click)="gotoLinks(data)">{{ data.linksCount }}</a>
-      </td>
-      <td style="text-align: center">{{ data.active }}</td>
-      <td style="text-align: center; white-space: nowrap">
-        <a
-          (click)="
-            router.navigate(['dashboard', 'domain-update'], {
-              queryParams: { id: data.id }
-            })
-          "
-        >
-          <i
-            nz-icon
-            nzType="check-circle"
-            nzTheme="fill"
+<ng-container *ngIf="(vm$ | async) as vm">
+  <nz-table
+    nzShowSizeChanger
+    nzSize="small"
+    [nzData]="vm.result"
+    [nzFrontPagination]="false"
+    [nzLoading]="vm.loading"
+    [nzTotal]="vm.total"
+    [nzShowSizeChanger]="false"
+    (nzQueryParams)="onQueryParamsChange($event)"
+  >
+    <thead>
+      <tr>
+        <th nzColumnKey="home" [nzSortFn]="true">Domain</th>
+        <th>Admin Email</th>
+        <th style="text-align: center">Links</th>
+        <th style="text-align: center">Active</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of vm.result">
+        <td>
+          <a [href]="data.home" target="_blank">{{ data.home | domainName }}</a>
+        </td>
+        <td>{{ data.adminEmail }}</td>
+        <td style="text-align: center">
+          <a (click)="gotoLinks(data)">{{ data.linksCount }}</a>
+        </td>
+        <td style="text-align: center">{{ data.active }}</td>
+        <td style="text-align: center; white-space: nowrap">
+          <a
+            (click)="
+              router.navigate(['dashboard', 'domain-update'], {
+                queryParams: { id: data.id }
+              })
+            "
+          >
+            <i
+              nz-icon
+              nzType="check-circle"
+              nzTheme="fill"
+              nz-tooltip
+              nzTooltipTitle="edit"
+            ></i>
+          </a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a
             nz-tooltip
-            nzTooltipTitle="edit"
-          ></i>
-        </a>
-        <nz-divider nzType="vertical"></nz-divider>
-        <a
-          nz-tooltip
-          nzTooltipTitle="delete"
-          nz-popconfirm
-          [nzPopconfirmTitle]="
-            'Are you sure delete ' + (data.home | domainName) + '?'
-          "
-          nzPopconfirmPlacement="left"
-          nzOkText="Delete"
-          nzCancelText="Cancel"
-          (nzOnConfirm)="delete(data.id)"
-        >
-          <i nz-icon nzType="close-circle" nzTheme="fill"></i>
-        </a>
-        <nz-divider nzType="vertical"></nz-divider>
-        <a
-          (click)="
-            router.navigate(['dashboard', 'domain-setting'], {
-              queryParams: { id: data.id }
-            })
-          "
-        >
-          <i
-            nz-icon
-            nzType="setting"
-            nzTheme="fill"
-            nz-tooltip
-            nzTooltipTitle="setting"
-          ></i>
-        </a>
-        <nz-divider nzType="vertical"></nz-divider>
-        <a
-          nz-popconfirm
-          [nzPopconfirmTitle]="'Scrap ' + (data.home | domainName) + ' now?'"
-          nzPopconfirmPlacement="left"
-          nzOkText="Scrap"
-          nzCancelText="Cancel"
-          (nzOnConfirm)="scrap(data.id)"
-        >
-          <i
-            nz-icon
-            nzType="robot"
-            nzTheme="fill"
-            nz-tooltip
-            nzTooltipTitle="scrap"
-          ></i>
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</nz-table>
+            nzTooltipTitle="delete"
+            nz-popconfirm
+            [nzPopconfirmTitle]="
+              'Are you sure delete ' + (data.home | domainName) + '?'
+            "
+            nzPopconfirmPlacement="left"
+            nzOkText="Delete"
+            nzCancelText="Cancel"
+            (nzOnConfirm)="delete(data.id)"
+          >
+            <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+          </a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a
+            (click)="
+              router.navigate(['dashboard', 'domain-setting'], {
+                queryParams: { id: data.id }
+              })
+            "
+          >
+            <i
+              nz-icon
+              nzType="setting"
+              nzTheme="fill"
+              nz-tooltip
+              nzTooltipTitle="setting"
+            ></i>
+          </a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a
+            nz-popconfirm
+            [nzPopconfirmTitle]="'Scrap ' + (data.home | domainName) + ' now?'"
+            nzPopconfirmPlacement="left"
+            nzOkText="Scrap"
+            nzCancelText="Cancel"
+            (nzOnConfirm)="scrap(data.id)"
+          >
+            <i
+              nz-icon
+              nzType="robot"
+              nzTheme="fill"
+              nz-tooltip
+              nzTooltipTitle="scrap"
+            ></i>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</ng-container>
