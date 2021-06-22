@@ -6,7 +6,7 @@ export class Pager {
   pageSize = 20;
   sortBy: string;
   sortOrder = "asc";
-  search: string;
+  search = "";
 }
 
 export class NzDataPaginator {
@@ -36,12 +36,12 @@ export class NzDataPaginator {
     return { ...this.pager };
   }
 
-  setPager(pager: Pager) {
+  setPager(pager: Partial<Pager>) {
     for (const key in pager) {
       if(this.pager[key] === pager[key]) {
         continue;
       }
-      this.pager = pager;
+      this.pager = { ...this.pager, ...pager };
       this.subject.next(this.pager);
       break;
     }

@@ -21,6 +21,21 @@ import { Pager } from "./nz-data-paginator";
 export class DomainService {
   constructor(private apollo: Apollo) {}
 
+  paging(pager: Pager) {
+    const { pageIndex, pageSize, sortBy, sortOrder, search } = pager;
+    return this.apollo
+      .query({
+        query: DOMAIN_PAGE_LIST_QUERY,
+        variables: { pageIndex, pageSize, sortBy, sortOrder, search },
+        fetchPolicy: "no-cache",
+      })
+      .pipe(
+        map((res) =>
+          pagelistResultMap<GqlDomainPageListResult>("domainPagelist", res)
+        )
+      )
+  }
+
   async fetchList(pager: Pager) {
     const { pageIndex, pageSize, sortBy, sortOrder, search } = pager;
     return this.apollo

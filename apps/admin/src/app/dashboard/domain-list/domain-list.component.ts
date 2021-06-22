@@ -1,7 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import { GqlDomainPageListResult } from "../shared/gql/dto/domain.dto";
 import { DomainPagingService } from "../shared/services/domain-paging.service";
 import { DomainService } from "../shared/services/domain.service";
@@ -12,8 +14,9 @@ import { ScraperService } from "../shared/services/scraper.service";
   templateUrl: "./domain-list.component.html",
   styleUrls: ["./domain-list.component.scss"],
 })
-export class DomainListComponent implements OnInit {
+export class DomainListComponent implements OnInit, OnDestroy {
   vm$ = this.domainPagingService.vm$;
+  notifier = new Subject();
 
   constructor(
     public router: Router,
@@ -24,7 +27,14 @@ export class DomainListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.domainPagingService.error$.subscribe((error) => this.msg.error(error));
+    this.domainPagingService.error$
+      .pipe(takeUntil(this.notifier))
+      .subscribe((error) => this.msg.error(error));
+  }
+
+  ngOnDestroy(): void {
+    this.notifier.next();
+    this.notifier.complete();
   }
 
   search(search: string) {

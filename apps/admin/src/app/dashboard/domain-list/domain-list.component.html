@@ -11,19 +11,19 @@
   </nz-page-header-extra>
 </nz-page-header>
 
-<div class="grid-search">
-  <div style="flex: 1 1 0%"></div>
-  <div style="display: flex">
-    <nz-input-group nzPrefixIcon="filter">
-      <input nz-input placeholder="filter by domain name" #txtSearch />
-    </nz-input-group>
-    <button nz-button nzType="primary" (click)="search(txtSearch.value)">
-      <i nz-icon nzType="search" nzTheme="outline"></i>Filter
-    </button>
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="grid-search">
+    <div style="flex: 1 1 0%"></div>
+    <div style="display: flex">
+      <nz-input-group nzPrefixIcon="filter">
+        <input nz-input placeholder="filter by domain name" #txtSearch [value]="vm.pager.search" />
+      </nz-input-group>
+      <button nz-button nzType="primary" (click)="search(txtSearch.value)">
+        <i nz-icon nzType="search" nzTheme="outline"></i>Filter
+      </button>
+    </div>
   </div>
-</div>
 
-<ng-container *ngIf="(vm$ | async) as vm">
   <nz-table
     nzShowSizeChanger
     nzSize="small"
