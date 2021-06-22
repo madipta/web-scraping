@@ -6,7 +6,7 @@ import { NzPagingService } from "./nz-paging.service";
 @Injectable({ providedIn: "root" })
 export class DomainPagingService {
   pagingService = new NzPagingService({ sortBy: "home" });
-  vm$ = this.pagingService.data$;
+  data$ = this.pagingService.data$;
   error$ = this.pagingService.error$;
 
   constructor(private readonly domainService: DomainService) {

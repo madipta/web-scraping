@@ -15,7 +15,7 @@ import { ScraperService } from "../shared/services/scraper.service";
   styleUrls: ["./domain-list.component.scss"],
 })
 export class DomainListComponent implements OnInit, OnDestroy {
-  vm$ = this.domainPagingService.vm$;
+  vm$ = this.domainPagingService.data$;
   notifier = new Subject();
 
   constructor(
