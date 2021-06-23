@@ -7,6 +7,7 @@ export class Pager {
   sortBy: string;
   sortOrder = "asc";
   search = "";
+  filter: Record<string, string | number> = {};
 }
 
 export class NzDataPaginator {
@@ -32,13 +33,29 @@ export class NzDataPaginator {
     this.first();
   }
 
+  getFilter() {
+    return { ...this.pager.filter };
+  }
+
+  addFilter(key: string, value: string | number) {
+    this.pager.filter[key] = value;
+  }
+
+  removeFilter(key: string) {
+    delete this.pager.filter[key];
+  }
+
+  setFilter(filter: Record<string, string | number>) {
+    this.pager.filter = filter;
+  }
+
   getPager() {
     return { ...this.pager };
   }
 
   setPager(pager: Partial<Pager>) {
     for (const key in pager) {
-      if(this.pager[key] === pager[key]) {
+      if (this.pager[key] === pager[key]) {
         continue;
       }
       this.pager = { ...this.pager, ...pager };
