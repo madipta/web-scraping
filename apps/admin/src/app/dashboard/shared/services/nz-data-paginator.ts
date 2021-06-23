@@ -51,6 +51,7 @@ export class NzDataPaginator {
         continue;
       }
       this.pager.filter = { ...this.pager.filter, ...filter };
+      this.pager.pageIndex = 1;
       this.subject.next(this.pager);
       break;
     }
