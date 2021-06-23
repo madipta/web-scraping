@@ -16,7 +16,12 @@
     <div style="flex: 1 1 0%"></div>
     <div style="display: flex">
       <nz-input-group nzPrefixIcon="filter">
-        <input nz-input placeholder="filter by domain name" #txtSearch [value]="vm.pager.search" />
+        <input
+          nz-input
+          placeholder="filter by domain name"
+          #txtSearch
+          [value]="vm.pager.search"
+        />
       </nz-input-group>
       <button nz-button nzType="primary" (click)="search(txtSearch.value)">
         <i nz-icon nzType="search" nzTheme="outline"></i>Filter

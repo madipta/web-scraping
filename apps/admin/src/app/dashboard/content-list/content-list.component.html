@@ -1,59 +1,58 @@
-<nz-page-header nzTitle="Content List">
-</nz-page-header>
+<nz-page-header nzTitle="Content List"> </nz-page-header>
 
-<div class="grid-search">
-  <div style="flex: 1 1 0%"></div>
-  <div style="display: flex">
-    <nz-input-group nzPrefixIcon="filter">
-      <input nz-input placeholder="filter by content" #txtSearch />
-    </nz-input-group>
-    <button
-      nz-button
-      nzType="primary"
-      (click)="search(txtSearch.value)"
-    >
-      <i nz-icon nzType="search" nzTheme="outline"></i>Filter
-    </button>
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="grid-search">
+    <div style="flex: 1 1 0%"></div>
+    <div style="display: flex">
+      <nz-input-group nzPrefixIcon="filter">
+        <input
+          nz-input
+          placeholder="filter by content"
+          #txtSearch
+          [value]="vm.pager.search"
+        />
+      </nz-input-group>
+      <button nz-button nzType="primary" (click)="search(txtSearch.value)">
+        <i nz-icon nzType="search" nzTheme="outline"></i>Filter
+      </button>
+    </div>
   </div>
-</div>
 
-<nz-table
-  nzShowSizeChanger
-  nzSize="small"
-  [nzData]="contentList"
-  [nzFrontPagination]="false"
-  [nzLoading]="loading"
-  [nzTotal]="total"
-  [nzPageSize]="pager.pageSize"
-  [nzPageIndex]="pager.pageIndex"
-  [nzShowSizeChanger]="false"
-  (nzQueryParams)="onQueryParamsChange($event)"
->
-  <thead>
-    <tr>
-      <th>Id</th>
-      <th>Domain</th>
-      <th nzColumnKey="Link.title" [nzSortFn]="true">Title</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of contentList">
-      <td>
-        <a [href]="data.linkUrl" target="_blank">{{ data.id }}</a>
-      </td>
-      <td>
-        {{ data.linkUrl | domainName }}
-      </td>
-      <td>
-        <a
-          (click)="
-            router.navigate(['dashboard', 'content'], {
-              queryParams: { id: data.id }
-            })
-          "
-          >{{ data.linkTitle }}</a
-        >
-      </td>
-    </tr>
-  </tbody>
-</nz-table>
+  <nz-table
+    nzShowSizeChanger
+    nzSize="small"
+    [nzFrontPagination]="false"
+    [nzLoading]="vm.loading"
+    [nzTotal]="vm.total"
+    [nzShowSizeChanger]="false"
+    (nzQueryParams)="onQueryParamsChange($event)"
+  >
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Domain</th>
+        <th nzColumnKey="Link.title" [nzSortFn]="true">Title</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of vm.result">
+        <td>
+          <a [href]="data.linkUrl" target="_blank">{{ data.id }}</a>
+        </td>
+        <td>
+          {{ data.linkUrl | domainName }}
+        </td>
+        <td>
+          <a
+            (click)="
+              router.navigate(['dashboard', 'content'], {
+                queryParams: { id: data.id }
+              })
+            "
+            >{{ data.linkTitle }}</a
+          >
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</ng-container>
