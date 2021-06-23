@@ -3,7 +3,15 @@ import { EMPTY } from "rxjs";
 import { catchError, filter, map } from "rxjs/operators";
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
 
-export type WsReturnType = { event: string; data: unknown };
+export type WsReturnType<T = unknown> = { event: string; data: T };
+export type JobCountType = {
+  domain: number;
+  content: number;
+  created: number;
+  loadingError: number;
+  scrapingError: number;
+  success: number;
+};
 
 @Injectable({
   providedIn: "root",
@@ -32,7 +40,7 @@ export class WsService {
   get jobCount$() {
     return this.connection.pipe(
       filter((v) => v.data && v.event === "jobCount"),
-      map((v) => v.data)
+      map<WsReturnType<JobCountType>, JobCountType>((v) => v.data)
     );
   }
 
