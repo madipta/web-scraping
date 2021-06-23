@@ -46,7 +46,14 @@ export class NzDataPaginator {
   }
 
   setFilter(filter: Record<string, string | number>) {
-    this.pager.filter = filter;
+    for (const key in filter) {
+      if (this.pager.filter[key] === filter[key]) {
+        continue;
+      }
+      this.pager.filter = { ...this.pager.filter, ...filter };
+      this.subject.next(this.pager);
+      break;
+    }
   }
 
   getPager() {

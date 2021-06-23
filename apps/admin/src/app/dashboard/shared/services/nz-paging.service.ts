@@ -63,4 +63,20 @@ export class NzPagingService<T = unknown> {
   onQueryParamsChange(params: NzTableQueryParams) {
     this.paginator.onQueryParamsChange(params);
   }
+
+  getFilter() {
+    return this.paginator.getFilter();
+  }
+
+  addFilter(key: string, value: string | number) {
+    this.paginator.addFilter(key, value);
+  }
+
+  removeFilter(key: string) {
+    this.paginator.removeFilter(key);
+  }
+
+  setFilter(filter: Record<string, string | number>) {
+    this.paginator.setFilter(filter);
+  }
 }
