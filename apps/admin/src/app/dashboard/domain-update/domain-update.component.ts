@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { DomainService } from "../shared/services/domain.service";
+import { DomainPagingService } from "../shared/services/domain-paging.service";
 
 @Component({
   selector: "web-scraping-domain-update",
@@ -18,7 +19,8 @@ export class DomainUpdateComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private msg: NzMessageService,
-    private domainService: DomainService
+    private domainService: DomainService,
+    private domainPagingService: DomainPagingService
   ) {}
 
   ngOnInit(): void {
@@ -68,6 +70,7 @@ export class DomainUpdateComponent implements OnInit {
       this.msg.error(res.error || "Failed!");
     } else {
       this.msg.success("Success!");
+      this.domainPagingService.refresh();
       this.location.back();
     }
   }
