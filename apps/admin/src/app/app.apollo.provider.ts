@@ -21,8 +21,16 @@ function createApollo(httpLink: HttpLink) {
       },
     };
   });
-  const errorLink = onError(({ response }) => {
+  const errorLink = onError(({ networkError, response }) => {
+    if (networkError) {
+      console.error(
+        "Apollo networkError",
+        (networkError as any).error.errors[0].message
+      );
+      return;
+    }
     const errorMessage = response.errors[0].message;
+    console.error("Apollo errorLink", errorMessage);
     response.errors = null;
     response.data = { errorMessage };
   });
