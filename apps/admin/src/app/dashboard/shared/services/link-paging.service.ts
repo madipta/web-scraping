@@ -12,7 +12,6 @@ export class LinkPagingService {
   constructor(private linkService: LinkService) {
     this.pagingService.pager$.subscribe(async (pager) => {
       const domainId = +pager.filter.domainId;
-      console.log(domainId);
       if (!isNaN(domainId)) {
         return this.pagingService.load(
           this.linkService.fetchList(pager, domainId)
