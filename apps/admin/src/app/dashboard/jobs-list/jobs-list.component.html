@@ -1,49 +1,52 @@
 <nz-page-header nzTitle="Scrape Job List"></nz-page-header>
 
-<div class="grid-search">
-  <div style="flex: 1 1 0%"></div>
-  <div style="display: flex">
-    <nz-input-group nzPrefixIcon="filter">
-      <input nz-input placeholder="filter by url / title" #txtSearch />
-    </nz-input-group>
-    <button
-      nz-button
-      nzType="primary"
-      (click)="search(txtSearch.value)"
-    >
-      <i nz-icon nzType="search" nzTheme="outline"></i>Filter
-    </button>
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="grid-search">
+    <div style="flex: 1 1 0%"></div>
+    <div style="display: flex">
+      <nz-input-group nzPrefixIcon="filter">
+        <input
+          nz-input
+          placeholder="filter by url / title"
+          #txtSearch
+          [value]="vm.pager.search"
+        />
+      </nz-input-group>
+      <button nz-button nzType="primary" (click)="search(txtSearch.value)">
+        <i nz-icon nzType="search" nzTheme="outline"></i>Filter
+      </button>
+    </div>
   </div>
-</div>
 
-<nz-table
-  nzShowSizeChanger
-  nzSize="small"
-  [nzData]="scrapeJobList"
-  [nzFrontPagination]="false"
-  [nzLoading]="loading"
-  [nzTotal]="total"
-  [nzPageSize]="pager.pageSize"
-  [nzPageIndex]="pager.pageIndex"
-  [nzShowSizeChanger]="false"
-  (nzQueryParams)="onQueryParamsChange($event)"
->
-  <thead>
-    <tr>
-      <th nzColumnKey="url" [nzSortFn]="true">URL</th>
-      <th>Status</th>
-      <th nzColumnKey="created_at" [nzSortFn]="true">Created At</th>
-      <th nzColumnKey="finished_at" [nzSortFn]="true">Finished At</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of scrapeJobList">
-      <td>
-        <a [href]="data.url" target="_blank">{{ data.url | link }}</a>
-      </td>
-      <td>{{ data.status }}</td>
-      <td>{{ data.createdAt | date:"YYYY-MM-dd HH:mm:ss"}}</td>
-      <td>{{ data.finishedAt | date:"YYYY-MM-dd HH:mm:ss"}}</td>
-    </tr>
-  </tbody>
-</nz-table>
+  <nz-table
+    nzShowSizeChanger
+    nzSize="small"
+    [nzData]="vm.result"
+    [nzFrontPagination]="false"
+    [nzLoading]="vm.loading"
+    [nzTotal]="vm.total"
+    [nzPageSize]="vm.pager.pageSize"
+    [nzPageIndex]="vm.pager.pageIndex"
+    [nzShowSizeChanger]="false"
+    (nzQueryParams)="onQueryParamsChange($event)"
+  >
+    <thead>
+      <tr>
+        <th nzColumnKey="url" [nzSortFn]="true">URL</th>
+        <th>Status</th>
+        <th nzColumnKey="created_at" [nzSortFn]="true">Created At</th>
+        <th nzColumnKey="finished_at" [nzSortFn]="true">Finished At</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of vm.result">
+        <td>
+          <a [href]="data.url" target="_blank">{{ data.url | link }}</a>
+        </td>
+        <td>{{ data.status }}</td>
+        <td>{{ data.createdAt | date: "YYYY-MM-dd HH:mm:ss" }}</td>
+        <td>{{ data.finishedAt | date: "YYYY-MM-dd HH:mm:ss" }}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</ng-container>
