@@ -32,9 +32,12 @@
   <nz-table
     nzShowSizeChanger
     nzSize="small"
+    [nzData]="vm.result"
     [nzFrontPagination]="false"
     [nzLoading]="vm.loading"
     [nzTotal]="vm.total"
+    [nzPageSize]="vm.pager.pageSize"
+    [nzPageIndex]="vm.pager.pageIndex"
     [nzShowSizeChanger]="false"
     (nzQueryParams)="onQueryParamsChange($event)"
   >

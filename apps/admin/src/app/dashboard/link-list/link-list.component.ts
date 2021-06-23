@@ -8,8 +8,8 @@ import { take, takeUntil } from "rxjs/operators";
 import { GqlGetDomainResult } from "../shared/gql/dto/domain.dto";
 import { GqlLinkPageListResult } from "../shared/gql/dto/link.dto";
 import { DomainService } from "../shared/services/domain.service";
+import { LinkPagingService } from "../shared/services/link-paging.service";
 import { LinkService } from "../shared/services/link.service";
-import { NzDataPaginator } from "../shared/services/nz-data-paginator";
 import { ScraperService } from "../shared/services/scraper.service";
 
 @Component({
@@ -19,11 +19,7 @@ import { ScraperService } from "../shared/services/scraper.service";
 })
 export class LinkListComponent implements OnInit, OnDestroy {
   domain: GqlGetDomainResult;
-  total = 1;
-  linkList: GqlLinkPageListResult[] = [];
-  loading = true;
-  paginator = new NzDataPaginator({ sortBy: "title" });
-  pager = this.paginator.getPager();
+  vm$ = this.linkPagingService.data$;
   notifier = new Subject();
 
   constructor(
@@ -33,33 +29,20 @@ export class LinkListComponent implements OnInit, OnDestroy {
     private msg: NzMessageService,
     private domainService: DomainService,
     private linkService: LinkService,
-    private scraperService: ScraperService
+    private scraperService: ScraperService,
+    private linkPagingService: LinkPagingService
   ) {}
 
   ngOnInit(): void {
+    this.linkPagingService.error$
+      .pipe(takeUntil(this.notifier))
+      .subscribe((error) => this.msg.error(error));
     combineLatest([this.route.params, this.route.queryParams])
       .pipe(take(1))
       .subscribe(async ([, query]) => {
-        this.domain = await this.getDomain(+query.id);
-        this.paginator.pager$
-          .pipe(takeUntil(this.notifier))
-          .subscribe(async (pager) => {
-            this.pager = pager;
-            if (!this.domain) {
-              return;
-            }
-            this.loading = true;
-            const res = await this.linkService.fetchList(
-              this.pager,
-              this.domain.id
-            );
-            this.loading = false;
-            this.total = res.total;
-            this.linkList = res.result;
-            if (res.error) {
-              this.msg.error(res.error);
-            }
-          });
+        const domainId = +query.id;
+        this.domain = await this.getDomain(domainId);
+        this.linkPagingService.setFilter({ domainId });
       });
   }
 
@@ -69,11 +52,11 @@ export class LinkListComponent implements OnInit, OnDestroy {
   }
 
   search(search: string) {
-    this.paginator.search(search);
+    this.linkPagingService.search(search);
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
-    this.paginator.onQueryParamsChange(params);
+    this.linkPagingService.onQueryParamsChange(params);
   }
 
   async getDomain(id: number) {
@@ -92,7 +75,7 @@ export class LinkListComponent implements OnInit, OnDestroy {
       this.msg.error(result.error || "Delete failed!");
     } else {
       this.msg.success("Deleted!");
-      this.paginator.refresh();
+      this.linkPagingService.refresh();
     }
   }
 

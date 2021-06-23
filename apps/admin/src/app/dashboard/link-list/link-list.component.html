@@ -7,87 +7,90 @@
   </nz-page-header-extra>
 </nz-page-header>
 
-<div class="grid-search">
-  <div style="flex: 1 1 0%"></div>
-  <div style="display: flex">
-    <nz-input-group nzPrefixIcon="filter">
-      <input nz-input placeholder="filter by title" #txtSearch />
-    </nz-input-group>
-    <button
-      nz-button
-      nzType="primary"
-      (click)="search(txtSearch.value)"
-    >
-      <i nz-icon nzType="search" nzTheme="outline"></i>Filter
-    </button>
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="grid-search">
+    <div style="flex: 1 1 0%"></div>
+    <div style="display: flex">
+      <nz-input-group nzPrefixIcon="filter">
+        <input
+          nz-input
+          placeholder="filter by title"
+          #txtSearch
+          [value]="vm.pager.search"
+        />
+      </nz-input-group>
+      <button nz-button nzType="primary" (click)="search(txtSearch.value)">
+        <i nz-icon nzType="search" nzTheme="outline"></i>Filter
+      </button>
+    </div>
   </div>
-</div>
 
-<nz-table
-  nzShowSizeChanger
-  nzSize="small"
-  [nzData]="linkList"
-  [nzFrontPagination]="false"
-  [nzLoading]="loading"
-  [nzTotal]="total"
-  [nzPageSize]="pager.pageSize"
-  [nzPageIndex]="pager.pageIndex"
-  [nzShowSizeChanger]="false"
-  (nzQueryParams)="onQueryParamsChange($event)"
->
-  <thead>
-    <tr>
-      <th nzColumnKey="title" [nzSortFn]="true">Title</th>
-      <th style="text-align: center">Scraped</th>
-      <th style="text-align: center">Broken</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of linkList">
-      <td>
-        <a [href]="data.url" target="_blank">{{ data.title }}</a>
-      </td>
-      <td style="text-align: center">
-        <a (click)="gotoContent(data)">
+  <nz-table
+    nzShowSizeChanger
+    nzSize="small"
+    [nzData]="vm.result"
+    [nzFrontPagination]="false"
+    [nzLoading]="vm.loading"
+    [nzTotal]="vm.total"
+    [nzPageSize]="vm.pager.pageSize"
+    [nzPageIndex]="vm.pager.pageIndex"
+    [nzShowSizeChanger]="false"
+    (nzQueryParams)="onQueryParamsChange($event)"
+  >
+    <thead>
+      <tr>
+        <th nzColumnKey="title" [nzSortFn]="true">Title</th>
+        <th style="text-align: center">Scraped</th>
+        <th style="text-align: center">Broken</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of vm.result">
+        <td>
+          <a [href]="data.url" target="_blank">{{ data.title }}</a>
+        </td>
+        <td style="text-align: center">
+          <a (click)="gotoContent(data)">
+            <web-scraping-checklist
+              [value]="data.scraped"
+            ></web-scraping-checklist>
+          </a>
+        </td>
+        <td style="text-align: center">
           <web-scraping-checklist
-            [value]="data.scraped"
+            [value]="data.broken"
+            trueIcon="warning"
+            falseIcon=""
+            trueColor="darkred"
+            falseColor="green"
           ></web-scraping-checklist>
-        </a>
-      </td>
-      <td style="text-align: center">
-        <web-scraping-checklist
-          [value]="data.broken"
-          trueIcon="warning"
-          falseIcon=""
-          trueColor="darkred"
-          falseColor="green"
-        ></web-scraping-checklist>
-      </td>
-      <td style="text-align: center; white-space: nowrap">
-        <a (click)="scrapOne(data.id)">
-          <i
-            nz-icon
-            nzType="robot"
-            nzTheme="fill"
+        </td>
+        <td style="text-align: center; white-space: nowrap">
+          <a (click)="scrapOne(data.id)">
+            <i
+              nz-icon
+              nzType="robot"
+              nzTheme="fill"
+              nz-tooltip
+              nzTooltipTitle="scrap content"
+            ></i>
+          </a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a
             nz-tooltip
-            nzTooltipTitle="scrap content"
-          ></i>
-        </a>
-        <nz-divider nzType="vertical"></nz-divider>
-        <a
-          nz-tooltip
-          nzTooltipTitle="delete"
-          nz-popconfirm
-          nzPopconfirmTitle="Are you sure delete this link?"
-          nzPopconfirmPlacement="left"
-          nzOkText="Delete"
-          nzCancelText="Cancel"
-          (nzOnConfirm)="delete(data.id)"
-        >
-          <i nz-icon nzType="close-circle" nzTheme="fill"></i>
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</nz-table>
+            nzTooltipTitle="delete"
+            nz-popconfirm
+            nzPopconfirmTitle="Are you sure delete this link?"
+            nzPopconfirmPlacement="left"
+            nzOkText="Delete"
+            nzCancelText="Cancel"
+            (nzOnConfirm)="delete(data.id)"
+          >
+            <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</ng-container>
