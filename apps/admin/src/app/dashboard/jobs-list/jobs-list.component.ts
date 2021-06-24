@@ -38,8 +38,12 @@ export class JobsListComponent implements OnInit, OnDestroy {
     this.scrapeJobPagingService.search(search);
   }
 
+  refresh() {
+    this.scrapeJobPagingService.refresh();
+  }
+
   onQueryParamsChange(params: NzTableQueryParams): void {
-    // this.scrapeJobPagingService.onQueryParamsChange(params);
+    this.scrapeJobPagingService.onQueryParamsChange(params);
   }
 
   ngOnDestroy(): void {

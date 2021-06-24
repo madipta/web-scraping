@@ -55,6 +55,10 @@ export class LinkListComponent implements OnInit, OnDestroy {
     this.linkPagingService.search(search);
   }
 
+  refresh() {
+    this.linkPagingService.refresh();
+  }
+
   onQueryParamsChange(params: NzTableQueryParams): void {
     this.linkPagingService.onQueryParamsChange(params);
   }

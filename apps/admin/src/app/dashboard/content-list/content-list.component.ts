@@ -36,6 +36,10 @@ export class ContentListComponent implements OnInit, OnDestroy {
     this.contentPagingService.search(search);
   }
 
+  refresh() {
+    this.contentPagingService.refresh();
+  }
+
   onQueryParamsChange(params: NzTableQueryParams): void {
     this.contentPagingService.onQueryParamsChange(params);
   }
