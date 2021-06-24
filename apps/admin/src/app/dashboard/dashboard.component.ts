@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "./shared/services/auth.service";
 import { ScrapeJobService } from "./shared/services/scrape-job.service";
@@ -8,7 +8,7 @@ import { ScrapeJobService } from "./shared/services/scrape-job.service";
   templateUrl: "./dashboard.component.html",
   styleUrls: ["./dashboard.component.css"],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   jobCount$ = this.jobService.jobCount$;
 
   constructor(
@@ -16,6 +16,10 @@ export class DashboardComponent {
     private authService: AuthService,
     private jobService: ScrapeJobService
   ) {}
+  
+  ngOnInit(): void {
+    this.jobService.initJobCount();
+  }
 
   signout() {
     this.authService.logout();

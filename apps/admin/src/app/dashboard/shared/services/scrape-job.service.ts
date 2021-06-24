@@ -12,14 +12,9 @@ import { WsService } from "./ws.service";
 
 @Injectable({ providedIn: "root" })
 export class ScrapeJobService {
-  
-  constructor(private apollo: Apollo, private wsService: WsService) {
-    this.initJobCount();
-  }
+  jobCount$ = this.wsService.jobCount$;
 
-  get jobCount$() {
-    return this.wsService.jobCount$;
-  }
+  constructor(private apollo: Apollo, private wsService: WsService) {}
 
   async fetchList(pager: Pager, status: string) {
     const { pageIndex, pageSize, sortBy, sortOrder, search } = pager;

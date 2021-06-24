@@ -41,6 +41,10 @@ export class DomainListComponent implements OnInit, OnDestroy {
     this.domainPagingService.search(search);
   }
 
+  refresh() {
+    this.domainPagingService.refresh();
+  }
+
   onQueryParamsChange(params: NzTableQueryParams): void {
     this.domainPagingService.onQueryParamsChange(params);
   }
