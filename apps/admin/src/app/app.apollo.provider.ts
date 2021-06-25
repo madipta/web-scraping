@@ -23,14 +23,11 @@ function createApollo(httpLink: HttpLink) {
   });
   const errorLink = onError(({ networkError, response }) => {
     if (networkError) {
-      console.error(
-        "Apollo networkError",
-        (networkError as any).error.errors[0].message
-      );
+      console.error("Network Error", networkError.message);
       return;
     }
     const errorMessage = response.errors[0].message;
-    console.error("Apollo errorLink", errorMessage);
+    console.error("Apollo Error", errorMessage);
     response.errors = null;
     response.data = { errorMessage };
   });
