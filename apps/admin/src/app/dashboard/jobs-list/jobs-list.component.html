@@ -33,8 +33,8 @@
           <a [href]="data.url" target="_blank">{{ data.url | link }}</a>
         </td>
         <td>{{ data.status }}</td>
-        <td style="white-space: nowrap;">{{ data.createdAt | date: "YYYY-MM-dd HH:mm:ss" }}</td>
-        <td style="white-space: nowrap;">{{ data.finishedAt | date: "YYYY-MM-dd HH:mm:ss" }}</td>
+        <td style="white-space: nowrap;">{{ data.createdAt | date: "MMM, d HH:mm:ss" }}</td>
+        <td style="white-space: nowrap;">{{ data.finishedAt | date: "MMM, d HH:mm:ss" }}</td>
       </tr>
     </tbody>
   </nz-table>
