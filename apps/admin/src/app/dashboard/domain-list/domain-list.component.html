@@ -1,12 +1,8 @@
 <nz-page-header nzTitle="Domain List">
   <nz-page-header-extra>
-    <a
-      nz-tooltip
-      nzTooltipTitle="Register new domain"
-      (click)="router.navigate(['dashboard', 'domain-update'])"
-    >
+    <a (click)="router.navigate(['dashboard', 'domain-update'])">
       <i nz-icon nzType="plus-circle"></i>
-      <span> New</span>
+      <span> New Domain</span>
     </a>
   </nz-page-header-extra>
 </nz-page-header>
