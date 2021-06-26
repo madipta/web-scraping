@@ -122,7 +122,7 @@ export class UserResolver {
     }
   }
 
-  @Role("Any")
+  @Role("any")
   @Mutation(() => UserResult)
   async updateUser(@Args("input") dto: UserUpdateInput): Promise<UserResult> {
     try {

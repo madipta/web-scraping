@@ -37,7 +37,7 @@ export class GqlAuthGuard implements CanActivate {
         const user = await this.userRepo.findOne(decoded[payloadId]);
         if (user) {
           gqlContext['user'] = user;
-          if (roles.includes('Any')) {
+          if (roles.includes("any")) {
             return true;
           }
           return roles.includes(user.role);

@@ -62,6 +62,7 @@ export class LinkResolver {
     }
   }
 
+  @Role("any")
   @Query(() => LinkResult)
   async getLinkById(@Args("input") dto: AutoNumberInput): Promise<LinkResult> {
     try {
@@ -72,6 +73,7 @@ export class LinkResolver {
     }
   }
 
+  @Role("any")
   @Query(() => LinkPageListResult)
   async linkPagelist(
     @Args("input") dto: LinkPageListInput

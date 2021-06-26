@@ -126,6 +126,7 @@ export class DomainResolver {
     }
   }
 
+  @Role("any")
   @Query(() => DomainResult)
   async getDomainById(
     @Args("input") dto: AutoNumberInput
@@ -139,7 +140,7 @@ export class DomainResolver {
     }
   }
 
-  @Role("admin", "staff")
+  @Role("any")
   @Query(() => DomainPageListResult)
   async domainPagelist(
     @Args("input") dto: PageListInput
@@ -177,6 +178,7 @@ export class DomainResolver {
     }
   }
 
+  @Role("any")
   @Query(() => Number)
   async getDomainCount(): Promise<number> {
     return this.domainRepo.count({ select: ["id"] });

@@ -8,6 +8,7 @@ import {
   Resolver,
 } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Role } from "@web-scraping/auth";
 import { Content, Domain, RefineSortParam } from "@web-scraping/orm";
 import { Repository } from "typeorm";
 import { AutoNumberInput } from "../core/auto-number-input";
@@ -46,6 +47,7 @@ export class ContentResolver {
     private readonly contentRepo: Repository<Content>
   ) {}
 
+  @Role("any")
   @Query(() => ContentResult)
   async getContentById(
     @Args("input") dto: AutoNumberInput
@@ -69,6 +71,7 @@ export class ContentResolver {
     }
   }
 
+  @Role("any")
   @Query(() => ContentPageListResult)
   async contentPagelist(
     @Args("input") dto: PageListInput
@@ -103,6 +106,7 @@ export class ContentResolver {
     }
   }
 
+  @Role("any")
   @Query(() => Number)
   async getContentCount(): Promise<number> {
     return this.contentRepo.count({ select: ["id"] });

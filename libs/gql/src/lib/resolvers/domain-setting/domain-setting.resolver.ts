@@ -53,6 +53,7 @@ export class DomainSettingResolver {
     }
   }
 
+  @Role("any")
   @Query(() => DomainSettingResult)
   async getDomainSettingById(
     @Args("input") dto: AutoNumberInput

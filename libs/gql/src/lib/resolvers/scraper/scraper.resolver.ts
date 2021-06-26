@@ -12,6 +12,7 @@ import { Repository } from "typeorm";
 import { AutoNumberInput } from "../core/auto-number-input";
 import { BaseResult } from "../core/base-result";
 import { ScrapeQueueService } from "@web-scraping/scrape-queue";
+import { Role } from "@web-scraping/auth";
 
 @Resolver()
 export class ScraperResolver {
@@ -28,12 +29,14 @@ export class ScraperResolver {
     private readonly scrapeQueueService: ScrapeQueueService
   ) {}
 
+  @Role("any")
   @Query(() => Boolean)
   async initJobCount() {
     await this.scrapeJobCountService.publishScrapeJobCount();
     return true;
   }
 
+  @Role("any")
   @Mutation(() => BaseResult)
   async scrapeIndex(@Args("input") dto: AutoNumberInput): Promise<BaseResult> {
     try {
@@ -53,6 +56,7 @@ export class ScraperResolver {
     }
   }
 
+  @Role("any")
   @Mutation(() => BaseResult)
   async scrapeContent(
     @Args("input") dto: AutoNumberInput
@@ -72,6 +76,7 @@ export class ScraperResolver {
     }
   }
 
+  @Role("any")
   @Mutation(() => BaseResult)
   async scrapeContentByDomain(
     @Args("input") dto: AutoNumberInput

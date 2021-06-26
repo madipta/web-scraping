@@ -7,6 +7,7 @@ import {
   Resolver,
 } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Role } from "@web-scraping/auth";
 import { RefineSortParam, ScrapeJob } from "@web-scraping/orm";
 import { Repository } from "typeorm";
 import { PageListInput } from "../core/page-list-input";
@@ -37,6 +38,7 @@ export class ScrapeJobResolver {
     private readonly scrapJobRepo: Repository<ScrapeJob>
   ) {}
 
+  @Role("any")
   @Query(() => ScrapeJobPageListResult)
   async scrapeJobPagelist(
     @Args("input") dto: ScrapeJobPageListInput
@@ -75,6 +77,7 @@ export class ScrapeJobResolver {
     }
   }
 
+  @Role("any")
   @Query(() => Number)
   async getScrapeJobCount(
     @Args("input") { status }: GetScrapeJobCountnput
