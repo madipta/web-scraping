@@ -1,10 +1,11 @@
 import React from "react";
 
-/* eslint-disable-next-line */
-export interface AppHeaderProps {}
-
-export function AppHeader(props: AppHeaderProps) {
-  return <div className="text-3xl mb-10">Search Engine</div>;
+export function AppHeader() {
+  return (
+    <div className="fixed top-0 left-0 right-0 bg-green-600 py-3 px-5 mb-2 z-10 shadow-lg">
+      <h1 className="leading-snug text-white text-base font-semibold">Scraped Portal</h1>
+    </div>
+  );
 }
 
 export default AppHeader;

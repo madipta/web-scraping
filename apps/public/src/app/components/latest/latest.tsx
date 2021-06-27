@@ -5,48 +5,51 @@ export interface LatestProps {}
 
 export function Latest(props: LatestProps) {
   return (
-    <ul className="flex flex-col flex-1 text-sm md:text-base mr-6">
-      <li className="flex flex-col md:flex-row items-center mb-6 md:mr-10">
-        <img
-          className="flex-none w-full md:w-44 mb-2 md:mb-0"
-          src="assets/md1.jpeg"
-          alt=""
-        ></img>
-        <a href="/" className="text-gray-600 font-semibold mx-4">
-          3 Calon Lawan Charles Oliveira di UFC
-        </a>
-      </li>
-      <li className="flex flex-col md:flex-row items-center mb-6 md:mr-10">
-        <img
-          className="flex-none w-full md:w-44 mb-2 md:mb-0"
-          src="assets/md2.jpeg"
-          alt=""
-        ></img>
-        <a href="/" className="text-gray-600 font-semibold mx-4">
-          Man Utd vs Fulham: Solskjaer Harap Suporter Tak Rusuh
-        </a>
-      </li>
-      <li className="flex flex-col md:flex-row items-center mb-6 md:mr-10">
-        <img
-          className="flex-none w-full md:w-44 mb-2 md:mb-0"
-          src="assets/md3.jpeg"
-          alt=""
-        ></img>
-        <a href="/" className="text-gray-600 font-semibold mx-4">
-          Hadapi Lonjakan Kasus Covid, DKI Siapkan Ranjang Isolasi-ICU
-        </a>
-      </li>
-      <li className="flex flex-col md:flex-row items-center mb-6 md:mr-10">
-        <img
-          className="flex-none w-full md:w-44 mb-2 md:mb-0"
-          src="assets/md4.jpg"
-          alt=""
-        ></img>
-        <a href="/" className="text-gray-600 font-semibold mx-4">
-          AS Selidiki Penyakit Misterius yang Muncul Dekat Gedung Putih
-        </a>
-      </li>
-    </ul>
+    <div className="col-start-1 col-end-13 text-xs mt-5">
+      <h2 className="text-base font-semibold mb-2">Berita terakhir</h2>
+      <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-5">
+        <li>
+          <img className="flex-none w-full" src="assets/md1.jpeg" alt=""></img>
+          <a
+            href="/"
+            rel="nofollow"
+            className="inline-block text-gray-600 font-semibold p-1"
+          >
+            3 Calon Lawan Charles Oliveira di UFC
+          </a>
+        </li>
+        <li>
+          <img className="flex-none w-full" src="assets/md2.jpeg" alt=""></img>
+          <a
+            href="/"
+            rel="nofollow"
+            className="inline-block text-gray-600 font-semibold p-1"
+          >
+            Man Utd vs Fulham: Solskjaer Harap Suporter Tak Rusuh
+          </a>
+        </li>
+        <li>
+          <img className="flex-none w-full" src="assets/md3.jpeg" alt=""></img>
+          <a
+            href="/"
+            rel="nofollow"
+            className="inline-block text-gray-600 font-semibold p-1"
+          >
+            Hadapi Lonjakan Kasus Covid, DKI Siapkan Ranjang Isolasi-ICU
+          </a>
+        </li>
+        <li>
+          <img className="flex-none w-full" src="assets/md4.jpg" alt=""></img>
+          <a
+            href="/"
+            rel="nofollow"
+            className="inline-block text-gray-600 font-semibold p-1"
+          >
+            AS Selidiki Penyakit Misterius yang Muncul Dekat Gedung Putih
+          </a>
+        </li>
+      </ul>
+    </div>
   );
 }
 
