@@ -10,7 +10,7 @@ export function App() {
   return (
     <>
       <AppHeader></AppHeader>
-      <div className="grid grid-cols-12 font-sans text-sm px-3 py-20 mx-auto">
+      <div className="grid grid-cols-12 font-sans text-sm px-3 py-24 mx-auto">
         <SearchInput></SearchInput>
         <MainHeadline></MainHeadline>
         <SubHeadlines></SubHeadlines>

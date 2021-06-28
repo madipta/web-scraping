@@ -6,7 +6,8 @@ export interface LatestProps {}
 export function Latest(props: LatestProps) {
   return (
     <div className="col-start-1 col-end-13 text-xs mt-5">
-      <h2 className="text-base font-semibold mb-2">Berita terakhir</h2>
+      <h2 className="leading-tight text-sm text-gray-600 font-semibold uppercase">Berita Terkini</h2>
+      <hr className="w-8 h-2 border-t-0 border-b-4 border-yellow-500 mb-4"></hr>
       <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-5">
         <li>
           <img className="flex-none w-full" src="assets/md1.jpeg" alt=""></img>

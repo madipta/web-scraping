@@ -6,7 +6,8 @@ export interface TrendingProps {}
 export function Trending(props: TrendingProps) {
   return (
     <div className="col-start-1 col-end-13 mt-5">
-      <h2 className="text-base font-semibold mb-2">Trend minggu ini</h2>
+      <h2 className="leading-tight text-sm text-gray-600 font-semibold uppercase">Berita Populer</h2>
+      <hr className="w-8 h-2 border-t-0 border-b-4 border-yellow-500 mb-4"></hr>
       <ul className="flex w-full items-stretch pb-4 overflow-x-auto">
         <li className="flex flex-none flex-col bg-gray-100 w-56 mr-4 overflow-hidden">
           <img className="" src="assets/sub1.jpeg" alt=""></img>
