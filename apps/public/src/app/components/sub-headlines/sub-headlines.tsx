@@ -5,7 +5,7 @@ export interface SubHeadlinesProps {}
 
 export function SubHeadlines(props: SubHeadlinesProps) {
   return (
-    <div className="col-start-1 col-end-13 md:col-start-8 text-gray-600 text-xs font-medium mt-5 md:mt-0 overflow-auto">
+    <div className="col-start-1 col-end-13 md:col-start-8 text-gray-600 text-xs font-medium mt-10 md:mt-0 overflow-auto">
       <a href="#url" className="flex mb-5 md:mb-3">
         <img src="assets/hl1.jpeg" alt="" className="object-cover w-36 mr-3"></img>
         <p className="flex-1">
