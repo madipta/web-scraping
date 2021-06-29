@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import SubHeadlines from './sub-headlines';
+import SearchResult from './search-result';
 
-describe('SubHeadlines', () => {
+describe('SearchResult', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(< SubHeadlines />);
+    const { baseElement } = render(< SearchResult />);
     expect(baseElement).toBeTruthy();
   });
 });

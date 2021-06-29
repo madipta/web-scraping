@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import Trending from './trending';
+import Main from './main';
 
-describe('Trending', () => {
+describe('Main', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(< Trending />);
+    const { baseElement } = render(< Main />);
     expect(baseElement).toBeTruthy();
   });
 });
