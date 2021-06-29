@@ -6,7 +6,7 @@ export interface SearchInputProps {}
 
 export function SearchInput(props: SearchInputProps) {
   return (
-    <div className="col-start-1 col-end-13 flex flex-nowrap w-10/12 sm:w-7/12 md:w-6/12 overflow-hidden rounded-r-full mx-auto mb-12">
+    <div className="col-start-1 col-end-13 flex flex-nowrap w-10/12 sm:w-7/12 md:w-6/12 leading-tight overflow-hidden rounded-r-full mx-auto mb-12">
       <input
         type="search"
         placeholder="What are you searching for?"
