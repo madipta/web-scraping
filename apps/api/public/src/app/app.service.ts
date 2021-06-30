@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class AppService {
-  getData(): { message: string } {
-    return { message: "Welcome to api/public!" };
+  search(searchText: string): { message: string } {
+    return { message: searchText };
   }
 }
