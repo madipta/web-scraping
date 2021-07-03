@@ -37,3 +37,5 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+/apps/public/src/app/styles/tailwind.css
