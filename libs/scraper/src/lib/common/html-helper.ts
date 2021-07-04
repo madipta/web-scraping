@@ -46,12 +46,7 @@ export class HtmlHelper {
     if (path) {
       const imageEl = this.$(path);
       if (imageEl.length) {
-        imageEl
-          .removeAttr("width")
-          .removeAttr("height")
-          .removeAttr("style")
-          .removeAttr("class");
-        return this.$.html(imageEl);
+        return imageEl.attr("src");
       }
     }
     return null;

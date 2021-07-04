@@ -9,6 +9,7 @@ export class PagingLooper implements ILooper {
     let links = [];
     let errorCount = 0;
     let totalErrorCount = 0;
+    const errorWaitInMs = 3000;
     const maxPage = 1000;
     const maxErrorCount = 3;
     const maxTotalErrorCount = 100;
@@ -27,13 +28,19 @@ export class PagingLooper implements ILooper {
         page--;
         errorCount++;
         totalErrorCount++;
-        console.error(`[PagingLooper] ${errorCount}x, total:${totalErrorCount}`);
-        if (totalErrorCount >= maxTotalErrorCount) {
+        console.error(
+          `[PagingLooper] error count: ${errorCount}x, total:${totalErrorCount}x`
+        );
+        if (
+          totalErrorCount >= maxTotalErrorCount ||
+          errorCount > maxErrorCount
+        ) {
           throw "[PagingLooper] too many errors!";
         }
-        if (errorCount <= maxErrorCount) {
-          continue;
-        }
+        console.error(`wait ${errorWaitInMs}ms`);
+        await new Promise((resolve) => {
+          setTimeout(() => resolve, errorWaitInMs);
+        });
       }
     } while (links && links.length && page <= maxPage);
     return false;
