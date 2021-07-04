@@ -2,7 +2,9 @@ import React from "react";
 import { ReactComponent as SearchIcon } from '../../icons/search.svg';
 
 /* eslint-disable-next-line */
-export interface SearchInputProps {}
+export interface SearchInputProps {
+  q: string;
+}
 
 export function SearchInput(props: SearchInputProps) {
   return (
@@ -10,6 +12,7 @@ export function SearchInput(props: SearchInputProps) {
       <input
         type="search"
         placeholder="What are you searching for?"
+        defaultValue={props.q}
         className="flex-1 focus:outline-none min-w-0 px-3 py-2 rounder-l-2 border border-r-0 border-gray-200"
       ></input>
       <button className="flex-none flex items-center bg-yellow-500 text-white text-xs font-medium pl-3 pr-4 sm:pr-6">
