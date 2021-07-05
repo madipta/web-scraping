@@ -31,7 +31,7 @@ export function Main() {
   ];
   return (
     <div className="auto-rows-max col-start-1 col-end-13 grid grid-cols-12">
-      <SearchInput q={""}></SearchInput>
+      <SearchInput q={""} search={(text) => alert(text)}></SearchInput>
       <SearchResult result={result}></SearchResult>
     </div>
   );
