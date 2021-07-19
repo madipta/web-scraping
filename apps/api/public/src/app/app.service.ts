@@ -10,7 +10,19 @@ export class AppService {
     private readonly contentRepo: Repository<Content>
   ) {}
 
-  search(searchText: string): { message: string } {
-    return { message: searchText };
+  async search(searchText: string) {
+    const builder = this.contentRepo
+      .createQueryBuilder("C")
+      .select("C.id", "id")
+      .addSelect("C.title", "title")
+      .addSelect("C.image_html", "image_html")
+      .leftJoin("C.link", "L")
+      .addSelect("L.url", "url");
+
+    const tsWhere = "search_vector @@ to_tsquery('simple', :search)";
+    builder.where(tsWhere, { search: `${searchText}:*` });
+    builder.orderBy(`ts_rank(search_vector, to_tsquery('simple', :search))`, "DESC");
+
+    return builder.getRawMany();
   }
 }

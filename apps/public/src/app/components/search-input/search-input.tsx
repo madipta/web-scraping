@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { ReactComponent as SearchIcon } from '../../icons/search.svg';
 
-/* eslint-disable-next-line */
 export interface SearchInputProps {
   q: string;
   search(text: string): void;
