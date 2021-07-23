@@ -1,4 +1,4 @@
-import { chromium } from "playwright";
+import { chromium, devices } from "playwright";
 import { IScrapeLoader } from "./loader.interface";
 
 export class SpaLoader implements IScrapeLoader<string> {
@@ -6,7 +6,11 @@ export class SpaLoader implements IScrapeLoader<string> {
     const browser = await chromium.launch();
     try {
       console.time(url);
-      const page = await browser.newPage();
+      const device = devices['Galaxy S5'];
+      const context = await browser.newContext({
+        ...device
+      });
+      const page = await context.newPage();
       await page.goto(url, {
         waitUntil: "domcontentloaded",
       });
