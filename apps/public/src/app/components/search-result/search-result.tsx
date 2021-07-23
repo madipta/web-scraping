@@ -1,7 +1,7 @@
 import React from "react";
 
 export interface SearchResultProps {
-  result: { id: number; url: string; imgSrc: string; title: string }[];
+  result: { id: number; url: string; image_html: string; title: string }[];
 }
 
 export function SearchResult(props: SearchResultProps) {
@@ -17,7 +17,7 @@ export function SearchResult(props: SearchResultProps) {
             <div className="bg-gray-300 h-36 overflow-hidden">
               <img
                 className="object-cover w-full"
-                src={d.imgSrc}
+                src={d.image_html}
                 alt={d.title}
               ></img>
             </div>
