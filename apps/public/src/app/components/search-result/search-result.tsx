@@ -25,34 +25,42 @@ export function SearchResult(props: SearchResultProps) {
         Search Result
       </h2>
       <hr className="w-8 h-2 border-t-0 border-b-4 border-yellow-500 mb-6"></hr>
-      <ul className="grid grid-cols-1 gap-x-4 sm:gap-x-5 gap-y-6 sm:gap-y-8">
+      <ul className="grid grid-cols-1 gap-y-6 sm:gap-y-8">
         {props.result.map((d, i) => (
           <li
             key={d.id}
             className="flex flex-col overflow-hidden rounded shadow-xl"
           >
             <div className="bg-gray-300 h-48 sm:h-64 overflow-hidden">
-              {!d.image_html && <NoPhoto className="object-contain h-36 sm:h-52 my-6 mx-auto"></NoPhoto>}
-              {d.image_html && (
-                <img
-                  className="object-cover w-full"
-                  src={d.image_html}
-                  alt={d.title}
-                ></img>
-              )}
+              <a
+                href={d.url}
+                rel="nofollow noreferrer"
+                target="_blank"
+              >
+                {!d.image_html && (
+                  <NoPhoto className="object-contain h-16 my-16 sm:my-24 mx-auto"></NoPhoto>
+                )}
+                {d.image_html && (
+                  <img
+                    className="object-cover w-full"
+                    src={d.image_html}
+                    alt={d.title}
+                  ></img>
+                )}
+              </a>
             </div>
-            <div className="pt-3 pb-2 px-4 leading-snug">
+            <div className="pt-3 pb-2 px-4">
               <p>
                 <a
                   href={d.url}
                   rel="nofollow noreferrer"
                   target="_blank"
-                  className="font-medium text-gray-700 text-base"
+                  className="font-medium text-gray-700 text-lg leading-snug"
                 >
                   {d.title}
                 </a>
               </p>
-              <p className="text-xs text-gray-500 italic mt-2">{d.homeUrl}</p>
+              <p className="text-xs text-gray-500 italic mt-3">{d.homeUrl}</p>
             </div>
           </li>
         ))}
