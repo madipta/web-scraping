@@ -1,4 +1,5 @@
 import React from "react";
+import { ReactComponent as NoPhoto } from "../../icons/no-photo.svg";
 
 export interface SearchResultProps {
   result: {
@@ -13,7 +14,9 @@ export interface SearchResultProps {
 export function SearchResult(props: SearchResultProps) {
   if (!props.result || props.result.length < 1) {
     return (
-      <div className="col-start-1 col-end-13 text-gray-400 text-xs text-center italic whitespace-nowrap mt-5">no result</div>
+      <div className="col-start-1 col-end-13 text-gray-400 text-xs text-center italic whitespace-nowrap mt-5">
+        no result
+      </div>
     );
   }
   return (
@@ -29,11 +32,14 @@ export function SearchResult(props: SearchResultProps) {
             className="flex flex-col overflow-hidden rounded shadow-xl"
           >
             <div className="bg-gray-300 h-48 sm:h-64 overflow-hidden">
-              <img
-                className="object-cover w-full"
-                src={d.image_html}
-                alt={d.title}
-              ></img>
+              {!d.image_html && <NoPhoto className="object-contain h-36 sm:h-52 my-6 mx-auto"></NoPhoto>}
+              {d.image_html && (
+                <img
+                  className="object-cover w-full"
+                  src={d.image_html}
+                  alt={d.title}
+                ></img>
+              )}
             </div>
             <div className="pt-3 pb-2 px-4 leading-snug">
               <p>
