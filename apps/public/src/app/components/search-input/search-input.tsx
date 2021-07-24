@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { ReactComponent as SearchIcon } from '../../icons/search.svg';
 
 export interface SearchInputProps {
-  q: string;
   search(text: string): void;
 }
 
 export function SearchInput(props: SearchInputProps) {
-  const [searchText, setSearchText] = useState(props.q);
+  const [searchText, setSearchText] = useState("");
   return (
     <div className="col-start-1 col-end-13 flex flex-nowrap w-10/12 sm:w-7/12 md:w-6/12 leading-tight overflow-hidden rounded-r-full mx-auto mb-12">
       <input

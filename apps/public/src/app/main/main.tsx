@@ -1,24 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import SearchInput from "../components/search-input/search-input";
 import SearchResult from "../components/search-result/search-result";
 
 export function Main() {
-  let q = "";
+  const [q, setQ] = useState("");
   const fetchSearch = async () => {
+    if (!q || q.trim().length < 3) {
+      return [];
+    }
     const res = await fetch(
       "http://localhost:3000/search?q=" + encodeURIComponent(q)
     );
     return res.json();
   };
-  const { data, status, refetch } = useQuery("people", fetchSearch, { enabled: false });
+  const { data, status, refetch } = useQuery("search", fetchSearch, {
+    enabled: false,
+  });
   const onSearch = (text) => {
-    q = text;
-    refetch();
-  }
+    setQ(text);
+  };
+  useEffect(() => {
+    if (q && q.length > 2) {
+      refetch();
+    }
+  }, [q, refetch]);
   return (
     <div className="auto-rows-max col-start-1 col-end-13 grid grid-cols-12">
-      <SearchInput q={""} search={onSearch}></SearchInput>
+      <SearchInput search={onSearch}></SearchInput>
       {status === "success" && <SearchResult result={data}></SearchResult>}
     </div>
   );

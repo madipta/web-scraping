@@ -17,11 +17,18 @@ export class AppService {
       .addSelect("C.title", "title")
       .addSelect("C.image_html", "image_html")
       .leftJoin("C.link", "L")
-      .addSelect("L.url", "url");
+      .addSelect("L.url", "url")
+      .leftJoin("L.domain", "D")
+      .addSelect("D.home", "homeUrl");
 
     const tsWhere = "search_vector @@ to_tsquery('simple', :search)";
     builder.where(tsWhere, { search: `${searchText}:*` });
-    builder.orderBy(`ts_rank(search_vector, to_tsquery('simple', :search))`, "DESC");
+    builder.orderBy(
+      `ts_rank(search_vector, to_tsquery('simple', :search))`,
+      "DESC"
+    );
+    builder.offset(0);
+    builder.limit(20);
 
     return builder.getRawMany();
   }
