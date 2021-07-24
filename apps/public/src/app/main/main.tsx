@@ -21,9 +21,7 @@ export function Main() {
     setQ(text);
   };
   useEffect(() => {
-    if (q && q.length > 2) {
-      refetch();
-    }
+    refetch();
   }, [q, refetch]);
   return (
     <div className="auto-rows-max col-start-1 col-end-13 grid grid-cols-12">

@@ -11,6 +11,11 @@ export interface SearchResultProps {
 }
 
 export function SearchResult(props: SearchResultProps) {
+  if (!props.result || props.result.length < 1) {
+    return (
+      <div className="col-start-1 col-end-13 text-gray-400 text-xs text-center italic whitespace-nowrap mt-5">no result</div>
+    );
+  }
   return (
     <div className="max-w-screen-sm col-start-1 col-end-13 text-gray-700 text-xs sm:text-sm md:text-base mt-5 mx-auto">
       <h2 className="leading-tight text-sm text-gray-600 font-semibold uppercase">
@@ -41,7 +46,7 @@ export function SearchResult(props: SearchResultProps) {
                   {d.title}
                 </a>
               </p>
-              <p className="text-xs text-gray-500 italics mt-2">{d.homeUrl}</p>
+              <p className="text-xs text-gray-500 italic mt-2">{d.homeUrl}</p>
             </div>
           </li>
         ))}
