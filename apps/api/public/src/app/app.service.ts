@@ -10,7 +10,8 @@ export class AppService {
     private readonly contentRepo: Repository<Content>
   ) {}
 
-  async search(searchText: string) {
+  async search(searchText: string, page = 1) {
+    const pagesize = 20;
     const builder = this.contentRepo
       .createQueryBuilder("C")
       .select("C.id", "id")
@@ -21,14 +22,15 @@ export class AppService {
       .leftJoin("L.domain", "D")
       .addSelect("D.home", "homeUrl");
 
-    const tsWhere = "search_vector @@ to_tsquery('simple', :search)";
-    builder.where(tsWhere, { search: `${searchText}:*` });
+    builder.where("search_vector @@ to_tsquery('simple', :search)", {
+      search: `${searchText}:*`,
+    });
     builder.orderBy(
       `ts_rank(search_vector, to_tsquery('simple', :search))`,
       "DESC"
     );
-    builder.offset(0);
-    builder.limit(20);
+    builder.offset(page * pagesize - pagesize);
+    builder.limit(pagesize);
 
     return builder.getRawMany();
   }
