@@ -1,14 +1,16 @@
 import React from "react";
 import { ReactComponent as NoPhoto } from "../../icons/no-photo.svg";
 
+export interface ISearchResult {
+  id: number;
+  url: string;
+  image_html: string;
+  title: string;
+  homeUrl: string;
+}
+
 export interface SearchResultProps {
-  result: {
-    id: number;
-    url: string;
-    image_html: string;
-    title: string;
-    homeUrl: string;
-  }[];
+  result: ISearchResult[];
 }
 
 export function SearchResult(props: SearchResultProps) {
@@ -32,11 +34,7 @@ export function SearchResult(props: SearchResultProps) {
             className="flex flex-col overflow-hidden rounded shadow-xl"
           >
             <div className="bg-gray-300 h-48 sm:h-64 overflow-hidden">
-              <a
-                href={d.url}
-                rel="nofollow noreferrer"
-                target="_blank"
-              >
+              <a href={d.url} rel="nofollow noreferrer" target="_blank">
                 {!d.image_html && (
                   <NoPhoto className="object-contain h-16 my-16 sm:my-24 mx-auto"></NoPhoto>
                 )}
