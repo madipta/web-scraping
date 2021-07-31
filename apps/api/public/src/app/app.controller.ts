@@ -6,7 +6,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get("search")
-  search(@Query("q") searchText: string) {
-    return this.appService.search(searchText);
+  search(@Query("q") searchText: string, @Query("page") page: number) {
+    return this.appService.search(searchText, page);
   }
 }
