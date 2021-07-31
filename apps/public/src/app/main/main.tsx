@@ -12,7 +12,7 @@ export function Main() {
   return (
     <div className="auto-rows-max col-start-1 col-end-13 grid grid-cols-12">
       <SearchInput search={onSearch}></SearchInput>
-      {search.result && <SearchResult result={search.result}></SearchResult>}
+      <SearchResult result={search.result}></SearchResult>
     </div>
   );
 }
