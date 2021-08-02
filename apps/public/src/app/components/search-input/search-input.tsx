@@ -19,7 +19,8 @@ export function SearchInput(props: SearchInputProps) {
       <button 
         onClick={() => props.search(searchText)}
         className="flex-none flex items-center bg-yellow-500 text-white text-xs font-medium pl-3 pr-4 sm:pr-6">
-        <SearchIcon></SearchIcon><p className="ml-1 hidden sm:inline-block">Search</p>
+        <p className="flex-none w-5"><SearchIcon></SearchIcon></p>
+        <p className="ml-1 hidden sm:inline-block">Search</p>
       </button>
     </div>
   );

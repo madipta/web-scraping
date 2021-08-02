@@ -291,7 +291,7 @@
               "apps/public/src/assets"
             ],
             "styles": [
-              "apps/public/src/app/styles/tailwind.css"
+              "apps/public/src/styles.css"
             ],
             "scripts": [],
             "webpackConfig": "@nrwl/react/plugins/webpack"

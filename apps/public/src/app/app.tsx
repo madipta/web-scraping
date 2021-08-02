@@ -1,7 +1,7 @@
 import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import AppHeader from "./components/app-header/app-header";
-import Main from "./main/main";
+import Main from "./pages/main/main";
 
 const queryClient = new QueryClient();
 

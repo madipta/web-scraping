@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { ISearchResult } from "../components/search-result/search-result";
+import { ISearchResult } from "../../components/search-result/search-result";
 
 export default function useSearch(currentSearch = "") {
   const pagesize = 20;
