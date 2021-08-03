@@ -15,10 +15,11 @@ export class PagingLooper implements ILooper {
     const maxTotalErrorCount = 100;
     do {
       links = [];
-      const url = this.manager.setting.url.replace(
-        "{{PAGE_NUMBER}}",
-        `${page++}`
-      );
+      const url =
+        page === 1
+          ? this.manager.setting.domainHome
+          : this.manager.setting.url.replace("{{PAGE_NUMBER}}", `${page}`);
+      page++;
       try {
         const res = await this.manager.load(url);
         links = await this.manager.scrap(res);
