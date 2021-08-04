@@ -22,9 +22,12 @@ export class IndexHtmlScrap implements IIndexScrap {
       if (
         url &&
         url !== home &&
-        url.startsWith(home) &&
+        (url.startsWith(home) || url.startsWith("/")) &&
         url !== indexPage
       ) {
+        if (url.startsWith("/")) {
+          url = home + url;
+        }
         const title = el.text().trim();
         if (!urls.includes(url)) {
           urls.push(url);
