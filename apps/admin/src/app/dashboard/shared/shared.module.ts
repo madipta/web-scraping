@@ -14,6 +14,7 @@ import { NzSelectModule } from "ng-zorro-antd/select";
 import { NzMessageModule } from "ng-zorro-antd/message";
 import { NzPopconfirmModule } from "ng-zorro-antd/popconfirm";
 import { NzToolTipModule } from "ng-zorro-antd/tooltip";
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzRadioModule } from "ng-zorro-antd/radio";
 import { ChecklistComponent } from "./components/checklist/checklist.component";
 import { DomainNamePipe } from "./pipes/domain-name.pipe";
@@ -38,6 +39,7 @@ const modules = [
   NzMessageModule,
   NzPopconfirmModule,
   NzToolTipModule,
+  NzTypographyModule,
   NzRadioModule,
   TableSearchModule
 ];
