@@ -22,8 +22,11 @@ export class AppService {
       .leftJoin("L.domain", "D")
       .addSelect("D.home", "homeUrl");
 
+    const search =
+      searchText.trim().replace(/\s\s+/g, " ").replace(/\s/g, ":* & ") + ":*";
+
     builder.where("search_vector @@ to_tsquery('simple', :search)", {
-      search: `${searchText}:*`,
+      search,
     });
     builder.orderBy(
       `ts_rank(search_vector, to_tsquery('simple', :search))`,
