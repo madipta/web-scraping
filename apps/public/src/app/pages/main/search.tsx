@@ -21,7 +21,7 @@ export default function useSearch(currentSearch = "") {
         `http://localhost:3000/search?q=${q}&page=${page}`
       );
       if (response.status >= 400) {
-        throw new Error("Server Error!");
+        throw new Error(response.statusText);
       }
       const result = (await response.json()) as ISearchResult[];
       setResult((prev) => {
@@ -37,9 +37,10 @@ export default function useSearch(currentSearch = "") {
         return data;
       });
       setHasMore(result && result.length === pagesize);
-    } catch {
+    } catch (e) {
+      console.error(e);
       setHasMore(false);
-      setError(true)
+      setError(true);
     } finally {
       setLoading(false);
     }
