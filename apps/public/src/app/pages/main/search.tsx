@@ -13,25 +13,35 @@ export default function useSearch(currentSearch = "") {
       setResult([]);
       return;
     }
-    setLoading(true);
-    const response = await fetch(
-      `http://localhost:3000/search?q=${encodeURIComponent(query)}&page=${page}`
-    );
-    const result = (await response.json()) as ISearchResult[];
-    setResult((prev) => {
-      const map = new Map();
-      const data = [];
-      const union = [...prev, ...result];
-      for (const item of union) {
-        if (!map.has(item.id)) {
-          map.set(item.id, true);
-          data.push(item);
-        }
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `http://localhost:3000/search?q=${encodeURIComponent(
+          query
+        )}&page=${page}`
+      );
+      if (response.status >= 400) {
+        throw new Error("Server Error!");
       }
-      return data;
-    });
-    setHasMore(result && result.length === pagesize);
-    setLoading(false);
+      const result = (await response.json()) as ISearchResult[];
+      setResult((prev) => {
+        const map = new Map();
+        const data = [];
+        const union = [...prev, ...result];
+        for (const item of union) {
+          if (!map.has(item.id)) {
+            map.set(item.id, true);
+            data.push(item);
+          }
+        }
+        return data;
+      });
+      setHasMore(result && result.length === pagesize);
+    } catch {
+      setHasMore(false)
+    } finally {
+      setLoading(false);
+    }
   }, [query, page]);
   useEffect(() => {
     setResult([]);
