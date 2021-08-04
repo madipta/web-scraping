@@ -13,8 +13,8 @@ import {
 } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
 import { JwtService, Role } from "@web-scraping/auth";
-import { User, UserRole } from "@web-scraping/orm";
-import { Repository } from "typeorm";
+import { DbSetup, User, UserRole } from "@web-scraping/orm";
+import { Connection, Repository } from "typeorm";
 import { BaseResult } from "../core/base-result";
 
 @ObjectType()
@@ -55,6 +55,7 @@ export class GetByUserNameInput extends PickType(User, ["userName"]) {}
 export class UserResolver {
   constructor(
     private readonly jwtService: JwtService,
+    private connection: Connection,
     @InjectRepository(User)
     private readonly userRepo: Repository<User>
   ) {}
@@ -72,6 +73,8 @@ export class UserResolver {
         await this.userRepo.save(
           this.userRepo.create({ userName, password, role: UserRole.admin })
         );
+        // run initial setup
+        await DbSetup.init(this.connection.createQueryRunner());
       }
       const result = await this.userRepo.findOne({ userName });
       if (!result) {
