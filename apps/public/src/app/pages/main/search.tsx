@@ -8,6 +8,7 @@ export default function useSearch(currentSearch = "") {
   const [query, setQuery] = useState(currentSearch);
   const [page, setPage] = useState(1);
   const [result, setResult] = useState([]);
+  const [error, setError] = useState(false);
   const fetchSearch = useCallback(async () => {
     if (!query || query.trim().length < 3) {
       setResult([]);
@@ -15,10 +16,9 @@ export default function useSearch(currentSearch = "") {
     }
     try {
       setLoading(true);
+      const q = encodeURIComponent(query);
       const response = await fetch(
-        `http://localhost:3000/search?q=${encodeURIComponent(
-          query
-        )}&page=${page}`
+        `http://localhost:3000/search?q=${q}&page=${page}`
       );
       if (response.status >= 400) {
         throw new Error("Server Error!");
@@ -38,7 +38,8 @@ export default function useSearch(currentSearch = "") {
       });
       setHasMore(result && result.length === pagesize);
     } catch {
-      setHasMore(false)
+      setHasMore(false);
+      setError(true)
     } finally {
       setLoading(false);
     }
@@ -49,5 +50,5 @@ export default function useSearch(currentSearch = "") {
   useEffect(() => {
     fetchSearch();
   }, [fetchSearch]);
-  return { hasMore, loading, query, setQuery, page, setPage, result };
+  return { hasMore, loading, query, setQuery, page, setPage, result, error };
 }

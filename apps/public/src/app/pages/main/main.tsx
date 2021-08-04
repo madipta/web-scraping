@@ -4,7 +4,7 @@ import SearchResult from "../../components/search-result/search-result";
 import useSearch from "./search";
 
 export function Main() {
-  const { loading, result, hasMore, setQuery, page, setPage } = useSearch();
+  const { loading, hasMore, setQuery, page, setPage, result, error } = useSearch();
   const onSearch = (text) => {
     setQuery(text);
     setPage(1);
@@ -35,6 +35,7 @@ export function Main() {
       <SearchInput search={onSearch}></SearchInput>
       <SearchResult result={result}></SearchResult>
       <div ref={containerRef}></div>
+      { error && <div className="col-start-1 col-end-13 text-red-500 text-sm text-center mt-5">Something error happen..</div> }
     </div>
   );
 }
