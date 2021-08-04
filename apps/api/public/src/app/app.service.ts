@@ -10,6 +10,10 @@ export class AppService {
     private readonly contentRepo: Repository<Content>
   ) {}
 
+  private refineSearchText(text) {
+    return text.trim().replace(/\s\s+/g, " ").replace(/\s/g, ":* & ") + ":*";
+  }
+
   async search(searchText: string, page = 1) {
     const pagesize = 20;
     const builder = this.contentRepo
@@ -22,8 +26,7 @@ export class AppService {
       .leftJoin("L.domain", "D")
       .addSelect("D.home", "homeUrl");
 
-    const search =
-      searchText.trim().replace(/\s\s+/g, " ").replace(/\s/g, ":* & ") + ":*";
+    const search = this.refineSearchText(searchText);
 
     builder.where("search_vector @@ to_tsquery('simple', :search)", {
       search,
