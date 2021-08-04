@@ -6,16 +6,16 @@ export class SpaLoader implements IScrapeLoader<string> {
     const browser = await chromium.launch();
     try {
       console.time(url);
-      const device = devices['Galaxy S5'];
+      const device = devices["Galaxy S5"];
       const context = await browser.newContext({
-        ...device
+        ...device,
       });
       const page = await context.newPage();
       await page.goto(url, {
-        waitUntil: "domcontentloaded",
+        waitUntil: "networkidle",
       });
       await page.evaluate(() => {
-        window.scrollTo(0, document.body.scrollHeight);
+        window.scrollBy(0, window.innerHeight);
       });
       const text = await page.innerHTML("body");
       console.timeEnd(url);
