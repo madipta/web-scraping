@@ -1,12 +1,12 @@
-version: '3'
+version: '3.8'
 services:
   adminer:
-    image: adminer
+    image: adminer:4-standalone
     restart: always
     ports:
       - 8080:8080
   pg:
-    image: "postgres:alpine"
+    image: "postgres:13-alpine"
     ports:
       - 5432:5432
     volumes:
@@ -16,6 +16,6 @@ services:
       POSTGRES_USER: ${DB_MAIN_USER}
       POSTGRES_PASSWORD: ${DB_MAIN_PASSWORD}
   redis:
-    image: redis:alpine
+    image: redis:6-alpine
     ports:
       - 6379:6379
