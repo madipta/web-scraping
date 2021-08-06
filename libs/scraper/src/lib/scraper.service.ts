@@ -54,6 +54,7 @@ export class ScraperService {
       .select("Link.id", "linkId")
       .addSelect("Link.url", "url")
       .addSelect("Link.domainId", "domainId")
+      .addSelect("Domain.home", "domainHome")
       .addSelect("Setting.scrap_index_method", "scrapIndexMethod")
       .addSelect("Setting.scrap_index_paging", "scrapIndexPaging")
       .addSelect("Setting.scrap_index_format", "scrapIndexFormat")

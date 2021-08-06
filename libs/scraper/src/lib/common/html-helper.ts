@@ -1,5 +1,6 @@
 import * as cheerio from "cheerio";
 import { HtmlSanitizer } from "./html-sanitizer";
+import { ISetting } from "./setting.interface";
 
 export class HtmlHelper {
   $: cheerio.CheerioAPI;
@@ -42,11 +43,16 @@ export class HtmlHelper {
     return null;
   }
 
-  getImageHtml(path: string) {
+  getImageHtml(setting: ISetting) {
+    const path = setting.imagePath;
     if (path) {
       const imageEl = this.$(path);
       if (imageEl.length) {
-        return imageEl.attr("src");
+        let src = imageEl.attr("src");
+        if (src && src.startsWith("/")) {
+          src = setting.domainHome + src;
+        }
+        return src;
       }
     }
     return null;
