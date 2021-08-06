@@ -8,7 +8,7 @@ import {
   ScrapeJob,
   ScrapeJobStatus,
 } from "@web-scraping/orm";
-import { Not, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { AutoNumberInput } from "../core/auto-number-input";
 import { BaseResult } from "../core/base-result";
 import { ScrapeQueueService } from "@web-scraping/scrape-queue";
@@ -85,12 +85,13 @@ export class ScraperResolver {
       const links = await this.linkRepo.find({
         where: {
           domainId: dto.id,
-          scraped: Not(true),
         },
       });
-      links.forEach((link) => {
-        this.scrapeContent({ id: link.id });
-      });
+      links
+        .filter((link) => !link.scraped)
+        .forEach((link) => {
+          this.scrapeContent({ id: link.id });
+        });
       return { ok: true };
     } catch (e) {
       console.error("[ScraperResolver | scrapeContentByDomain]", e);
