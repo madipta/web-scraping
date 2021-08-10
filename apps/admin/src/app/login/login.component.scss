@@ -1,13 +1,15 @@
 .login_page {
   display: flex;
   flex-direction: column;
+  background-color: #e0eaff;
   height: 100%;
+  padding: 0 15px;
 }
 
 .login_form {
   display: flex;
   flex-direction: column;
-  background-color: #fafcff;
+  background-color: #fff;
   width: 100%;
   max-width: 350px;
   padding: 25px 30px 0px;
@@ -19,7 +21,7 @@
 h1 {
   line-height: 1em;
   padding: 0;
-  margin: 0 0 30px;
+  margin: 0 0 33px;
 }
 
 input {
@@ -30,7 +32,8 @@ input {
 }
 
 button {
-  border: 1px solid #ccc;
+  background-color: #b6d0ff;
+  border: 1px solid #b6d0ff;
   padding: 6px 10px;
   border-radius: 3px;
   margin-top: 15px;
