@@ -7,7 +7,7 @@ export function AppHeader() {
       <div className="flex-none w-5 text-yellow-500 mr-1">
         <HomeIcon></HomeIcon>
       </div>
-      <h1 className="leading-none text-white text-lg font-medium">Scraped Portal</h1>
+      <h1 className="leading-none text-white text-lg font-medium">Search Portal</h1>
     </div>
   );
 }
