@@ -48,26 +48,20 @@ Install dependencies using npm or yarn or else
   npm install or yarn
 ```
 
-Start postgres, redis and/or adminer(optional) server using docker-compose
+Start web, postgres and redis server using docker-compose
 
 ```bash
   docker-compose up
 ```
 
-Start admin dashboard on http://localhost:4000
+Start API service
+& password 
 ```bash
-  npx nx serve api-admin
-```
-```bash
-  npx nx serve admin --port=4000
+  npx nx run-many --target=serve --projects=api-admin,api-public
 ```
 
-Start search application on port http://localhost:5000
-```bash
-  npx nx serve api-public
-```
-```bash
-  npx nx serve public --port=5000
-```
+Admin dashboard run on http://localhost:4000
+Public web run on http://localhost:5000
 
-  
+First time admin login use any user and password you want then it will saved for next time you login
+
