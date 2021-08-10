@@ -54,14 +54,13 @@ Start web, postgres and redis server using docker-compose
   docker-compose up
 ```
 
-Start API service
-& password 
+Start web application and API service
 ```bash
-  npx nx run-many --target=serve --projects=api-admin,api-public
+  nx run-many --target=serve --projects=admin,public,api-admin,api-public --parallel --maxParallel=4
 ```
 
 Admin dashboard run on http://localhost:4000
 Public web run on http://localhost:5000
 
-First time admin login use any user and password you want then it will saved for next time you login
+For the first time login, any user name and password it will saved to database, use simple user name and password such as user: "admin", password: "password" to make easier to remember
 

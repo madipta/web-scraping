@@ -1,19 +1,5 @@
 version: '3.8'
 services:
-  admin:
-    image: nginx:1.20.1-alpine
-    restart: unless-stopped
-    volumes:
-      - ./dist/apps/admin:/usr/share/nginx/html
-    ports:
-      - "${ADMIN_PORT}:80"
-  public:
-    image: nginx:1.20.1-alpine
-    restart: unless-stopped
-    volumes:
-      - ./dist/apps/public:/usr/share/nginx/html
-    ports:
-      - "${PUBLIC_PORT}:80"
   # adminer:
   #   image: adminer:4-standalone
   #   restart: always
