@@ -51,7 +51,8 @@
             "tsConfig": "apps/api/admin/tsconfig.app.json",
             "assets": [
               "apps/api/admin/src/assets"
-            ]
+            ],
+            "generatePackageJson": true
           },
           "configurations": {
             "production": {
@@ -406,7 +407,8 @@
             "tsConfig": "apps/api/public/tsconfig.app.json",
             "assets": [
               "apps/api/public/src/assets"
-            ]
+            ],
+            "generatePackageJson": true
           },
           "configurations": {
             "production": {
