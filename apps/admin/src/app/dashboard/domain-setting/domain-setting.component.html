@@ -6,14 +6,16 @@
 </nz-page-header>
 
 <form nz-form [formGroup]="form">
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24">Scrap Index Method</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24">
-      <nz-radio-group formControlName="scrapIndexMethod">
-        <label nz-radio nzValue="web">Web</label><br />
-      </nz-radio-group>
-    </nz-form-control>
-  </nz-form-item>
+  <div style="display: none">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Scrap Index Method</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <nz-radio-group formControlName="scrapIndexMethod">
+          <label nz-radio nzValue="web">Web</label><br />
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24">Scrap Index Paging</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -23,14 +25,16 @@
       </nz-radio-group>
     </nz-form-control>
   </nz-form-item>
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24">Scrap Index Format</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24">
-      <nz-radio-group formControlName="scrapIndexFormat">
-        <label nz-radio nzValue="html">HTML</label><br />
-      </nz-radio-group>
-    </nz-form-control>
-  </nz-form-item>
+  <div style="display: none">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Scrap Index Format</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <nz-radio-group formControlName="scrapIndexFormat">
+          <label nz-radio nzValue="html">HTML</label><br />
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="indexUrl"
       >Index URL</nz-form-label
@@ -44,19 +48,21 @@
       />
     </nz-form-control>
   </nz-form-item>
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="indexFeedUrl"
-      >Index Feed URL</nz-form-label
-    >
-    <nz-form-control [nzSm]="14" [nzXs]="24">
-      <input
-        nz-input
-        id="indexFeedUrl"
-        formControlName="indexFeedUrl"
-        placeholder="ex: index/feed"
-      />
-    </nz-form-control>
-  </nz-form-item>
+  <div style="display: none">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="indexFeedUrl"
+        >Index Feed URL</nz-form-label
+      >
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <input
+          nz-input
+          id="indexFeedUrl"
+          formControlName="indexFeedUrl"
+          placeholder="ex: index/feed"
+        />
+      </nz-form-control>
+    </nz-form-item>
+  </div>
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="indexPath"
       >Index path</nz-form-label
@@ -70,36 +76,40 @@
       />
     </nz-form-control>
   </nz-form-item>
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="nextPath"
-      >Next path</nz-form-label
-    >
-    <nz-form-control [nzSm]="14" [nzXs]="24">
-      <input
-        nz-input
-        id="nextPath"
-        formControlName="nextPath"
-        placeholder="ex: main a.next"
-      />
-    </nz-form-control>
-  </nz-form-item>
+  <div style="display: none">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="nextPath"
+        >Next path</nz-form-label
+      >
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <input
+          nz-input
+          id="nextPath"
+          formControlName="nextPath"
+          placeholder="ex: main a.next"
+        />
+      </nz-form-control>
+    </nz-form-item>
+  </div>
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24">Scrap Article Method</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-radio-group formControlName="scrapArticleMethod">
-        <label nz-radio nzValue="web">Web</label>
-        <label nz-radio nzValue="spa">Spa</label>
+        <label nz-radio nzValue="web">Static HTML</label>
+        <label nz-radio nzValue="spa">Dynamic HTML</label>
       </nz-radio-group>
     </nz-form-control>
   </nz-form-item>
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24">Scrap Article Format</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24">
-      <nz-radio-group formControlName="scrapArticleFormat">
-        <label nz-radio nzValue="html">HTML</label><br />
-      </nz-radio-group>
-    </nz-form-control>
-  </nz-form-item>
+  <div style="display: none">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Scrap Article Format</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <nz-radio-group formControlName="scrapArticleFormat">
+          <label nz-radio nzValue="html">HTML</label><br />
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="articlePath"
       >Article path</nz-form-label
