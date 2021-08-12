@@ -31,7 +31,8 @@ export class ContentManagerService {
     let content: IContent;
     try {
       content = await this.scrap(setting, responseText);
-    } catch {
+    } catch(e) {
+      console.error(url, e);
       this.eventEmitter.emit(ScrapeEvents.ErrorScraping, { url, jobId });
       return;
     }
