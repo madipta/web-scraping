@@ -12,11 +12,12 @@ export class SpaLoader implements IScrapeLoader<string> {
       });
       const page = await context.newPage();
       await page.goto(url, {
-        waitUntil: "networkidle",
+        waitUntil: "domcontentloaded"
       });
       await page.evaluate(() => {
         window.scrollBy(0, window.innerHeight);
       });
+      await page.waitForTimeout(1000);
       const text = await page.innerHTML("body");
       console.timeEnd(url);
       return text;
