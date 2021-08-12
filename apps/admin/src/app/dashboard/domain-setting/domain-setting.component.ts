@@ -1,7 +1,7 @@
 import { Location } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { DomainSettingService } from "../shared/services/domain-setting.service";
 
@@ -17,6 +17,7 @@ export class DomainSettingComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private location: Location,
     private fb: FormBuilder,
     private msg: NzMessageService,
@@ -70,9 +71,10 @@ export class DomainSettingComponent implements OnInit {
     const res = await this.settingService.update(dto);
     this.msg.remove(msgId);
     if (res.ok) {
+      this.router.navigate(["dashboard", "domain-list"]);
       this.msg.success(`Saved!`);
-    } else {
-      this.msg.error(res.error || `failed!`);
+      return;
     }
+    this.msg.error(res.error || `failed!`);
   }
 }
