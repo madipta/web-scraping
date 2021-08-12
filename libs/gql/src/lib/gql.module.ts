@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { GraphQLModule } from "@nestjs/graphql";
+import { GqlModuleOptions, GraphQLModule } from "@nestjs/graphql";
 import { AuthModule } from "@web-scraping/auth";
 import { PubSubModule } from "@web-scraping/pubsub";
 import { OrmModule } from "@web-scraping/orm";
@@ -27,7 +27,7 @@ import { UserResolver } from "./resolvers/user/user.resolver";
       useFactory: (cfg: ConfigService) => ({
         playground: cfg.get<boolean>("gql_playground"),
         installSubscriptionHandlers: cfg.get<boolean>("gql_subcription"),
-        autoSchemaFile: join(process.cwd(), "dist/schema.gql"),
+        autoSchemaFile: true
       }),
     }),
     PubSubModule,
