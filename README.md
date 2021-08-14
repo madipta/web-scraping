@@ -22,13 +22,14 @@ Web scrapping for news or blog site using CSS selector to get the content fields
 
 ## Screenshots
 ![Admin Dashboard Screenshot](https://raw.githubusercontent.com/madipta/web-scraping/master/screenshot/ws-admin-dashboard-min.png)  
+
 ![Web Search Screenshot](https://raw.githubusercontent.com/madipta/web-scraping/master/screenshot/ws-search-min.png)
 
   
 ## Run Locally
 
-The easy way to run this application locally you need docker & docker-compose installed
-to install docker go to https://docs.docker.com/engine/install/```
+The easy way to run this application locally you need docker & docker-compose installed,  
+to install docker go to https://docs.docker.com/engine/install/```  
 to install docker-compose go to ```https://docs.docker.com/compose/install/```
 
 Clone the project
