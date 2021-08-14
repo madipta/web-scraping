@@ -1,7 +1,7 @@
 
 # Web Scrapping
 
-Web scrapping for news or blog site.
+Web scrapping for news or blog site using CSS selector to get the content fields
 
 
 ## Tech Stack
@@ -21,7 +21,7 @@ Web scrapping for news or blog site.
 
 
 ## Screenshots
-![Admin Dashboard Screenshot](https://raw.githubusercontent.com/madipta/web-scraping/master/screenshot/ws-admin-dashboard-min.png)
+![Admin Dashboard Screenshot](https://raw.githubusercontent.com/madipta/web-scraping/master/screenshot/ws-admin-dashboard-min.png)  
 ![Web Search Screenshot](https://raw.githubusercontent.com/madipta/web-scraping/master/screenshot/ws-search-min.png)
 
   
@@ -56,7 +56,7 @@ Start web, postgres and redis server using docker-compose
 
 Start web application and API service
 ```bash
-  nx run-many --target=serve --projects=admin,public,api-admin,api-public --parallel --maxParallel=4
+  npx nx run-many --target=serve --projects=admin,public,api-admin,api-public --parallel --maxParallel=4
 ```
 
 Admin dashboard run on http://localhost:4000
