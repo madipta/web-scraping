@@ -21,8 +21,8 @@ Web scrapping for news or blog site.
 
 
 ## Screenshots
-
 ![Admin Dashboard Screenshot](https://raw.githubusercontent.com/madipta/web-scraping/master/screenshot/ws-admin-dashboard-min.png)
+![Web Search Screenshot](https://raw.githubusercontent.com/madipta/web-scraping/master/screenshot/ws-search-min.png)
 
   
 ## Run Locally
