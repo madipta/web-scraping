@@ -1,7 +1,7 @@
 
 # Web Scrapping
 
-Web scrapping for news or blog site.
+Web scrapping for news or blog site using CSS selector to get the content fields
 
 
 ## Tech Stack
@@ -17,18 +17,20 @@ Web scrapping for news or blog site.
 ### *Public Portal*
 
 ***Client:*** React, TailwindCSS  
-***Server:*** Node, NestJs, Postgres, TypeORM
+***Server:*** Node, NestJs, Postgres, TypeORM  
 
 
 ## Screenshots
-![Admin Dashboard Screenshot](https://raw.githubusercontent.com/madipta/web-scraping/master/screenshot/ws-admin-dashboard-min.png)
+![Admin Dashboard Screenshot](https://raw.githubusercontent.com/madipta/web-scraping/master/screenshot/ws-admin-dashboard-min.png)  
+
 ![Web Search Screenshot](https://raw.githubusercontent.com/madipta/web-scraping/master/screenshot/ws-search-min.png)
 
   
 ## Run Locally
 
-The easy way to run this application locally you need docker installed, if not goto 
-https://docs.docker.com/engine/install/
+The easy way to run this application locally you need docker & docker-compose installed,  
+to install docker go to https://docs.docker.com/engine/install/  
+to install docker-compose go to https://docs.docker.com/compose/install/  
 
 Clone the project
 
@@ -56,7 +58,7 @@ Start web, postgres and redis server using docker-compose
 
 Start web application and API service
 ```bash
-  nx run-many --target=serve --projects=admin,public,api-admin,api-public --parallel --maxParallel=4
+  npx nx run-many --target=serve --projects=admin,public,api-admin,api-public --parallel --maxParallel=4
 ```
 
 Admin dashboard run on http://localhost:4000
