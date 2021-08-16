@@ -13,11 +13,6 @@
         "*.js",
         "*.jsx"
       ],
-      "parserOptions": {
-        "project": [
-          "libs/orm/tsconfig.*?.json"
-        ]
-      },
       "rules": {}
     },
     {

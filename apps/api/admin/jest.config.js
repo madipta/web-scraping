@@ -10,5 +10,5 @@ module.exports = {
     "^.+\\.[tj]s$": "ts-jest",
   },
   moduleFileExtensions: ["ts", "js", "html"],
-  coverageDirectory: "../../../coverage/apps/api/admin",
+  coverageDirectory: "../../../coverage/apps/api/admin","testEnvironment": "node"
 };

@@ -11,11 +11,6 @@
         "*.js",
         "*.jsx"
       ],
-      "parserOptions": {
-        "project": [
-          "libs/web-scraper/tsconfig.*?.json"
-        ]
-      },
       "rules": {}
     },
     {

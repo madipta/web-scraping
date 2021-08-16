@@ -35,90 +35,6 @@
     }
   },
   "projects": {
-    "api-admin": {
-      "root": "apps/api/admin",
-      "sourceRoot": "apps/api/admin/src",
-      "projectType": "application",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/node:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
-          "options": {
-            "outputPath": "dist/apps/api/admin",
-            "main": "apps/api/admin/src/main.ts",
-            "tsConfig": "apps/api/admin/tsconfig.app.json",
-            "assets": [
-              "apps/api/admin/src/assets"
-            ],
-            "generatePackageJson": true
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/api/admin/src/environments/environment.ts",
-                  "with": "apps/api/admin/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "executor": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "api-admin:build"
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "apps/api/admin/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/api/admin"
-          ],
-          "options": {
-            "jestConfig": "apps/api/admin/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "scraper": {
-      "root": "libs/scraper",
-      "sourceRoot": "libs/scraper/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/scraper/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/scraper"
-          ],
-          "options": {
-            "jestConfig": "libs/scraper/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "admin": {
       "projectType": "application",
       "root": "apps/admin",
@@ -243,6 +159,174 @@
             "lintFilePatterns": [
               "apps/admin-e2e/**/*.{js,ts}"
             ]
+          }
+        }
+      }
+    },
+    "api-admin": {
+      "root": "apps/api/admin",
+      "sourceRoot": "apps/api/admin/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/api/admin",
+            "main": "apps/api/admin/src/main.ts",
+            "tsConfig": "apps/api/admin/tsconfig.app.json",
+            "assets": [
+              "apps/api/admin/src/assets"
+            ],
+            "generatePackageJson": true
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/api/admin/src/environments/environment.ts",
+                  "with": "apps/api/admin/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "api-admin:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/api/admin/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/api/admin"
+          ],
+          "options": {
+            "jestConfig": "apps/api/admin/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-public": {
+      "root": "apps/api/public",
+      "sourceRoot": "apps/api/public/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/api/public",
+            "main": "apps/api/public/src/main.ts",
+            "tsConfig": "apps/api/public/tsconfig.app.json",
+            "assets": [
+              "apps/api/public/src/assets"
+            ],
+            "generatePackageJson": true
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/api/public/src/environments/environment.ts",
+                  "with": "apps/api/public/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "api-public:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/api/public/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/api/public"
+          ],
+          "options": {
+            "jestConfig": "apps/api/public/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "auth": {
+      "root": "libs/auth",
+      "sourceRoot": "libs/auth/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/auth/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/auth"
+          ],
+          "options": {
+            "jestConfig": "libs/auth/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "gql": {
+      "root": "libs/gql",
+      "sourceRoot": "libs/gql/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/gql/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/gql"
+          ],
+          "options": {
+            "jestConfig": "libs/gql/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }
@@ -391,85 +475,26 @@
         }
       }
     },
-    "api-public": {
-      "root": "apps/api/public",
-      "sourceRoot": "apps/api/public/src",
-      "projectType": "application",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/node:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
-          "options": {
-            "outputPath": "dist/apps/api/public",
-            "main": "apps/api/public/src/main.ts",
-            "tsConfig": "apps/api/public/tsconfig.app.json",
-            "assets": [
-              "apps/api/public/src/assets"
-            ],
-            "generatePackageJson": true
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/api/public/src/environments/environment.ts",
-                  "with": "apps/api/public/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "executor": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "api-public:build"
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "apps/api/public/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/api/public"
-          ],
-          "options": {
-            "jestConfig": "apps/api/public/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "gql": {
-      "root": "libs/gql",
-      "sourceRoot": "libs/gql/src",
+    "pubsub": {
+      "root": "libs/pubsub",
+      "sourceRoot": "libs/pubsub/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/gql/**/*.ts"
+              "libs/pubsub/**/*.ts"
             ]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/libs/gql"
+            "coverage/libs/pubsub"
           ],
           "options": {
-            "jestConfig": "libs/gql/jest.config.js",
+            "jestConfig": "libs/pubsub/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -500,51 +525,26 @@
         }
       }
     },
-    "pubsub": {
-      "root": "libs/pubsub",
-      "sourceRoot": "libs/pubsub/src",
+    "scraper": {
+      "root": "libs/scraper",
+      "sourceRoot": "libs/scraper/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/pubsub/**/*.ts"
+              "libs/scraper/**/*.ts"
             ]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/libs/pubsub"
+            "coverage/libs/scraper"
           ],
           "options": {
-            "jestConfig": "libs/pubsub/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "auth": {
-      "root": "libs/auth",
-      "sourceRoot": "libs/auth/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/auth/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/auth"
-          ],
-          "options": {
-            "jestConfig": "libs/auth/jest.config.js",
+            "jestConfig": "libs/scraper/jest.config.js",
             "passWithNoTests": true
           }
         }

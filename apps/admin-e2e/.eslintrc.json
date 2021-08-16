@@ -14,9 +14,6 @@
         "*.js",
         "*.jsx"
       ],
-      "parserOptions": {
-        "project": "apps/admin-e2e/tsconfig.*?.json"
-      },
       "rules": {}
     },
     {

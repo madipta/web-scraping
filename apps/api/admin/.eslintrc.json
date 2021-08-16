@@ -13,11 +13,6 @@
         "*.js",
         "*.jsx"
       ],
-      "parserOptions": {
-        "project": [
-          "apps/api/admin/tsconfig.*?.json"
-        ]
-      },
       "rules": {}
     },
     {

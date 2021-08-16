@@ -11,11 +11,6 @@
         "*.js",
         "*.jsx"
       ],
-      "parserOptions": {
-        "project": [
-          "libs/pubsub/tsconfig.*?.json"
-        ]
-      },
       "rules": {}
     },
     {

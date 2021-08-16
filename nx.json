@@ -18,24 +18,39 @@
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e"
+        ]
       }
     }
   },
   "projects": {
-    "api-admin": {
-      "tags": []
-    },
-    "scraper": {
-      "tags": []
-    },
     "admin": {
       "tags": [],
-      "implicitDependencies": ["api-admin"]
+      "implicitDependencies": [
+        "api-admin"
+      ]
     },
     "admin-e2e": {
       "tags": [],
-      "implicitDependencies": ["admin"]
+      "implicitDependencies": [
+        "admin"
+      ]
+    },
+    "api-admin": {
+      "tags": []
+    },
+    "api-public": {
+      "tags": []
+    },
+    "auth": {
+      "tags": []
+    },
+    "gql": {
+      "tags": []
     },
     "orm": {
       "tags": []
@@ -45,22 +60,26 @@
     },
     "public-e2e": {
       "tags": [],
-      "implicitDependencies": ["public"]
+      "implicitDependencies": [
+        "public"
+      ]
     },
-    "api-public": {
-      "tags": []
-    },
-    "gql": {
+    "pubsub": {
       "tags": []
     },
     "scrape-queue": {
       "tags": []
     },
-    "pubsub": {
-      "tags": []
-    },
-    "auth": {
+    "scraper": {
       "tags": []
     }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
   }
 }

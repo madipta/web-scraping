@@ -14,11 +14,6 @@
         "*.js",
         "*.jsx"
       ],
-      "parserOptions": {
-        "project": [
-          "apps/public/tsconfig.*?.json"
-        ]
-      },
       "rules": {}
     },
     {
