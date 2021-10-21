@@ -22,7 +22,6 @@ export class IndexHtmlScrap implements IIndexScrap {
       if (
         url &&
         url !== home &&
-        (url.startsWith(home) || url.startsWith("/")) &&
         url !== indexPage
       ) {
         if (url.startsWith("/")) {
