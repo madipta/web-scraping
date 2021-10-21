@@ -21,6 +21,7 @@ export class AppService {
       .select("C.id", "id")
       .addSelect("C.title", "title")
       .addSelect("C.image_html", "image_html")
+      .addSelect("C.publish_date", "publish_date")
       .leftJoin("C.link", "L")
       .addSelect("L.url", "url")
       .leftJoin("L.domain", "D")
