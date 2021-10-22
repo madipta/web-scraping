@@ -1,39 +1,5 @@
 {
   "version": 2,
-  "cli": {
-    "defaultCollection": "@nrwl/nest"
-  },
-  "defaultProject": "public",
-  "generators": {
-    "@nrwl/angular:application": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest",
-      "e2eTestRunner": "cypress"
-    },
-    "@nrwl/angular:library": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest"
-    },
-    "@nrwl/angular:component": {
-      "style": "scss"
-    },
-    "@nrwl/react": {
-      "application": {
-        "style": "styled-components",
-        "linter": "eslint",
-        "babel": true
-      },
-      "component": {
-        "style": "styled-components"
-      },
-      "library": {
-        "style": "styled-components",
-        "linter": "eslint"
-      }
-    }
-  },
   "projects": {
     "admin": {
       "projectType": "application",
@@ -121,7 +87,10 @@
               "apps/admin/src/**/*.ts",
               "apps/admin/src/**/*.html"
             ]
-          }
+          },
+          "outputs": [
+            "{options.outputFile}"
+          ]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -133,7 +102,11 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": [
+        "api-admin"
+      ]
     },
     "admin-e2e": {
       "root": "apps/admin-e2e",
@@ -159,9 +132,16 @@
             "lintFilePatterns": [
               "apps/admin-e2e/**/*.{js,ts}"
             ]
-          }
+          },
+          "outputs": [
+            "{options.outputFile}"
+          ]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": [
+        "admin"
+      ]
     },
     "api-admin": {
       "root": "apps/api/admin",
@@ -208,7 +188,10 @@
             "lintFilePatterns": [
               "apps/api/admin/**/*.ts"
             ]
-          }
+          },
+          "outputs": [
+            "{options.outputFile}"
+          ]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -220,7 +203,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "api-public": {
       "root": "apps/api/public",
@@ -267,7 +251,10 @@
             "lintFilePatterns": [
               "apps/api/public/**/*.ts"
             ]
-          }
+          },
+          "outputs": [
+            "{options.outputFile}"
+          ]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -279,7 +266,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "auth": {
       "root": "libs/auth",
@@ -292,7 +280,10 @@
             "lintFilePatterns": [
               "libs/auth/**/*.ts"
             ]
-          }
+          },
+          "outputs": [
+            "{options.outputFile}"
+          ]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -304,7 +295,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "gql": {
       "root": "libs/gql",
@@ -317,7 +309,10 @@
             "lintFilePatterns": [
               "libs/gql/**/*.ts"
             ]
-          }
+          },
+          "outputs": [
+            "{options.outputFile}"
+          ]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -329,7 +324,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "orm": {
       "root": "libs/orm",
@@ -342,7 +338,10 @@
             "lintFilePatterns": [
               "libs/orm/**/*.ts"
             ]
-          }
+          },
+          "outputs": [
+            "{options.outputFile}"
+          ]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -354,7 +353,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "public": {
       "root": "apps/public",
@@ -425,7 +425,10 @@
             "lintFilePatterns": [
               "apps/public/**/*.{ts,tsx,js,jsx}"
             ]
-          }
+          },
+          "outputs": [
+            "{options.outputFile}"
+          ]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -445,7 +448,8 @@
             "cwd": "apps/public"
           }
         }
-      }
+      },
+      "tags": []
     },
     "public-e2e": {
       "root": "apps/public-e2e",
@@ -471,9 +475,16 @@
             "lintFilePatterns": [
               "apps/public-e2e/**/*.{js,ts}"
             ]
-          }
+          },
+          "outputs": [
+            "{options.outputFile}"
+          ]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": [
+        "public"
+      ]
     },
     "pubsub": {
       "root": "libs/pubsub",
@@ -486,7 +497,10 @@
             "lintFilePatterns": [
               "libs/pubsub/**/*.ts"
             ]
-          }
+          },
+          "outputs": [
+            "{options.outputFile}"
+          ]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -498,7 +512,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "scrape-queue": {
       "root": "libs/scrape-queue",
@@ -511,7 +526,10 @@
             "lintFilePatterns": [
               "libs/scrape-queue/**/*.ts"
             ]
-          }
+          },
+          "outputs": [
+            "{options.outputFile}"
+          ]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -523,7 +541,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "scraper": {
       "root": "libs/scraper",
@@ -536,7 +555,10 @@
             "lintFilePatterns": [
               "libs/scraper/**/*.ts"
             ]
-          }
+          },
+          "outputs": [
+            "{options.outputFile}"
+          ]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -548,7 +570,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     }
   }
 }
