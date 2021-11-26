@@ -38,4 +38,7 @@ testem.log
 .DS_Store
 Thumbs.db
 
+.angular/
+
 /apps/public/src/app/styles/tailwind.css
+migrations.json
