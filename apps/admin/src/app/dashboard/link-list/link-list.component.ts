@@ -20,7 +20,7 @@ import { ScraperService } from "../shared/services/scraper.service";
 export class LinkListComponent implements OnInit, OnDestroy {
   domain: GqlGetDomainResult;
   vm$ = this.linkPagingService.data$;
-  notifier = new Subject();
+  destroy = new Subject();
 
   constructor(
     private route: ActivatedRoute,
@@ -35,7 +35,7 @@ export class LinkListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.linkPagingService.error$
-      .pipe(takeUntil(this.notifier))
+      .pipe(takeUntil(this.destroy))
       .subscribe((error) => this.msg.error(error));
     combineLatest([this.route.params, this.route.queryParams])
       .pipe(take(1))
@@ -47,8 +47,8 @@ export class LinkListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.notifier.next();
-    this.notifier.complete();
+    this.destroy.next(true);
+    this.destroy.complete();
   }
 
   search(search: string) {

@@ -16,7 +16,7 @@ import { ScraperService } from "../shared/services/scraper.service";
 })
 export class DomainListComponent implements OnInit, OnDestroy {
   vm$ = this.domainPagingService.data$;
-  notifier = new Subject();
+  destroy$ = new Subject();
 
   constructor(
     public router: Router,
@@ -28,13 +28,13 @@ export class DomainListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.domainPagingService.error$
-      .pipe(takeUntil(this.notifier))
+      .pipe(takeUntil(this.destroy$))
       .subscribe((error) => this.msg.error(error));
   }
 
   ngOnDestroy(): void {
-    this.notifier.next();
-    this.notifier.complete();
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   search(search: string) {

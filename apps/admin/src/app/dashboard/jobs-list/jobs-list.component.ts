@@ -13,7 +13,7 @@ import { ScrapeJobPagingService } from "../shared/services/scrape-job-paging.ser
 })
 export class JobsListComponent implements OnInit, OnDestroy {
   vm$ = this.scrapeJobPagingService.data$;
-  notifier = new Subject();
+  destroy$ = new Subject();
 
   constructor(
     private route: ActivatedRoute,
@@ -24,10 +24,10 @@ export class JobsListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.scrapeJobPagingService.error$
-      .pipe(takeUntil(this.notifier))
+      .pipe(takeUntil(this.destroy$))
       .subscribe((error) => this.msg.error(error));
     combineLatest([this.route.params, this.route.queryParams])
-      .pipe(takeUntil(this.notifier))
+      .pipe(takeUntil(this.destroy$))
       .subscribe(([, query]) => {
         const status = query.status;
         this.scrapeJobPagingService.setFilter({ status });
@@ -47,7 +47,7 @@ export class JobsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.notifier.next();
-    this.notifier.complete();
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }

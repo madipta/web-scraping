@@ -13,7 +13,7 @@ import { ContentPagingService } from "../shared/services/content-paging.service"
 })
 export class ContentListComponent implements OnInit, OnDestroy {
   vm$ = this.contentPagingService.data$;
-  notifier = new Subject();
+  destroy$ = new Subject();
 
   constructor(
     public router: Router,
@@ -23,13 +23,13 @@ export class ContentListComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.contentPagingService.error$
-      .pipe(takeUntil(this.notifier))
+      .pipe(takeUntil(this.destroy$))
       .subscribe((error) => this.msg.error(error));
   }
 
   ngOnDestroy(): void {
-    this.notifier.next();
-    this.notifier.complete();
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   search(search: string) {
