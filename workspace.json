@@ -98,7 +98,7 @@
             "coverage/apps/admin"
           ],
           "options": {
-            "jestConfig": "apps/admin/jest.config.js",
+            "jestConfig": "apps/admin/jest.config.ts",
             "passWithNoTests": true
           }
         }
@@ -149,7 +149,7 @@
       "projectType": "application",
       "targets": {
         "build": {
-          "executor": "@nrwl/node:build",
+          "executor": "@nrwl/node:webpack",
           "outputs": [
             "{options.outputPath}"
           ],
@@ -177,7 +177,7 @@
           }
         },
         "serve": {
-          "executor": "@nrwl/node:execute",
+          "executor": "@nrwl/node:node",
           "options": {
             "buildTarget": "api-admin:build"
           }
@@ -199,7 +199,7 @@
             "coverage/apps/api/admin"
           ],
           "options": {
-            "jestConfig": "apps/api/admin/jest.config.js",
+            "jestConfig": "apps/api/admin/jest.config.ts",
             "passWithNoTests": true
           }
         }
@@ -212,7 +212,7 @@
       "projectType": "application",
       "targets": {
         "build": {
-          "executor": "@nrwl/node:build",
+          "executor": "@nrwl/node:webpack",
           "outputs": [
             "{options.outputPath}"
           ],
@@ -240,7 +240,7 @@
           }
         },
         "serve": {
-          "executor": "@nrwl/node:execute",
+          "executor": "@nrwl/node:node",
           "options": {
             "buildTarget": "api-public:build"
           }
@@ -262,7 +262,7 @@
             "coverage/apps/api/public"
           ],
           "options": {
-            "jestConfig": "apps/api/public/jest.config.js",
+            "jestConfig": "apps/api/public/jest.config.ts",
             "passWithNoTests": true
           }
         }
@@ -291,7 +291,7 @@
             "coverage/libs/auth"
           ],
           "options": {
-            "jestConfig": "libs/auth/jest.config.js",
+            "jestConfig": "libs/auth/jest.config.ts",
             "passWithNoTests": true
           }
         }
@@ -320,7 +320,7 @@
             "coverage/libs/gql"
           ],
           "options": {
-            "jestConfig": "libs/gql/jest.config.js",
+            "jestConfig": "libs/gql/jest.config.ts",
             "passWithNoTests": true
           }
         }
@@ -349,7 +349,7 @@
             "coverage/libs/orm"
           ],
           "options": {
-            "jestConfig": "libs/orm/jest.config.js",
+            "jestConfig": "libs/orm/jest.config.ts",
             "passWithNoTests": true
           }
         }
@@ -362,7 +362,7 @@
       "projectType": "application",
       "targets": {
         "build": {
-          "executor": "@nrwl/web:build",
+          "executor": "@nrwl/web:webpack",
           "outputs": [
             "{options.outputPath}"
           ],
@@ -380,7 +380,8 @@
               "apps/public/src/styles.css"
             ],
             "scripts": [],
-            "webpackConfig": "@nrwl/react/plugins/webpack"
+            "webpackConfig": "@nrwl/react/plugins/webpack",
+            "postcssConfig": "apps/public/postcss.config.js"
           },
           "configurations": {
             "production": {
@@ -416,8 +417,12 @@
           "configurations": {
             "production": {
               "buildTarget": "public:build:production"
+            },
+            "development": {
+              "buildTarget": "public:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
@@ -436,7 +441,7 @@
             "coverage/apps/public"
           ],
           "options": {
-            "jestConfig": "apps/public/jest.config.js",
+            "jestConfig": "apps/public/jest.config.ts",
             "passWithNoTests": true
           }
         },
@@ -508,7 +513,7 @@
             "coverage/libs/pubsub"
           ],
           "options": {
-            "jestConfig": "libs/pubsub/jest.config.js",
+            "jestConfig": "libs/pubsub/jest.config.ts",
             "passWithNoTests": true
           }
         }
@@ -537,7 +542,7 @@
             "coverage/libs/scrape-queue"
           ],
           "options": {
-            "jestConfig": "libs/scrape-queue/jest.config.js",
+            "jestConfig": "libs/scrape-queue/jest.config.ts",
             "passWithNoTests": true
           }
         }
@@ -566,7 +571,7 @@
             "coverage/libs/scraper"
           ],
           "options": {
-            "jestConfig": "libs/scraper/jest.config.js",
+            "jestConfig": "libs/scraper/jest.config.ts",
             "passWithNoTests": true
           }
         }

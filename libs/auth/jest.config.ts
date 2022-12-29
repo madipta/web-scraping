@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: "gql-sub",
-  preset: "../../jest.preset.js",
+  displayName: "auth",
+  
   globals: {
     "ts-jest": {
       tsconfig: "<rootDir>/tsconfig.spec.json",
@@ -11,5 +11,5 @@ module.exports = {
     "^.+\\.[tj]sx?$": "ts-jest",
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
-  coverageDirectory: "../../coverage/libs/pubsub",
+  coverageDirectory: "../../coverage/libs/auth","preset": "..\\..\\jest.preset.ts"
 };
