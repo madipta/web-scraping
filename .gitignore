@@ -42,3 +42,4 @@ Thumbs.db
 
 /apps/public/src/app/styles/tailwind.css
 migrations.json
+debug.log
