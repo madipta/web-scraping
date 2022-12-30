@@ -1,6 +1,8 @@
 import { IndexManagerService } from "../index-manager";
 import { ILooper } from "./looper.interface";
 
+const ctag = "[PagingLooper]";
+
 export class PagingLooper implements ILooper {
   constructor(public manager: IndexManagerService) {}
 
@@ -29,16 +31,17 @@ export class PagingLooper implements ILooper {
         page--;
         errorCount++;
         totalErrorCount++;
+        console.error(ctag, error);
         console.error(
-          `[PagingLooper] error count: ${errorCount}x, total:${totalErrorCount}x`
+          `${ctag} error count: ${errorCount}x, total:${totalErrorCount}x`
         );
         if (
           totalErrorCount >= maxTotalErrorCount ||
           errorCount > maxErrorCount
         ) {
-          throw "[PagingLooper] too many errors!";
+          throw `${ctag} too many errors!`;
         }
-        console.error(`wait ${errorWaitInMs}ms`);
+        console.error(`${ctag} wait ${errorWaitInMs}ms`);
         await new Promise((resolve) => {
           setTimeout(() => resolve, errorWaitInMs);
         });
