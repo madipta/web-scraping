@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   displayName: "admin",
   
   setupFilesAfterEnv: ["<rootDir>/src/test-setup.ts"],
