@@ -29,7 +29,7 @@ const appRoutes: Routes = [
   imports: [
     BrowserAnimationsModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes, { initialNavigation: "enabled" }),
+    RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
   ],
   providers: [AppApolloProvider],
 })

@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Location } from "@angular/common";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { DomainService } from "../shared/services/domain.service";
@@ -13,9 +13,9 @@ import { DomainPagingService } from "../shared/services/domain-paging.service";
 })
 export class DomainUpdateComponent implements OnInit {
   selectedId = 0;
-  form!: FormGroup;
+  form!: UntypedFormGroup;
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     private location: Location,
     private msg: NzMessageService,

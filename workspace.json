@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "admin": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "projectType": "application",
       "root": "apps/admin",
       "sourceRoot": "apps/admin/src",
@@ -109,6 +110,7 @@
       ]
     },
     "admin-e2e": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "apps/admin-e2e",
       "sourceRoot": "apps/admin-e2e/src",
       "projectType": "application",
@@ -144,6 +146,7 @@
       ]
     },
     "api-admin": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "apps/api/admin",
       "sourceRoot": "apps/api/admin/src",
       "projectType": "application",
@@ -207,6 +210,7 @@
       "tags": []
     },
     "api-public": {
+      "$schema": "../../../node_modules/nx/schemas/project-schema.json",
       "root": "apps/api/public",
       "sourceRoot": "apps/api/public/src",
       "projectType": "application",
@@ -270,6 +274,7 @@
       "tags": []
     },
     "auth": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/auth",
       "sourceRoot": "libs/auth/src",
       "projectType": "library",
@@ -299,6 +304,7 @@
       "tags": []
     },
     "gql": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/gql",
       "sourceRoot": "libs/gql/src",
       "projectType": "library",
@@ -328,6 +334,7 @@
       "tags": []
     },
     "orm": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/orm",
       "sourceRoot": "libs/orm/src",
       "projectType": "library",
@@ -357,6 +364,7 @@
       "tags": []
     },
     "public": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "apps/public",
       "sourceRoot": "apps/public/src",
       "projectType": "application",
@@ -457,6 +465,7 @@
       "tags": []
     },
     "public-e2e": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "apps/public-e2e",
       "sourceRoot": "apps/public-e2e/src",
       "projectType": "application",
@@ -492,6 +501,7 @@
       ]
     },
     "pubsub": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/pubsub",
       "sourceRoot": "libs/pubsub/src",
       "projectType": "library",
@@ -521,6 +531,7 @@
       "tags": []
     },
     "scrape-queue": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/scrape-queue",
       "sourceRoot": "libs/scrape-queue/src",
       "projectType": "library",
@@ -550,6 +561,7 @@
       "tags": []
     },
     "scraper": {
+      "$schema": "../../node_modules/nx/schemas/project-schema.json",
       "root": "libs/scraper",
       "sourceRoot": "libs/scraper/src",
       "projectType": "library",
@@ -578,5 +590,6 @@
       },
       "tags": []
     }
-  }
+  },
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }

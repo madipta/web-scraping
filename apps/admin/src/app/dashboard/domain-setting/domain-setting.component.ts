@@ -1,6 +1,6 @@
 import { Location } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormBuilder } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { DomainSettingService } from "../shared/services/domain-setting.service";
@@ -11,7 +11,7 @@ import { DomainSettingService } from "../shared/services/domain-setting.service"
   styleUrls: ["./domain-setting.component.scss"],
 })
 export class DomainSettingComponent implements OnInit {
-  form!: FormGroup;
+  form!: UntypedFormGroup;
   public domainHome: string;
   selectedId = 0;
 
@@ -19,7 +19,7 @@ export class DomainSettingComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private msg: NzMessageService,
     private settingService: DomainSettingService
   ) {}
