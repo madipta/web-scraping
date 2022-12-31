@@ -1,11 +1,10 @@
 import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { GqlModuleOptions, GraphQLModule } from "@nestjs/graphql";
+import { GraphQLModule } from "@nestjs/graphql";
 import { AuthModule } from "@web-scraping/auth";
 import { PubSubModule } from "@web-scraping/pubsub";
 import { OrmModule } from "@web-scraping/orm";
 import { ScrapeQueueModule } from "@web-scraping/scrape-queue";
-import { join } from "path";
 import { GqlConfigModule } from "./config/gql-config.module";
 import { DomainResolver } from "./resolvers/domain/domain.resolver";
 import { LinkResolver } from "./resolvers/link/link.resolver";
