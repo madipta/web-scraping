@@ -10,7 +10,7 @@ services:
   pg:
     image: "postgres:13-alpine"
     ports:
-      - 5432:5432
+      - ${DB_MAIN_PORT}:5432
     volumes:
       - ./tmp/pg:/var/lib/postgresql/data/
     environment:
