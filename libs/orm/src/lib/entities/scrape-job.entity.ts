@@ -8,12 +8,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import type { ILink, IScrapeJob } from "../interfaces";
-import { Link } from "./link.entity";
+import type { IScrapeJob } from "../interfaces";
 
 export enum ScrapeJobStatus {
   created = "created",
