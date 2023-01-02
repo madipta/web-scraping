@@ -76,7 +76,7 @@ export class UserResolver {
         // run initial setup
         await DbSetup.init(this.connection.createQueryRunner());
       }
-      const result = await this.userRepo.findOne({ userName });
+      const result = await this.userRepo.findOne({ where: { userName } });
       if (!result) {
         return { ok: false, error: "User not found!" };
       }
@@ -97,7 +97,7 @@ export class UserResolver {
     try {
       let { userName } = dto;
       userName = userName.toLowerCase();
-      const result = await this.userRepo.findOne({ userName });
+      const result = await this.userRepo.findOne({ where: { userName } });
       return { ok: true, result };
     } catch (e) {
       console.error(e);
@@ -131,7 +131,7 @@ export class UserResolver {
     try {
       let { userName } = dto;
       userName = userName.toLowerCase();
-      const user = await this.userRepo.findOne(userName);
+      const user = await this.userRepo.findOne({ where: { userName } });
       if (!user) {
         return {
           ok: false,

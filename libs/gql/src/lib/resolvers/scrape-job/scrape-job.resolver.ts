@@ -8,7 +8,7 @@ import {
 } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Role } from "@web-scraping/auth";
-import { RefineSortParam, ScrapeJob } from "@web-scraping/orm";
+import { RefineSortParam, ScrapeJob, ScrapeJobStatus } from "@web-scraping/orm";
 import { Repository } from "typeorm";
 import { PageListInput } from "../core/page-list-input";
 import { PageListResult } from "../core/page-list-result";
@@ -28,7 +28,7 @@ export class ScrapeJobPageListResult extends PageListResult {
 @InputType()
 export class GetScrapeJobCountnput {
   @Field(() => String)
-  status: string;
+  status: ScrapeJobStatus;
 }
 
 @Resolver(() => ScrapeJob)
@@ -50,7 +50,7 @@ export class ScrapeJobResolver {
         .createQueryBuilder("ScrapeJob")
         .select("ScrapeJob.id", "id")
         .addSelect("ScrapeJob.url", "url")
-        .where("status=:status", { status });        
+        .where("status=:status", { status });
       if (search) {
         builder.andWhere("url ILIKE :search", {
           search: `%${search}%`,

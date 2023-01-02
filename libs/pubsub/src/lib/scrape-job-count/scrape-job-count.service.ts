@@ -18,18 +18,20 @@ export class ScrapeJobCountService {
   ) {}
 
   async getScrapeJobCountQuery() {
+    const now = new Date().toJSON().substring(0, 10);
+    const filter = `AND created_at>='${now}'`;
     return this.scrapeJobRepo.query(`
       SELECT COUNT(id) FROM domain
       UNION ALL
       SELECT COUNT(id) FROM content
       UNION ALL
-      SELECT COUNT(id) FROM scrape_job where status = 'created'
+      SELECT COUNT(id) FROM scrape_job WHERE status = 'created' ${filter}
       UNION ALL
-      SELECT COUNT(id) FROM scrape_job where status = 'loading-failed'
+      SELECT COUNT(id) FROM scrape_job WHERE status = 'loading-failed' ${filter}
       UNION ALL
-      SELECT COUNT(id) FROM scrape_job where status = 'scraping-failed'
+      SELECT COUNT(id) FROM scrape_job WHERE status = 'scraping-failed' ${filter}
       UNION ALL
-      SELECT COUNT(id) FROM scrape_job where status = 'success'
+      SELECT COUNT(id) FROM scrape_job WHERE status = 'success' ${filter}
   `);
   }
 

@@ -14,7 +14,7 @@ export class ScraperService {
     @InjectRepository(DomainSetting)
     private readonly settingRepo: Repository<DomainSetting>,
     private readonly indexManagerService: IndexManagerService,
-    private readonly contentManagerService: ContentManagerService,
+    private readonly contentManagerService: ContentManagerService
   ) {}
 
   async index(domainId: number, jobId: string) {
@@ -37,7 +37,7 @@ export class ScraperService {
       if (!setting) {
         throw new Error("[ScraperService | content] Setting not found!");
       }
-      const { url } = await this.linkRepo.findOne(linkId);
+      const { url } = await this.linkRepo.findOne({ where: { id: linkId } });
       await this.contentManagerService.manage(setting, url, jobId);
       return { ok: true };
     } catch (e) {

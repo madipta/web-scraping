@@ -59,10 +59,10 @@ export class DomainSettingResolver {
     @Args("input") dto: AutoNumberInput
   ): Promise<DomainSettingResult> {
     try {
-      const result = await this.settingRepo.findOne(
-        { id: dto.id },
-        { relations: ["domain"] }
-      );
+      const result = await this.settingRepo.findOne({
+        where: { id: dto.id },
+        relations: ["domain"],
+      });
       return { ok: true, result };
     } catch (error) {
       console.error(error);
@@ -72,6 +72,6 @@ export class DomainSettingResolver {
 
   @ResolveField()
   async domain(@Parent() setting: DomainSetting) {
-    return this.domainRepo.findOne({ id: setting.id });
+    return this.domainRepo.findOne({ where: { id: setting.id } });
   }
 }

@@ -132,7 +132,7 @@ export class DomainResolver {
     @Args("input") dto: AutoNumberInput
   ): Promise<DomainResult> {
     try {
-      const result = await this.domainRepo.findOne({ id: dto.id });
+      const result = await this.domainRepo.findOne({ where: { id: dto.id } });
       return { ok: true, result };
     } catch (e) {
       console.error(e);
@@ -186,11 +186,11 @@ export class DomainResolver {
 
   @ResolveField()
   async setting(@Parent() domain: Domain) {
-    return this.settingRepo.findOne({ id: domain.id });
+    return this.settingRepo.findOne({ where: { id: domain.id } });
   }
 
   @ResolveField()
   async contents(@Parent() domain: Domain) {
-    return this.contentRepo.find({ domainId: domain.id });
+    return this.contentRepo.find({ where: { domainId: domain.id } });
   }
 }

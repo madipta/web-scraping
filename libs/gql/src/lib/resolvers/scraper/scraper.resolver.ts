@@ -40,8 +40,8 @@ export class ScraperResolver {
   @Mutation(() => BaseResult)
   async scrapeIndex(@Args("input") dto: AutoNumberInput): Promise<BaseResult> {
     try {
-      const domain = await this.domainRepo.findOne(dto.id);
-      const domainSetting = await this.settingRepo.findOne(dto.id);
+      const domain = await this.domainRepo.findOne({ where: { id: dto.id } });
+      const domainSetting = await this.settingRepo.findOne({ where: { id: dto.id } });
       const url = domain.home + domainSetting.indexUrl;
       const { id: jobId } = await this.scrapeJobRepo.save({
         url,
@@ -62,7 +62,7 @@ export class ScraperResolver {
     @Args("input") dto: AutoNumberInput
   ): Promise<BaseResult> {
     try {
-      const link = await this.linkRepo.findOne(dto.id);
+      const link = await this.linkRepo.findOne({ where: { id: dto.id } });
       const { id: jobId } = await this.scrapeJobRepo.save({
         url: link.url,
         status: ScrapeJobStatus.created,

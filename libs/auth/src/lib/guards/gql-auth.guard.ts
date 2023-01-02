@@ -18,12 +18,12 @@ export class GqlAuthGuard implements CanActivate {
     private readonly userRepo: Repository<User>
   ) {}
   async canActivate(context: ExecutionContext) {
-    if(context.getType().toString() !== "graphql") {
+    if (context.getType().toString() !== "graphql") {
       return true;
     }
     const roles = this.reflector.get<AllowedRoles>(
-      'roles',
-      context.getHandler(),
+      "roles",
+      context.getHandler()
     );
     if (!roles) {
       return true;
@@ -34,9 +34,11 @@ export class GqlAuthGuard implements CanActivate {
       const decoded = this.jwtService.verify(token.toString());
       const payloadId = this.config.get("jwt_payload_id");
       if (typeof decoded === "object" && decoded[payloadId]) {
-        const user = await this.userRepo.findOne(decoded[payloadId]);
+        const user = await this.userRepo.findOne({
+          where: { userName: decoded[payloadId] },
+        });
         if (user) {
-          gqlContext['user'] = user;
+          gqlContext["user"] = user;
           if (roles.includes("any")) {
             return true;
           }

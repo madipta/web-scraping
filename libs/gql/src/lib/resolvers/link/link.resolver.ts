@@ -66,7 +66,7 @@ export class LinkResolver {
   @Query(() => LinkResult)
   async getLinkById(@Args("input") dto: AutoNumberInput): Promise<LinkResult> {
     try {
-      const result = await this.linkRepo.findOne({ id: dto.id });
+      const result = await this.linkRepo.findOne({ where: { id: dto.id } });
       return { ok: true, result };
     } catch (error) {
       return { ok: false, error };
@@ -119,6 +119,6 @@ export class LinkResolver {
 
   @ResolveField()
   async domain(@Parent() link: Link) {
-    return this.domainRepo.findOne({ id: link.domainId });
+    return this.domainRepo.findOne({ where: { id: link.domainId } });
   }
 }

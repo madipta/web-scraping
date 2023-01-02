@@ -30,7 +30,7 @@ export class ScraperEvent {
   async onSSuccessIndexScraping(links: IIndexScrapResult[]) {
     await Promise.all(
       links.map(async (link) => {
-        const count = await this.linkRepo.count({ url: link.url });
+        const count = await this.linkRepo.count({ where: { url: link.url }});
         if (!count) {
           this.linkRepo.save({ ...link });
         }
@@ -65,11 +65,11 @@ export class ScraperEvent {
 
   @OnEvent(ScrapeEvents.SuccessScraping)
   async onSuccessScraping({ url, jobId, content }) {
-    const link = await this.linkRepo.findOne({ url });
+    const link = await this.linkRepo.findOne({ where: { url }});
     if (link) {
       const { id: linkId, title } = link;
       content = { ...content, title };
-      if (await this.contentRepo.count({ id: linkId })) {
+      if (await this.contentRepo.count({ where: { id: linkId }})) {
         await this.contentRepo.update({ id: linkId }, content);
       } else {
         await this.contentRepo.save({ ...content, id: linkId });

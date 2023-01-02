@@ -114,11 +114,11 @@ export class ContentResolver {
 
   @ResolveField()
   async link(@Parent() content: Content) {
-    return this.domainRepo.findOne({ id: content.domainId });
+    return this.domainRepo.findOne({ where: { id: content.domainId }});
   }
 
   @ResolveField()
   async domain(@Parent() content: Content) {
-    return this.domainRepo.findOne({ id: content.domainId });
+    return this.domainRepo.findOne({ where: { id: content.domainId }});
   }
 }
