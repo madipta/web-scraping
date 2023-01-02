@@ -1,7 +1,7 @@
 
-# Web Scrapping
+# Web Scraping
 
-Web scrapping for news or blog site using CSS selector to get the content fields
+Web scraping for news or blog site using CSS selector to get the content fields
 
 
 ## Tech Stack
