@@ -96,7 +96,7 @@
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/apps/admin"
+            "{workspaceRoot}/coverage/apps/admin"
           ],
           "options": {
             "jestConfig": "apps/admin/jest.config.ts",
@@ -152,7 +152,7 @@
       "projectType": "application",
       "targets": {
         "build": {
-          "executor": "@nrwl/node:webpack",
+          "executor": "@nrwl/webpack:webpack",
           "outputs": [
             "{options.outputPath}"
           ],
@@ -163,7 +163,9 @@
             "assets": [
               "apps/api/admin/src/assets"
             ],
-            "generatePackageJson": true
+            "generatePackageJson": true,
+            "target": "node",
+            "compiler": "tsc"
           },
           "configurations": {
             "production": {
@@ -199,7 +201,7 @@
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/apps/api/admin"
+            "{workspaceRoot}/coverage/apps/api/admin"
           ],
           "options": {
             "jestConfig": "apps/api/admin/jest.config.ts",
@@ -216,7 +218,7 @@
       "projectType": "application",
       "targets": {
         "build": {
-          "executor": "@nrwl/node:webpack",
+          "executor": "@nrwl/webpack:webpack",
           "outputs": [
             "{options.outputPath}"
           ],
@@ -227,7 +229,9 @@
             "assets": [
               "apps/api/public/src/assets"
             ],
-            "generatePackageJson": true
+            "generatePackageJson": true,
+            "target": "node",
+            "compiler": "tsc"
           },
           "configurations": {
             "production": {
@@ -263,7 +267,7 @@
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/apps/api/public"
+            "{workspaceRoot}/coverage/apps/api/public"
           ],
           "options": {
             "jestConfig": "apps/api/public/jest.config.ts",
@@ -293,7 +297,7 @@
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/libs/auth"
+            "{workspaceRoot}/coverage/libs/auth"
           ],
           "options": {
             "jestConfig": "libs/auth/jest.config.ts",
@@ -323,7 +327,7 @@
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/libs/gql"
+            "{workspaceRoot}/coverage/libs/gql"
           ],
           "options": {
             "jestConfig": "libs/gql/jest.config.ts",
@@ -353,7 +357,7 @@
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/libs/orm"
+            "{workspaceRoot}/coverage/libs/orm"
           ],
           "options": {
             "jestConfig": "libs/orm/jest.config.ts",
@@ -370,7 +374,7 @@
       "projectType": "application",
       "targets": {
         "build": {
-          "executor": "@nrwl/web:webpack",
+          "executor": "@nrwl/webpack:webpack",
           "outputs": [
             "{options.outputPath}"
           ],
@@ -417,7 +421,7 @@
           }
         },
         "serve": {
-          "executor": "@nrwl/web:dev-server",
+          "executor": "@nrwl/webpack:dev-server",
           "options": {
             "buildTarget": "public:build",
             "port": 5000
@@ -446,7 +450,7 @@
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/apps/public"
+            "{workspaceRoot}/coverage/apps/public"
           ],
           "options": {
             "jestConfig": "apps/public/jest.config.ts",
@@ -454,7 +458,7 @@
           }
         },
         "build-tailwind-css": {
-          "executor": "@nrwl/workspace:run-commands",
+          "executor": "nx:run-commands",
           "outputs": [],
           "options": {
             "command": "npx tailwindcss-cli@latest build ./src/styles.css -o src/app/styles/tailwind.css",
@@ -520,7 +524,7 @@
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/libs/pubsub"
+            "{workspaceRoot}/coverage/libs/pubsub"
           ],
           "options": {
             "jestConfig": "libs/pubsub/jest.config.ts",
@@ -550,7 +554,7 @@
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/libs/scrape-queue"
+            "{workspaceRoot}/coverage/libs/scrape-queue"
           ],
           "options": {
             "jestConfig": "libs/scrape-queue/jest.config.ts",
@@ -580,7 +584,7 @@
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/libs/scraper"
+            "{workspaceRoot}/coverage/libs/scraper"
           ],
           "options": {
             "jestConfig": "libs/scraper/jest.config.ts",
