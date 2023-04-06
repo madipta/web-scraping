@@ -11,6 +11,7 @@ export class SpaLoader implements IScrapeLoader<string> {
       const device = devices["Galaxy S5"];
       const context = await browser.newContext({
         ...device,
+        ignoreHTTPSErrors: true
       });
       const page = await context.newPage();
       await page.goto(url, {
