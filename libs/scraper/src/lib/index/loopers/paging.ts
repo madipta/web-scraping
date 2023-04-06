@@ -43,7 +43,7 @@ export class PagingLooper implements ILooper {
         }
         console.error(`${ctag} wait ${errorWaitInMs}ms`);
         await new Promise((resolve) => {
-          setTimeout(() => resolve, errorWaitInMs);
+          setTimeout(resolve, errorWaitInMs);
         });
       }
     } while (links && links.length && page <= maxPage);
