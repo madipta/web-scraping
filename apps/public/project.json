@@ -1,0 +1,89 @@
+{
+  "name": "public",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/public/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/public",
+        "index": "apps/public/src/index.html",
+        "main": "apps/public/src/main.tsx",
+        "polyfills": "apps/public/src/polyfills.ts",
+        "tsConfig": "apps/public/tsconfig.app.json",
+        "assets": ["apps/public/src/favicon.ico", "apps/public/src/assets"],
+        "styles": ["apps/public/src/styles.css"],
+        "scripts": [],
+        "webpackConfig": "apps/public/webpack.config.js",
+        "postcssConfig": "apps/public/postcss.config.js",
+        "isolatedConfig": true
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/public/src/environments/environment.ts",
+              "with": "apps/public/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "extractCss": true,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "2mb",
+              "maximumError": "5mb"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/webpack:dev-server",
+      "options": {
+        "buildTarget": "public:build",
+        "port": 5000
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "public:build:production"
+        },
+        "development": {
+          "buildTarget": "public:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/public/**/*.{ts,tsx,js,jsx}"]
+      },
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/public"],
+      "options": {
+        "jestConfig": "apps/public/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "build-tailwind-css": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "npx tailwindcss-cli@latest build ./src/styles.css -o src/app/styles/tailwind.css",
+        "cwd": "apps/public"
+      }
+    }
+  },
+  "tags": []
+}
