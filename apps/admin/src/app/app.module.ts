@@ -2,6 +2,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule, Routes } from "@angular/router";
+import { ApolloModule } from "apollo-angular";
 import { AppApolloProvider } from "./app.apollo.provider";
 import { AppComponent } from "./app.component";
 import { AuthGuard } from "./guards/auth.guard";
@@ -27,6 +28,7 @@ const appRoutes: Routes = [
   declarations: [AppComponent],
   bootstrap: [AppComponent],
   imports: [
+    ApolloModule,
     BrowserAnimationsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),

@@ -5,11 +5,6 @@ import { APOLLO_OPTIONS } from "apollo-angular";
 import { HttpLink } from "apollo-angular/http";
 
 function createApollo(httpLink: HttpLink) {
-  const basic = setContext(() => ({
-    headers: {
-      Accept: "charset=utf-8",
-    },
-  }));
   const auth = setContext(() => {
     const token = localStorage.getItem("token");
     if (token === null) {
@@ -32,7 +27,6 @@ function createApollo(httpLink: HttpLink) {
     response.data = { errorMessage };
   });
   const link = ApolloLink.from([
-    basic,
     auth,
     errorLink,
     httpLink.create({ uri: "http://localhost:3333/graphql" }),

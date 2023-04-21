@@ -1,3 +1,4 @@
+import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
@@ -20,13 +21,14 @@ import { UserResolver } from "./resolvers/user/user.resolver";
     OrmModule.Register(),
     AuthModule,
     ScrapeQueueModule,
-    GraphQLModule.forRootAsync({
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
+      driver: ApolloDriver,
       imports: [GqlConfigModule],
       inject: [ConfigService],
       useFactory: (cfg: ConfigService) => ({
-        playground: cfg.get<boolean>("gql_playground"),
+        autoSchemaFile: true,
         installSubscriptionHandlers: cfg.get<boolean>("gql_subcription"),
-        autoSchemaFile: true
+        playground: cfg.get<boolean>("gql_playground"),
       }),
     }),
     PubSubModule,
