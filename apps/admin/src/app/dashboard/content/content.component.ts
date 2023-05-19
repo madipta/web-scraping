@@ -3,18 +3,21 @@ import { Location } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { ContentService } from "../shared/services/content.service";
+import { SharedModule } from "../shared/shared.module";
 
 @Component({
+  imports: [SharedModule],
   selector: "web-scraping-content",
-  templateUrl: "./content.component.html",
+  standalone: true,
   styleUrls: ["./content.component.scss"],
+  templateUrl: "./content.component.html",
 })
 export class ContentComponent implements OnInit {
   text: string;
   home: string;
   url: string;
   title: string;
-  
+
   constructor(
     private route: ActivatedRoute,
     private location: Location,

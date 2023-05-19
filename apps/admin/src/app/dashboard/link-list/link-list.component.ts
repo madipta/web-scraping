@@ -11,11 +11,18 @@ import { DomainService } from "../shared/services/domain.service";
 import { LinkPagingService } from "../shared/services/link-paging.service";
 import { LinkService } from "../shared/services/link.service";
 import { ScraperService } from "../shared/services/scraper.service";
+import { TableSearchComponent } from "../shared/components/table-search/table-search.component";
+import { SharedModule } from "../shared/shared.module";
 
 @Component({
+  imports: [
+    SharedModule,
+    TableSearchComponent
+  ],
   selector: "web-scraping-link-list",
-  templateUrl: "./link-list.component.html",
+  standalone: true,
   styleUrls: ["./link-list.component.scss"],
+  templateUrl: "./link-list.component.html",
 })
 export class LinkListComponent implements OnInit, OnDestroy {
   domain: GqlGetDomainResult;

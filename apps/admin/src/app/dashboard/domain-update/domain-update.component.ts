@@ -1,15 +1,22 @@
 import { Component, OnInit } from "@angular/core";
 import { Location } from "@angular/common";
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from "@angular/forms";
+import {
+  UntypedFormGroup,
+  UntypedFormBuilder,
+  Validators,
+} from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { DomainService } from "../shared/services/domain.service";
 import { DomainPagingService } from "../shared/services/domain-paging.service";
+import { SharedModule } from "../shared/shared.module";
 
 @Component({
+  imports: [SharedModule],
   selector: "web-scraping-domain-update",
-  templateUrl: "./domain-update.component.html",
+  standalone: true,
   styleUrls: ["./domain-update.component.scss"],
+  templateUrl: "./domain-update.component.html",
 })
 export class DomainUpdateComponent implements OnInit {
   selectedId = 0;

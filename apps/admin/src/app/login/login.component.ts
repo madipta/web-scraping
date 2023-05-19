@@ -1,3 +1,4 @@
+import { CommonModule } from "@angular/common";
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Subject } from "rxjs";
@@ -5,9 +6,11 @@ import { AuthService } from "../dashboard/shared/services/auth.service";
 import { UserService } from "../dashboard/shared/services/user.service";
 
 @Component({
+  imports: [CommonModule],
   selector: "web-scraping-login",
-  templateUrl: "./login.component.html",
+  standalone: true,
   styleUrls: ["./login.component.scss"],
+  templateUrl: "./login.component.html",
 })
 export class LoginComponent {
   @ViewChild("txtUsername") txtUsername: ElementRef;
@@ -18,7 +21,7 @@ export class LoginComponent {
     private readonly router: Router,
     private readonly userService: UserService,
     private readonly authService: AuthService
-  ) {}
+  ) { }
 
   async login(ev: UIEvent) {
     ev.preventDefault();

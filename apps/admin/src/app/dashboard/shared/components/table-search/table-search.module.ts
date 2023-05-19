@@ -6,13 +6,13 @@ import { NzInputModule } from "ng-zorro-antd/input";
 import { TableSearchComponent } from "./table-search.component";
 
 @NgModule({
-  declarations: [TableSearchComponent],
+  // declarations: [TableSearchComponent],
   imports: [
     CommonModule,
     NzIconModule,
     NzButtonModule,
     NzInputModule,
   ],
-  exports: [TableSearchComponent],
+  // exports: [TableSearchComponent],
 })
 export class TableSearchModule {}

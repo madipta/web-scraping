@@ -13,7 +13,7 @@
     </nz-row>
   </nz-header>
   <nz-content>
-    <div class="dashboard-stats" *ngIf="(jobCount$ | async) as jobCount">
+    <div class="dashboard-stats" *ngIf="jobCount$ | async as jobCount">
       <a routerLink="domain-list" class="dashboard-stat">
         <div class="dashboard-stat-title">Domains</div>
         <i nz-icon nzType="cloud" nzTheme="twotone"></i>
@@ -65,8 +65,8 @@
       <router-outlet></router-outlet>
     </div>
   </nz-content>
-  <nz-footer
-    >Web Scraper ©2021 Implement By
-    <a href="https://madipta.github.io" target="_blank">Madipta</a></nz-footer
-  >
+  <nz-footer>
+    Web Scraper ©2023 by
+    <a href="https://madipta.github.io" target="_blank">Madipta</a>
+  </nz-footer>
 </nz-layout>

@@ -8,11 +8,18 @@ import { GqlDomainPageListResult } from "../shared/gql/dto/domain.dto";
 import { DomainPagingService } from "../shared/services/domain-paging.service";
 import { DomainService } from "../shared/services/domain.service";
 import { ScraperService } from "../shared/services/scraper.service";
+import { SharedModule } from "../shared/shared.module";
+import { TableSearchComponent } from "../shared/components/table-search/table-search.component";
 
 @Component({
+  imports: [
+    SharedModule,
+    TableSearchComponent
+  ],
   selector: "web-scraping-domain-list",
-  templateUrl: "./domain-list.component.html",
+  standalone: true,
   styleUrls: ["./domain-list.component.scss"],
+  templateUrl: "./domain-list.component.html",
 })
 export class DomainListComponent implements OnInit, OnDestroy {
   vm$ = this.domainPagingService.data$;

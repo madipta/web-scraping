@@ -1,8 +1,14 @@
+import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { NzButtonModule } from "ng-zorro-antd/button";
+import { NzIconModule } from "ng-zorro-antd/icon";
+import { NzInputModule } from "ng-zorro-antd/input";
 
 @Component({
+  imports: [CommonModule, NzIconModule, NzButtonModule, NzInputModule],
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: "table-search",
+  standalone: true,
   styleUrls: ["./table-search.component.scss"],
   template: `
     <div class="search-bar">

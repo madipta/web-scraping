@@ -5,11 +5,18 @@ import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { combineLatest, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { ScrapeJobPagingService } from "../shared/services/scrape-job-paging.service";
+import { TableSearchComponent } from "../shared/components/table-search/table-search.component";
+import { SharedModule } from "../shared/shared.module";
 
 @Component({
+  imports: [
+    SharedModule,
+    TableSearchComponent
+  ],
   selector: "web-scraping-jobs-list",
-  templateUrl: "./jobs-list.component.html",
+  standalone: true,
   styleUrls: ["./jobs-list.component.scss"],
+  templateUrl: "./jobs-list.component.html",
 })
 export class JobsListComponent implements OnInit, OnDestroy {
   vm$ = this.scrapeJobPagingService.data$;

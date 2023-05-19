@@ -4,11 +4,14 @@ import { UntypedFormGroup, UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { DomainSettingService } from "../shared/services/domain-setting.service";
+import { SharedModule } from "../shared/shared.module";
 
 @Component({
+  imports: [SharedModule],
   selector: "web-scraping-domain-setting",
-  templateUrl: "./domain-setting.component.html",
+  standalone: true,
   styleUrls: ["./domain-setting.component.scss"],
+  templateUrl: "./domain-setting.component.html",
 })
 export class DomainSettingComponent implements OnInit {
   form!: UntypedFormGroup;
@@ -47,7 +50,7 @@ export class DomainSettingComponent implements OnInit {
       scrapIndexPaging: ["paging"],
       scrapIndexFormat: ["html"],
       scrapArticleMethod: ["web"],
-      scrapArticleFormat: ["html"]
+      scrapArticleFormat: ["html"],
     });
   }
 

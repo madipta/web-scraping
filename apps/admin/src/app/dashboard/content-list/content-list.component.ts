@@ -4,12 +4,19 @@ import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { TableSearchComponent } from "../shared/components/table-search/table-search.component";
 import { ContentPagingService } from "../shared/services/content-paging.service";
+import { SharedModule } from "../shared/shared.module";
 
 @Component({
+  imports: [
+    SharedModule,
+    TableSearchComponent
+  ],
   selector: "web-scraping-content-list",
-  templateUrl: "./content-list.component.html",
+  standalone: true,
   styleUrls: ["./content-list.component.scss"],
+  templateUrl: "./content-list.component.html",
 })
 export class ContentListComponent implements OnInit, OnDestroy {
   vm$ = this.contentPagingService.data$;

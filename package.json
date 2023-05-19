@@ -38,6 +38,7 @@
     "@angular/platform-browser": "15.2.8",
     "@angular/platform-browser-dynamic": "15.2.8",
     "@angular/router": "15.2.8",
+    "@ant-design/icons-angular": "^15.0.0",
     "@apollo/client": "^3.7.12",
     "@apollo/server": "^4.7.0",
     "@nestjs/apollo": "^11.0.5",
