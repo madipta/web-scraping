@@ -5,7 +5,7 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/webpack:webpack",
+      "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/public",
@@ -46,7 +46,7 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/webpack:dev-server",
+      "executor": "@nx/webpack:dev-server",
       "options": {
         "buildTarget": "public:build",
         "port": 5000
@@ -62,14 +62,14 @@
       "defaultConfiguration": "development"
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": ["apps/public/**/*.{ts,tsx,js,jsx}"]
       },
       "outputs": ["{options.outputFile}"]
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/apps/public"],
       "options": {
         "jestConfig": "apps/public/jest.config.ts",
