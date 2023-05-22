@@ -1,14 +1,15 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { Router, RouterModule } from "@angular/router";
-import { AuthService } from "./shared/services/auth.service";
-import { ScrapeJobService } from "./shared/services/scrape-job.service";
 import { NzGridModule } from "ng-zorro-antd/grid";
 import { NzIconModule } from "ng-zorro-antd/icon";
 import { NzLayoutModule } from "ng-zorro-antd/layout";
 import { NzMenuModule } from "ng-zorro-antd/menu";
+import { AuthService } from "./shared/services/auth.service";
+import { ScrapeJobService } from "./shared/services/scrape-job.service";
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     NzGridModule,
@@ -23,7 +24,7 @@ import { NzMenuModule } from "ng-zorro-antd/menu";
   templateUrl: "./dashboard.component.html",
 })
 export class DashboardComponent implements OnInit {
-  jobCount$ = this.jobService.jobCount$;
+  jobCount = this.jobService.jobCount$;
 
   constructor(
     public router: Router,

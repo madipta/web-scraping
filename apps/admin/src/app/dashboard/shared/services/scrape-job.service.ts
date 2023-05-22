@@ -12,7 +12,7 @@ import { WsService } from "./ws.service";
 
 @Injectable({ providedIn: "root" })
 export class ScrapeJobService {
-  jobCount$ = this.wsService.jobCount$;
+  jobCount$ = this.wsService.jobCount;
 
   constructor(private apollo: Apollo, private wsService: WsService) {}
 
