@@ -5,36 +5,38 @@ import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { GqlDomainPageListResult } from "../shared/gql/dto/domain.dto";
-import { DomainPagingService } from "../shared/services/domain-paging.service";
 import { DomainService } from "../shared/services/domain.service";
 import { ScraperService } from "../shared/services/scraper.service";
 import { SharedModule } from "../shared/shared.module";
 import { TableSearchComponent } from "../shared/components/table-search/table-search.component";
+import { NzPagingService } from "../shared/services/nz-paging.service";
 
 @Component({
-  imports: [
-    SharedModule,
-    TableSearchComponent
-  ],
+  imports: [SharedModule, TableSearchComponent],
   selector: "web-scraping-domain-list",
   standalone: true,
   styleUrls: ["./domain-list.component.scss"],
   templateUrl: "./domain-list.component.html",
 })
 export class DomainListComponent implements OnInit, OnDestroy {
-  vm$ = this.domainPagingService.data$;
+  pagingService = new NzPagingService({ sortBy: "home" });
+  vm$ = this.pagingService.data$;
   destroy$ = new Subject();
 
   constructor(
     public router: Router,
     private msg: NzMessageService,
     private domainService: DomainService,
-    private domainPagingService: DomainPagingService,
     private scraperService: ScraperService
   ) {}
 
   ngOnInit(): void {
-    this.domainPagingService.error$
+    this.pagingService.pager$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(async (pager) => {
+        this.pagingService.load(this.domainService.fetchList(pager));
+      });
+    this.pagingService.error$
       .pipe(takeUntil(this.destroy$))
       .subscribe((error) => this.msg.error(error));
   }
@@ -45,15 +47,15 @@ export class DomainListComponent implements OnInit, OnDestroy {
   }
 
   search(search: string) {
-    this.domainPagingService.search(search);
+    this.pagingService.search(search);
   }
 
   refresh() {
-    this.domainPagingService.refresh();
+    this.pagingService.refresh();
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
-    this.domainPagingService.onQueryParamsChange(params);
+    this.pagingService.onQueryParamsChange(params);
   }
 
   async delete(id) {
@@ -64,7 +66,7 @@ export class DomainListComponent implements OnInit, OnDestroy {
       this.msg.error(result.error || "Deleting domain failed!");
     } else {
       this.msg.success("Domain deleted!");
-      this.domainPagingService.refresh();
+      this.pagingService.refresh();
     }
   }
 

@@ -8,26 +8,24 @@ import { take, takeUntil } from "rxjs/operators";
 import { GqlGetDomainResult } from "../shared/gql/dto/domain.dto";
 import { GqlLinkPageListResult } from "../shared/gql/dto/link.dto";
 import { DomainService } from "../shared/services/domain.service";
-import { LinkPagingService } from "../shared/services/link-paging.service";
 import { LinkService } from "../shared/services/link.service";
 import { ScraperService } from "../shared/services/scraper.service";
 import { TableSearchComponent } from "../shared/components/table-search/table-search.component";
 import { SharedModule } from "../shared/shared.module";
+import { NzPagingService } from "../shared/services/nz-paging.service";
 
 @Component({
-  imports: [
-    SharedModule,
-    TableSearchComponent
-  ],
+  imports: [SharedModule, TableSearchComponent],
   selector: "web-scraping-link-list",
   standalone: true,
   styleUrls: ["./link-list.component.scss"],
   templateUrl: "./link-list.component.html",
 })
 export class LinkListComponent implements OnInit, OnDestroy {
+  pagingService = new NzPagingService({ sortBy: "title" });
   domain: GqlGetDomainResult;
-  vm$ = this.linkPagingService.data$;
-  destroy = new Subject();
+  vm$ = this.pagingService.data$;
+  destroy$ = new Subject();
 
   constructor(
     private route: ActivatedRoute,
@@ -36,38 +34,47 @@ export class LinkListComponent implements OnInit, OnDestroy {
     private msg: NzMessageService,
     private domainService: DomainService,
     private linkService: LinkService,
-    private scraperService: ScraperService,
-    private linkPagingService: LinkPagingService
+    private scraperService: ScraperService
   ) {}
 
   ngOnInit(): void {
-    this.linkPagingService.error$
-      .pipe(takeUntil(this.destroy))
+    this.pagingService.pager$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(async (pager) => {
+        const domainId = +pager.filter.domainId;
+        if (!isNaN(domainId)) {
+          return this.pagingService.load(
+            this.linkService.fetchList(pager, domainId)
+          );
+        }
+      });
+    this.pagingService.error$
+      .pipe(takeUntil(this.destroy$))
       .subscribe((error) => this.msg.error(error));
     combineLatest([this.route.params, this.route.queryParams])
       .pipe(take(1))
       .subscribe(async ([, query]) => {
         const domainId = +query.id;
         this.domain = await this.getDomain(domainId);
-        this.linkPagingService.setFilter({ domainId });
+        this.pagingService.setFilter({ domainId });
       });
   }
 
   ngOnDestroy(): void {
-    this.destroy.next(true);
-    this.destroy.complete();
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   search(search: string) {
-    this.linkPagingService.search(search);
+    this.pagingService.search(search);
   }
 
   refresh() {
-    this.linkPagingService.refresh();
+    this.pagingService.refresh();
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
-    this.linkPagingService.onQueryParamsChange(params);
+    this.pagingService.onQueryParamsChange(params);
   }
 
   async getDomain(id: number) {
@@ -86,7 +93,7 @@ export class LinkListComponent implements OnInit, OnDestroy {
       this.msg.error(result.error || "Delete failed!");
     } else {
       this.msg.success("Deleted!");
-      this.linkPagingService.refresh();
+      this.pagingService.refresh();
     }
   }
 

@@ -1,11 +1,9 @@
-import { Injectable } from "@angular/core";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { BehaviorSubject, combineLatest } from "rxjs";
 import { distinctUntilChanged, filter, map } from "rxjs/operators";
 import { BasePagingResult } from "../gql/dto/base-result.dto";
 import { NzDataPaginator, Pager } from "./nz-data-paginator";
 
-@Injectable({ providedIn: "root" })
 export class NzPagingService<T = unknown> {
   private subject = new BehaviorSubject<BasePagingResult<T>>({
     error: null,

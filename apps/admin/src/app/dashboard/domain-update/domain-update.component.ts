@@ -8,7 +8,6 @@ import {
 import { ActivatedRoute } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { DomainService } from "../shared/services/domain.service";
-import { DomainPagingService } from "../shared/services/domain-paging.service";
 import { SharedModule } from "../shared/shared.module";
 
 @Component({
@@ -21,13 +20,13 @@ import { SharedModule } from "../shared/shared.module";
 export class DomainUpdateComponent implements OnInit {
   selectedId = 0;
   form!: UntypedFormGroup;
+
   constructor(
     private fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     private location: Location,
     private msg: NzMessageService,
-    private domainService: DomainService,
-    private domainPagingService: DomainPagingService
+    private domainService: DomainService
   ) {}
 
   ngOnInit(): void {
@@ -77,7 +76,6 @@ export class DomainUpdateComponent implements OnInit {
       this.msg.error(res.error || "Failed!");
     } else {
       this.msg.success("Success!");
-      this.domainPagingService.refresh();
       this.location.back();
     }
   }
