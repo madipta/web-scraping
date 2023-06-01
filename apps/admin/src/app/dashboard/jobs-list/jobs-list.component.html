@@ -1,8 +1,8 @@
 <nz-page-header nzTitle="Scrape Job List"></nz-page-header>
 
-<ng-container *ngIf="vm$ | async as vm">
+<ng-container *ngIf="vm()">
   <table-search
-    [searchText]="vm.pager.search"
+    [searchText]="vm().pager.search"
     (table_search)="search($event)"
     (table_refresh)="refresh()"
   ></table-search>
@@ -10,12 +10,12 @@
   <nz-table
     nzShowSizeChanger
     nzSize="small"
-    [nzData]="vm.result"
+    [nzData]="vm().result"
     [nzFrontPagination]="false"
-    [nzLoading]="vm.loading"
-    [nzTotal]="vm.total"
-    [nzPageSize]="vm.pager.pageSize"
-    [nzPageIndex]="vm.pager.pageIndex"
+    [nzLoading]="vm().loading"
+    [nzTotal]="vm().total"
+    [nzPageSize]="vm().pager.pageSize"
+    [nzPageIndex]="vm().pager.pageIndex"
     [nzShowSizeChanger]="false"
     (nzQueryParams)="onQueryParamsChange($event)"
   >
@@ -28,7 +28,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of vm.result">
+      <tr *ngFor="let data of vm().result">
         <td>
           <a [href]="data.url" target="_blank">{{ data.url | link }}</a>
         </td>

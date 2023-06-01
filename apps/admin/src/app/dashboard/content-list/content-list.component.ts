@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { Router } from "@angular/router";
-import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -13,19 +12,15 @@ import { ContentService } from "../shared/services/content.service";
   imports: [SharedModule, TableSearchComponent],
   selector: "web-scraping-content-list",
   standalone: true,
-  styleUrls: ["./content-list.component.scss"],
   templateUrl: "./content-list.component.html",
 })
 export class ContentListComponent implements OnInit, OnDestroy {
   pagingService = new NzPagingService({ sortBy: "Link.title" });
-  vm$ = this.pagingService.data$;
+  vm = this.pagingService.data;
   destroy$ = new Subject();
 
-  constructor(
-    public router: Router,
-    private contentService: ContentService,
-    private msg: NzMessageService
-  ) {}
+  router = inject(Router);
+  private contentService = inject(ContentService);
 
   async ngOnInit() {
     this.pagingService.pager$
@@ -33,9 +28,6 @@ export class ContentListComponent implements OnInit, OnDestroy {
       .subscribe(async (pager) => {
         this.pagingService.load(this.contentService.fetchList(pager));
       });
-    this.pagingService.error$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((error) => this.msg.error(error));
   }
 
   ngOnDestroy(): void {

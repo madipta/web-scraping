@@ -1,34 +1,32 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { TableSearchComponent } from "../shared/components/table-search/table-search.component";
 import { GqlDomainPageListResult } from "../shared/gql/dto/domain.dto";
 import { DomainService } from "../shared/services/domain.service";
+import { NzPagingService } from "../shared/services/nz-paging.service";
 import { ScraperService } from "../shared/services/scraper.service";
 import { SharedModule } from "../shared/shared.module";
-import { TableSearchComponent } from "../shared/components/table-search/table-search.component";
-import { NzPagingService } from "../shared/services/nz-paging.service";
 
 @Component({
   imports: [SharedModule, TableSearchComponent],
   selector: "web-scraping-domain-list",
   standalone: true,
-  styleUrls: ["./domain-list.component.scss"],
   templateUrl: "./domain-list.component.html",
 })
 export class DomainListComponent implements OnInit, OnDestroy {
   pagingService = new NzPagingService({ sortBy: "home" });
-  vm$ = this.pagingService.data$;
+  vm = this.pagingService.data;
   destroy$ = new Subject();
 
-  constructor(
-    public router: Router,
-    private msg: NzMessageService,
-    private domainService: DomainService,
-    private scraperService: ScraperService
-  ) {}
+  router = inject(Router);
+
+  private domainService = inject(DomainService);
+  private msg = inject(NzMessageService);
+  private scraperService = inject(ScraperService);
 
   ngOnInit(): void {
     this.pagingService.pager$
@@ -36,9 +34,6 @@ export class DomainListComponent implements OnInit, OnDestroy {
       .subscribe(async (pager) => {
         this.pagingService.load(this.domainService.fetchList(pager));
       });
-    this.pagingService.error$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((error) => this.msg.error(error));
   }
 
   ngOnDestroy(): void {

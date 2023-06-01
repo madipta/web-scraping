@@ -1,8 +1,11 @@
+import { toSignal } from "@angular/core/rxjs-interop";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { BehaviorSubject, combineLatest } from "rxjs";
-import { distinctUntilChanged, filter, map } from "rxjs/operators";
+import { distinctUntilChanged, filter, map, tap } from "rxjs/operators";
 import { BasePagingResult } from "../gql/dto/base-result.dto";
 import { NzDataPaginator, Pager } from "./nz-data-paginator";
+import { inject } from "@angular/core";
+import { NzMessageService } from "ng-zorro-antd/message";
 
 export class NzPagingService<T = unknown> {
   private subject = new BehaviorSubject<BasePagingResult<T>>({
@@ -39,9 +42,14 @@ export class NzPagingService<T = unknown> {
       return { loading, pager, result, total };
     })
   );
+  data = toSignal(this.data$);
+  private msg = inject(NzMessageService);
 
   constructor(pagingOptions: Partial<Pager>) {
     this.paginator.setPager(pagingOptions);
+    this.error$.subscribe((error) => {
+      this.msg.error(error)
+    });
   }
 
   async load(val: Promise<BasePagingResult<T>>) {

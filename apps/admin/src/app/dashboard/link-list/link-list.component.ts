@@ -1,5 +1,5 @@
 import { Location } from "@angular/common";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
@@ -18,24 +18,22 @@ import { NzPagingService } from "../shared/services/nz-paging.service";
   imports: [SharedModule, TableSearchComponent],
   selector: "web-scraping-link-list",
   standalone: true,
-  styleUrls: ["./link-list.component.scss"],
   templateUrl: "./link-list.component.html",
 })
 export class LinkListComponent implements OnInit, OnDestroy {
   pagingService = new NzPagingService({ sortBy: "title" });
   domain: GqlGetDomainResult;
-  vm$ = this.pagingService.data$;
+  vm = this.pagingService.data;
   destroy$ = new Subject();
 
-  constructor(
-    private route: ActivatedRoute,
-    public router: Router,
-    private location: Location,
-    private msg: NzMessageService,
-    private domainService: DomainService,
-    private linkService: LinkService,
-    private scraperService: ScraperService
-  ) {}
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+
+  private domainService = inject(DomainService);
+  private linkService = inject(LinkService);
+  private location = inject(Location);
+  private msg = inject(NzMessageService);
+  private scraperService = inject(ScraperService);
 
   ngOnInit(): void {
     this.pagingService.pager$
@@ -48,9 +46,6 @@ export class LinkListComponent implements OnInit, OnDestroy {
           );
         }
       });
-    this.pagingService.error$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((error) => this.msg.error(error));
     combineLatest([this.route.params, this.route.queryParams])
       .pipe(take(1))
       .subscribe(async ([, query]) => {

@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { combineLatest, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -13,33 +12,29 @@ import { ScrapeJobService } from "../shared/services/scrape-job.service";
   imports: [SharedModule, TableSearchComponent],
   selector: "web-scraping-jobs-list",
   standalone: true,
-  styleUrls: ["./jobs-list.component.scss"],
   templateUrl: "./jobs-list.component.html",
 })
 export class JobsListComponent implements OnInit, OnDestroy {
   pagingService = new NzPagingService({ sortBy: "created_at" });
-  vm$ = this.pagingService.data$;
+  vm = this.pagingService.data;
   destroy$ = new Subject();
 
-  constructor(
-    private route: ActivatedRoute,
-    public router: Router,
-    private msg: NzMessageService,
-    private scrapeJobService: ScrapeJobService
-  ) {}
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+
+  private scrapeJobService = inject(ScrapeJobService);
 
   ngOnInit(): void {
-    this.pagingService.pager$.subscribe(async (pager) => {
-      const status = pager.filter.status as string;
-      if (status) {
-        return this.pagingService.load(
-          this.scrapeJobService.fetchList(pager, status)
-        );
-      }
-    });
-    this.pagingService.error$
+    this.pagingService.pager$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((error) => this.msg.error(error));
+      .subscribe(async (pager) => {
+        const status = pager.filter.status as string;
+        if (status) {
+          return this.pagingService.load(
+            this.scrapeJobService.fetchList(pager, status)
+          );
+        }
+      });
     combineLatest([this.route.params, this.route.queryParams])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([, query]) => {
