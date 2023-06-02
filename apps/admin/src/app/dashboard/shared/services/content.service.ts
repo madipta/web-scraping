@@ -4,7 +4,7 @@ import { map } from "rxjs/operators";
 import { CONTENT_PAGE_LIST_QUERY, GET_CONTENT_QUERY } from "../gql/content";
 import { pagelistResultMap, resultMap } from "../gql/dto/base-result.dto";
 import { GqlContentPageListResult, GqlGetContent } from "../gql/dto/content.dto";
-import { Pager } from "./nz-data-paginator";
+import { Pager } from "./nz-table-paginator";
 
 @Injectable({ providedIn: "root" })
 export class ContentService {

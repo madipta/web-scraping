@@ -4,7 +4,7 @@ import { map } from "rxjs/operators";
 import { pagelistResultMap, resultMap } from "../gql/dto/base-result.dto";
 import { GqlDeleteLinkResult, GqlLinkPageListResult } from "../gql/dto/link.dto";
 import { DELETE_LINK_MUTATION, LINK_PAGE_LIST_QUERY } from "../gql/link";
-import { Pager } from "./nz-data-paginator";
+import { Pager } from "./nz-table-paginator";
 
 @Injectable({ providedIn: "root" })
 export class LinkService {

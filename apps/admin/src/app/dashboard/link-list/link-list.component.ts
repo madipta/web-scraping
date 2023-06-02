@@ -1,10 +1,10 @@
 import { Location } from "@angular/common";
-import { Component, OnDestroy, OnInit, inject } from "@angular/core";
+import { Component, DestroyRef, inject } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
-import { combineLatest, Subject } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
+import { combineLatest } from "rxjs";
 import { GqlGetDomainResult } from "../shared/gql/dto/domain.dto";
 import { GqlLinkPageListResult } from "../shared/gql/dto/link.dto";
 import { DomainService } from "../shared/services/domain.service";
@@ -12,7 +12,7 @@ import { LinkService } from "../shared/services/link.service";
 import { ScraperService } from "../shared/services/scraper.service";
 import { TableSearchComponent } from "../shared/components/table-search/table-search.component";
 import { SharedModule } from "../shared/shared.module";
-import { NzPagingService } from "../shared/services/nz-paging.service";
+import { NzTablePaging } from "../shared/services/nz-table-paging";
 
 @Component({
   imports: [SharedModule, TableSearchComponent],
@@ -20,56 +20,52 @@ import { NzPagingService } from "../shared/services/nz-paging.service";
   standalone: true,
   templateUrl: "./link-list.component.html",
 })
-export class LinkListComponent implements OnInit, OnDestroy {
-  pagingService = new NzPagingService({ sortBy: "title" });
+export class LinkListComponent {
   domain: GqlGetDomainResult;
-  vm = this.pagingService.data;
-  destroy$ = new Subject();
 
   route = inject(ActivatedRoute);
   router = inject(Router);
 
+  private destroyRef = inject(DestroyRef);
   private domainService = inject(DomainService);
   private linkService = inject(LinkService);
   private location = inject(Location);
   private msg = inject(NzMessageService);
   private scraperService = inject(ScraperService);
 
-  ngOnInit(): void {
-    this.pagingService.pager$
-      .pipe(takeUntil(this.destroy$))
+  tableData = new NzTablePaging({ sortBy: "title" });
+  vm = this.tableData.data;
+
+  constructor() {
+    this.tableData.pager$
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(async (pager) => {
         const domainId = +pager.filter.domainId;
         if (!isNaN(domainId)) {
-          return this.pagingService.load(
+          return this.tableData.load(
             this.linkService.fetchList(pager, domainId)
           );
         }
       });
     combineLatest([this.route.params, this.route.queryParams])
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(async ([, query]) => {
         const domainId = +query.id;
         this.domain = await this.getDomain(domainId);
-        this.pagingService.setFilter({ domainId });
+        this.tableData.setFilter({ domainId });
       });
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
-  }
-
   search(search: string) {
-    this.pagingService.search(search);
+    this.tableData.search(search);
   }
 
   refresh() {
-    this.pagingService.refresh();
+    this.tableData.refresh();
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
-    this.pagingService.onQueryParamsChange(params);
+    this.tableData.onQueryParamsChange(params);
   }
 
   async getDomain(id: number) {
@@ -88,7 +84,7 @@ export class LinkListComponent implements OnInit, OnDestroy {
       this.msg.error(result.error || "Delete failed!");
     } else {
       this.msg.success("Deleted!");
-      this.pagingService.refresh();
+      this.tableData.refresh();
     }
   }
 

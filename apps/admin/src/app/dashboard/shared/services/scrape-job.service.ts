@@ -7,7 +7,7 @@ import {
   SCRAP_INIT_JOB_COUNT_SUBSCRIPTION,
   SCRAP_JOB_PAGE_LIST_QUERY,
 } from "../gql/scrap-job";
-import { Pager } from "./nz-data-paginator";
+import { Pager } from "./nz-table-paginator";
 import { WsService } from "./ws.service";
 
 @Injectable({ providedIn: "root" })

@@ -15,7 +15,7 @@ import {
   GqlGetDomainResult,
   GqlUpdateDomainInput,
 } from "../gql/dto/domain.dto";
-import { Pager } from "./nz-data-paginator";
+import { Pager } from "./nz-table-paginator";
 
 @Injectable({ providedIn: "root" })
 export class DomainService {

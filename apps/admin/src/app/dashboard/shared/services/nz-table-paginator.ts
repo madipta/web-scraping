@@ -10,7 +10,7 @@ export class Pager {
   filter: Record<string, string | number> = {};
 }
 
-export class NzDataPaginator {
+export class NzTablePaginator {
   private pager = new Pager();
   private subject = new BehaviorSubject(this.pager);
   pager$ = this.subject.asObservable();
