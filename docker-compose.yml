@@ -1,12 +1,12 @@
 version: '3.8'
 services:
-  adminer:
-    image: adminer:4-standalone
-    restart: always
-    ports:
-      - 8080:8080
-    depends_on:
-      - pg
+  # adminer:
+  #   image: adminer:4-standalone
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+  #   depends_on:
+  #     - pg
   pg:
     image: "postgres:13-alpine"
     ports:

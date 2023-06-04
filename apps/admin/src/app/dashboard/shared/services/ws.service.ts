@@ -1,4 +1,5 @@
 import { Injectable, signal } from "@angular/core";
+import { environment } from "../../../../environments/environment";
 import { EMPTY } from "rxjs";
 import { catchError, filter, map, tap } from "rxjs/operators";
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
@@ -18,7 +19,7 @@ export type JobCountType = {
 })
 export class WsService {
   private socket$: WebSocketSubject<WsReturnType>;
-  private endpoint = "ws://localhost:8000";
+  private endpoint = `ws://localhost:${environment.ws_port}`;
 
   jobCount = signal<JobCountType>({
     domain: 0,

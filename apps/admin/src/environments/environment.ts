@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  ws_port: 3334
 };
 
 /*

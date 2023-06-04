@@ -9,7 +9,9 @@ import { PUBSUB_EVENTS, PUBSUB_PROVIDER } from "@web-scraping/pubsub";
 import { RedisClient } from "redis";
 import { Server } from "ws";
 
-@WebSocketGateway(8000)
+const port = process.env.API_ADMIN_WS_PORT;
+
+@WebSocketGateway(+port)
 export class PubSubWsGateway
   implements OnModuleInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
