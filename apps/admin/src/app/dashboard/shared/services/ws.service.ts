@@ -1,8 +1,8 @@
-import { Injectable, signal } from "@angular/core";
-import { environment } from "../../../../environments/environment";
-import { EMPTY } from "rxjs";
-import { catchError, filter, map, tap } from "rxjs/operators";
-import { webSocket, WebSocketSubject } from "rxjs/webSocket";
+import { Injectable, signal } from '@angular/core';
+import { environment } from '../../../../environments/environment';
+import { EMPTY } from 'rxjs';
+import { catchError, filter, map, tap } from 'rxjs/operators';
+import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 
 export type WsReturnType<T = unknown> = { event: string; data: T };
 export type JobCountType = {
@@ -15,10 +15,10 @@ export type JobCountType = {
 };
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class WsService {
-  private socket$: WebSocketSubject<WsReturnType>;
+  private socket$: WebSocketSubject<WsReturnType> | undefined;
   private endpoint = `ws://localhost:${environment.ws_port}`;
 
   jobCount = signal<JobCountType>({
@@ -33,7 +33,7 @@ export class WsService {
   constructor() {
     this.connection
       .pipe(
-        filter((v) => v.data && v.event === "jobCount"),
+        filter((v) => v.data && v.event === 'jobCount'),
         map<WsReturnType<JobCountType>, JobCountType>((v) => v.data),
         tap((v) => this.jobCount.set(v))
       )
@@ -41,12 +41,7 @@ export class WsService {
   }
 
   get connection() {
-    if (
-      !this.socket$ ||
-      this.socket$.closed ||
-      this.socket$.isStopped ||
-      this.socket$.hasError
-    ) {
+    if (!this.socket$ || this.socket$.closed) {
       this.socket$ = webSocket(this.endpoint);
     }
     return this.socket$.pipe(
@@ -58,7 +53,9 @@ export class WsService {
   }
 
   close() {
-    this.socket$.unsubscribe();
-    this.socket$ = null;
+    if (this.socket$) {
+      this.socket$.unsubscribe();
+      this.socket$ = undefined;
+    }
   }
 }

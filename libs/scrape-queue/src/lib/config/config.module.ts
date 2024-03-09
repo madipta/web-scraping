@@ -5,8 +5,8 @@ import * as Joi from "joi";
 const env = process.env;
 
 const config = () => ({
-  redis_queue_host: env.REDIS_QUEUE_HOST,
-  redis_queue_port: +env.REDIS_QUEUE_PORT,
+  redis_queue_host: env["REDIS_QUEUE_HOST"],
+  redis_queue_port: +(env["REDIS_QUEUE_PORT"] || "6379"),
 });
 
 const schema = Joi.object({

@@ -1,0 +1,24 @@
+{
+  "name": "api-public",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apis/public/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "api-public:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "api-public:build:development"
+        },
+        "production": {
+          "buildTarget": "api-public:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

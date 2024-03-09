@@ -1,12 +1,14 @@
-import { NzTableQueryParams } from "ng-zorro-antd/table";
-import { BehaviorSubject } from "rxjs";
+import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { BehaviorSubject } from 'rxjs';
+
+type SortOrderType = 'ASC' | 'DESC';
 
 export class Pager {
   pageIndex = 1;
   pageSize = 20;
-  sortBy: string;
-  sortOrder = "asc";
-  search = "";
+  sortBy = '';
+  sortOrder: SortOrderType = 'ASC';
+  search = '';
   filter: Record<string, string | number> = {};
 }
 
@@ -80,7 +82,8 @@ export class NzTablePaginator {
     };
     const currentSort = sort.find((item) => item.value !== null) || defaultSort;
     const sortBy = currentSort.key || defaultSort.key;
-    const sortOrder = currentSort.value || defaultSort.value;
+    const sortOrder =
+      (currentSort.value.toUpperCase() as SortOrderType) || defaultSort.value;
     this.setPager({
       pageIndex,
       pageSize,

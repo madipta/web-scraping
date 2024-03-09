@@ -10,24 +10,24 @@ import {
   PickType,
   Query,
   Resolver,
-} from "@nestjs/graphql";
-import { InjectRepository } from "@nestjs/typeorm";
-import { JwtService, Role } from "@web-scraping/auth";
-import { DbSetup, User, UserRole } from "@web-scraping/orm";
-import { Connection, Repository } from "typeorm";
-import { BaseResult } from "../core/base-result";
+} from '@nestjs/graphql';
+import { InjectRepository } from '@nestjs/typeorm';
+import { JwtService, Role } from '@web-scraping/auth';
+import { DbSetup, User, UserRole } from '@web-scraping/orm';
+import { Connection, Repository } from 'typeorm';
+import { BaseResult } from '../core/base-result';
 
 @ObjectType()
 export class UserResult extends BaseResult {
   @Field(() => User, { nullable: true })
-  result?: User;
+  result?: User | null;
 }
 
 @InputType()
 export class UserLoginInput extends OmitType(User, [
-  "role",
-  "createdAt",
-  "updatedAt",
+  'role',
+  'createdAt',
+  'updatedAt',
 ]) {}
 
 @ObjectType()
@@ -38,18 +38,18 @@ export class UserLoginResult extends BaseResult {
 
 @InputType()
 export class UserCreateInput extends OmitType(User, [
-  "createdAt",
-  "updatedAt",
+  'createdAt',
+  'updatedAt',
 ]) {}
 
 @InputType()
 export class UserUpdateInput extends IntersectionType(
-  PickType(User, ["userName"]),
+  PickType(User, ['userName']),
   PartialType(UserCreateInput)
 ) {}
 
 @InputType()
-export class GetByUserNameInput extends PickType(User, ["userName"]) {}
+export class GetByUserNameInput extends PickType(User, ['userName']) {}
 
 @Resolver(() => User)
 export class UserResolver {
@@ -62,7 +62,7 @@ export class UserResolver {
 
   @Query(() => UserLoginResult)
   async userLogin(
-    @Args("input") dto: UserLoginInput
+    @Args('input') dto: UserLoginInput
   ): Promise<UserLoginResult> {
     try {
       const { password } = dto;
@@ -78,21 +78,21 @@ export class UserResolver {
       }
       const result = await this.userRepo.findOne({ where: { userName } });
       if (!result) {
-        return { ok: false, error: "User not found!" };
+        return { ok: false, error: 'User not found!' };
       }
       if (!result.checkPassword(password)) {
-        return { ok: false, error: "Wrong password!" };
+        return { ok: false, error: 'Wrong password!' };
       }
       return { ok: true, token: this.jwtService.sign(userName) };
     } catch (e) {
       console.error(e);
-      return { ok: false, error: "User login failed!" };
+      return { ok: false, error: 'User login failed!' };
     }
   }
 
   @Query(() => UserResult)
   async getUserById(
-    @Args("input") dto: GetByUserNameInput
+    @Args('input') dto: GetByUserNameInput
   ): Promise<UserResult> {
     try {
       let { userName } = dto;
@@ -101,33 +101,33 @@ export class UserResolver {
       return { ok: true, result };
     } catch (e) {
       console.error(e);
-      return { ok: false, error: "Get User failed!" };
+      return { ok: false, error: 'Get User failed!' };
     }
   }
 
-  @Role("admin")
+  @Role('admin')
   @Mutation(() => UserResult)
-  async createUser(@Args("input") dto: UserCreateInput): Promise<UserResult> {
+  async createUser(@Args('input') dto: UserCreateInput): Promise<UserResult> {
     try {
       let { userName } = dto;
       userName = userName.toLowerCase();
       const data = { ...dto, userName };
       if (
-        await this.userRepo.count({ select: ["userName"], where: { userName } })
+        await this.userRepo.count({ select: ['userName'], where: { userName } })
       ) {
-        return { ok: false, error: "User exists!" };
+        return { ok: false, error: 'User exists!' };
       }
       const result = await this.userRepo.save(this.userRepo.create(data));
       return { ok: true, result };
     } catch (e) {
       console.error(e);
-      return { ok: false, error: "Create user failed!" };
+      return { ok: false, error: 'Create user failed!' };
     }
   }
 
-  @Role("any")
+  @Role('any')
   @Mutation(() => UserResult)
-  async updateUser(@Args("input") dto: UserUpdateInput): Promise<UserResult> {
+  async updateUser(@Args('input') dto: UserUpdateInput): Promise<UserResult> {
     try {
       let { userName } = dto;
       userName = userName.toLowerCase();
@@ -135,23 +135,23 @@ export class UserResolver {
       if (!user) {
         return {
           ok: false,
-          error: "User not found!",
+          error: 'User not found!',
         };
       }
-      user.role = dto.role;
-      user.password = dto.password;
+      if (dto.role) user.role = dto.role;
+      if (dto.password) user.password = dto.password;
       const result = await this.userRepo.save(user);
       return { ok: true, result };
     } catch (e) {
       console.error(e);
-      return { ok: false, error: "Update user failed!" };
+      return { ok: false, error: 'Update user failed!' };
     }
   }
 
-  @Role("admin")
+  @Role('admin')
   @Mutation(() => UserResult)
   async deleteUser(
-    @Args("input") dto: GetByUserNameInput
+    @Args('input') dto: GetByUserNameInput
   ): Promise<UserResult> {
     try {
       let { userName } = dto;
@@ -160,7 +160,7 @@ export class UserResolver {
       return { ok: result.affected === 1 };
     } catch (e) {
       console.error(e);
-      return { ok: false, error: "Delete user failed!" };
+      return { ok: false, error: 'Delete user failed!' };
     }
   }
 }

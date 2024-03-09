@@ -10,11 +10,11 @@ export class ScrapeQueueService {
     private readonly queue: Queue
   ) {}
 
-  addIndex(id, jobId) {
+  addIndex(id: number, jobId: string) {
     this.queue.add(ScrapeQueue.index, { id, jobId });
   }
 
-  addContent(id, jobId) {
+  addContent(id: number, jobId: string) {
     this.queue.add(ScrapeQueue.content, { id, jobId });
   }
 }

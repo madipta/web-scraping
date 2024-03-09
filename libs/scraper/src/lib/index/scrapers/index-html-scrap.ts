@@ -1,17 +1,17 @@
-import { HtmlHelper } from "../../common/html-helper";
-import { ISetting } from "../../common/setting.interface";
-import { IIndexScrap } from "./index-scrap.interface";
+import { HtmlHelper } from '../../common/html-helper';
+import { ISetting } from '../../common/setting.interface';
+import { IIndexScrap, IIndexScrapResult } from './index-scrap.interface';
 
 export class IndexHtmlScrap implements IIndexScrap {
   async scrap(text: string, setting: ISetting) {
     const home = setting.domainHome;
     const indexPage = setting.url;
     const doc = new HtmlHelper(text);
-    const urls = [];
-    const data = [];
+    const urls: string[] = [];
+    const data: IIndexScrapResult[] = [];
     doc.$(setting.indexPath).each((i, o) => {
       const el = doc.$(o);
-      let url = el.attr("href");
+      let url = el.attr('href');
       if (!url) {
         return;
       }
@@ -19,12 +19,8 @@ export class IndexHtmlScrap implements IIndexScrap {
       if (posHashtag > -1) {
         url = url.substr(0, posHashtag - 1);
       }
-      if (
-        url &&
-        url !== home &&
-        url !== indexPage
-      ) {
-        if (url.startsWith("/")) {
+      if (url && url !== home && url !== indexPage) {
+        if (url.startsWith('/')) {
           url = home + url;
         }
         const title = el.text().trim();

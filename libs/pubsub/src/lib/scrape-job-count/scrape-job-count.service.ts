@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ScrapeJob } from "@web-scraping/orm";
 import { PubSub } from "graphql-subscriptions";
-import { RedisClient } from "redis";
+import { Redis } from "ioredis";
 import { Repository } from "typeorm";
 import { PUBSUB_EVENTS, PUBSUB_PROVIDER } from "../pub-sub.constants";
 
@@ -12,7 +12,7 @@ const gqlPubSub = new PubSub();
 export class ScrapeJobCountService {
   constructor(
     @Inject(PUBSUB_PROVIDER)
-    private readonly redisPubsub: RedisClient,
+    private readonly redisPubsub: Redis,
     @InjectRepository(ScrapeJob)
     private readonly scrapeJobRepo: Repository<ScrapeJob>
   ) {}

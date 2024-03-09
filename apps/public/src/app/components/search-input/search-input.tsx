@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { ReactComponent as SearchIcon } from '../../icons/search.svg';
+import { useState } from "react";
+import SearchIcon from '../../icons/search.svg';
 
 export interface SearchInputProps {
   search(text: string): void;

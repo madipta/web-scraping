@@ -1,12 +1,12 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
-/tmp
+dist
+tmp
 /out-tsc
 
 # dependencies
-/node_modules
+node_modules
 
 # IDEs and editors
 /.idea
@@ -31,7 +31,6 @@
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
-yarn.lockpnpm-lock.yaml
 testem.log
 /typings
 
@@ -39,8 +38,5 @@ testem.log
 .DS_Store
 Thumbs.db
 
-.angular/
-
-/apps/public/src/app/styles/tailwind.css
-migrations.json
-debug.log
+.nx/cache
+.angular

@@ -40,7 +40,7 @@ export class LinkListComponent {
     this.tableData.pager$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(async (pager) => {
-        const domainId = +pager.filter.domainId;
+        const domainId = +pager.filter["domainId"];
         if (!isNaN(domainId)) {
           return this.tableData.load(
             this.linkService.fetchList(pager, domainId)
@@ -50,7 +50,7 @@ export class LinkListComponent {
     combineLatest([this.route.params, this.route.queryParams])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(async ([, query]) => {
-        const domainId = +query.id;
+        const domainId = +query["id"];
         this.domain = await this.getDomain(domainId);
         this.tableData.setFilter({ domainId });
       });

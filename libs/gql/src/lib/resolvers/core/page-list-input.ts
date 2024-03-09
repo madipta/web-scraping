@@ -15,5 +15,5 @@ export class PageListInput {
   sortBy: string;
 
   @Field(() => String, { nullable: true })
-  sortOrder: string;
+  sortOrder: "ASC" | "DESC" = "ASC";
 }

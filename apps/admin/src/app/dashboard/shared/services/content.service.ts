@@ -1,12 +1,15 @@
-import { Injectable } from "@angular/core";
-import { Apollo } from "apollo-angular";
-import { map } from "rxjs/operators";
-import { CONTENT_PAGE_LIST_QUERY, GET_CONTENT_QUERY } from "../gql/content";
-import { pagelistResultMap, resultMap } from "../gql/dto/base-result.dto";
-import { GqlContentPageListResult, GqlGetContent } from "../gql/dto/content.dto";
-import { Pager } from "./nz-table-paginator";
+import { Injectable } from '@angular/core';
+import { Apollo } from 'apollo-angular';
+import { map } from 'rxjs/operators';
+import { CONTENT_PAGE_LIST_QUERY, GET_CONTENT_QUERY } from '../gql/content';
+import { pagelistResultMap, resultMap } from '../gql/dto/base-result.dto';
+import {
+  GqlContentPageListResult,
+  GqlGetContent,
+} from '../gql/dto/content.dto';
+import { Pager } from './nz-table-paginator';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class ContentService {
   constructor(private apollo: Apollo) {}
 
@@ -16,11 +19,11 @@ export class ContentService {
       .query({
         query: CONTENT_PAGE_LIST_QUERY,
         variables: { pageIndex, pageSize, sortBy, sortOrder, search },
-        fetchPolicy: "no-cache",
+        fetchPolicy: 'no-cache',
       })
       .pipe(
         map((res) =>
-          pagelistResultMap<GqlContentPageListResult>("contentPagelist", res)
+          pagelistResultMap<GqlContentPageListResult>('contentPagelist', res)
         )
       )
       .toPromise();
@@ -31,9 +34,9 @@ export class ContentService {
       .query({
         query: GET_CONTENT_QUERY,
         variables: { ...dto },
-        fetchPolicy: "no-cache",
+        fetchPolicy: 'no-cache',
       })
-      .pipe(map((res) => resultMap<GqlGetContent>("getContentById", res)))
+      .pipe(map((res) => resultMap<GqlGetContent>('getContentById', res)))
       .toPromise();
   }
 }

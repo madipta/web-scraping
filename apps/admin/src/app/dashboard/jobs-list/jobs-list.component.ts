@@ -28,7 +28,7 @@ export class JobsListComponent {
     this.tableData.pager$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(async (pager) => {
-        const status = pager.filter.status as string;
+        const status = pager.filter["status"] as string;
         if (status) {
           return this.tableData.load(
             this.scrapeJobService.fetchList(pager, status)
@@ -38,7 +38,7 @@ export class JobsListComponent {
     combineLatest([this.route.params, this.route.queryParams])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(([, query]) => {
-        const status = query.status;
+        const status = query["status"];
         this.tableData.setFilter({ status });
       });
   }

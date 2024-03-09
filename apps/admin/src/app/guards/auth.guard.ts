@@ -49,9 +49,9 @@
 //   }
 // }
 
-import { inject } from "@angular/core";
-import { Router } from "@angular/router";
-import { AuthService } from "../dashboard/shared/services/auth.service";
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../dashboard/shared/services/auth.service';
 
 export const AuthGuard = () => {
   const authService = inject(AuthService);
@@ -62,5 +62,5 @@ export const AuthGuard = () => {
   }
 
   // Redirect to the login page
-  return router.parseUrl("/login");
+  return router.parseUrl('/login');
 };

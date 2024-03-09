@@ -9,20 +9,20 @@ import {
   Query,
   ResolveField,
   Resolver,
-} from "@nestjs/graphql";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Role } from "@web-scraping/auth";
-import { Content, Domain, Link, RefineSortParam } from "@web-scraping/orm";
-import { Brackets, Repository } from "typeorm";
-import { AutoNumberInput } from "../core/auto-number-input";
-import { BaseResult } from "../core/base-result";
-import { PageListInput } from "../core/page-list-input";
-import { PageListResult } from "../core/page-list-result";
+} from '@nestjs/graphql';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Role } from '@web-scraping/auth';
+import { Content, Domain, Link } from '@web-scraping/orm';
+import { Brackets, Repository } from 'typeorm';
+import { AutoNumberInput } from '../core/auto-number-input';
+import { BaseResult } from '../core/base-result';
+import { PageListInput } from '../core/page-list-input';
+import { PageListResult } from '../core/page-list-result';
 
 @ObjectType()
 export class LinkResult extends BaseResult {
   @Field(() => Link, { nullable: true })
-  result?: Link;
+  result?: Link | null;
 }
 
 @ObjectType()
@@ -48,9 +48,9 @@ export class LinkResolver {
     private readonly linkRepo: Repository<Link>
   ) {}
 
-  @Role("admin")
+  @Role('admin')
   @Mutation(() => LinkResult)
-  async deleteLink(@Args("input") dto: AutoNumberInput): Promise<LinkResult> {
+  async deleteLink(@Args('input') dto: AutoNumberInput): Promise<LinkResult> {
     try {
       const { id } = dto;
       await this.contentRepo.delete({ id });
@@ -62,9 +62,9 @@ export class LinkResolver {
     }
   }
 
-  @Role("any")
+  @Role('any')
   @Query(() => LinkResult)
-  async getLinkById(@Args("input") dto: AutoNumberInput): Promise<LinkResult> {
+  async getLinkById(@Args('input') dto: AutoNumberInput): Promise<LinkResult> {
     try {
       const result = await this.linkRepo.findOne({ where: { id: dto.id } });
       return { ok: true, result };
@@ -73,22 +73,21 @@ export class LinkResolver {
     }
   }
 
-  @Role("any")
+  @Role('any')
   @Query(() => LinkPageListResult)
   async linkPagelist(
-    @Args("input") dto: LinkPageListInput
+    @Args('input') dto: LinkPageListInput
   ): Promise<LinkPageListResult> {
     const { pageIndex, pageSize, search, sortBy, sortOrder } = dto;
-    const orderBy = RefineSortParam(sortBy ?? "title", sortOrder);
     const queryBuilder = () => {
       const builder = this.linkRepo
-        .createQueryBuilder("Link")
-        .select("Link.id", "id")
+        .createQueryBuilder('Link')
+        .select('Link.id', 'id')
         .where({ domainId: dto.domainId });
       if (search) {
         builder.andWhere(
           new Brackets((qb) => {
-            qb.where("url ILIKE :search OR title ILIKE :search", {
+            qb.where('url ILIKE :search OR title ILIKE :search', {
               search: `%${search}%`,
             });
           })
@@ -101,14 +100,14 @@ export class LinkResolver {
       const total = await totalBuilder.getCount();
       const resultBuilder = queryBuilder();
       const result = await resultBuilder
-        .addSelect("Link.domain_id", "domainId")
-        .addSelect("Link.url", "url")
-        .addSelect("Link.title", "title")
-        .addSelect("Link.scraped", "scraped")
-        .addSelect("Link.broken", "broken")
+        .addSelect('Link.domain_id', 'domainId')
+        .addSelect('Link.url', 'url')
+        .addSelect('Link.title', 'title')
+        .addSelect('Link.scraped', 'scraped')
+        .addSelect('Link.broken', 'broken')
         .limit(pageSize)
         .offset((pageIndex - 1) * pageSize)
-        .orderBy(orderBy)
+        .orderBy(sortBy ?? 'title', sortOrder)
         .getRawMany();
       return { ok: true, result, total };
     } catch (error) {

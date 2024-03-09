@@ -1,4 +1,5 @@
-import * as sanitizeHtml from "sanitize-html";
+// import * as sanitizeHtml from "sanitize-html";
+import sanitizeHtml = require('sanitize-html');
 
 export class HtmlSanitizer {
   static removeAllHtmlTags(html: string) {

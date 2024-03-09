@@ -1,4 +1,7 @@
 @tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind base;
 /* Simple reusable components provided by tailwind */
 @tailwind components;
 /* utility classes generated based on our tailwind.config.js */

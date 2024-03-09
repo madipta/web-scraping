@@ -1,5 +1,4 @@
-import React from "react";
-import { ReactComponent as HomeIcon } from '../../icons/search-circle.svg';
+import HomeIcon from '../../icons/search-circle.svg';
 
 export function AppHeader() {
   return (

@@ -1,10 +1,14 @@
-import { Injectable } from "@nestjs/common";
-import { EventEmitter2 } from "@nestjs/event-emitter";
-import { IndexLoaders, IndexPaging, IndexScrapers } from "../common/constants";
-import { ISetting } from "../common/setting.interface";
-import { ScrapeEvents } from "../scraper.event";
-import { ILooper } from "./loopers/looper.interface";
-import { IIndexScrapResult } from "./scrapers/index-scrap.interface";
+import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ISetting } from '../common/setting.interface';
+import { SpaLoader } from '../loaders/spa-loader';
+import { WebLoader } from '../loaders/web-loader';
+import { ScrapeEvents } from '../scraper.event';
+import { ILooper } from './loopers/looper.interface';
+import { IndexHtmlScrap } from './scrapers/index-html-scrap';
+import { IIndexScrapResult } from './scrapers/index-scrap.interface';
+import { SingleLooper } from './loopers/single';
+import { PagingLooper } from './loopers/paging';
 
 @Injectable()
 export class IndexManagerService {
@@ -16,7 +20,10 @@ export class IndexManagerService {
 
   async load(url: string) {
     try {
-      const loader = new IndexLoaders[this.setting.scrapIndexMethod]();
+      const loader =
+        this.setting.scrapArticleMethod === 'spa'
+          ? new SpaLoader()
+          : new WebLoader();
       const responseText = await loader.load(url);
       this.eventEmitter.emit(ScrapeEvents.SuccessLoading, { url });
       return responseText;
@@ -33,7 +40,7 @@ export class IndexManagerService {
     const url = this.setting.url;
     const jobId = this.jobId;
     try {
-      const scraper = new IndexScrapers[this.setting.scrapIndexFormat]();
+      const scraper = new IndexHtmlScrap();
       const links = await scraper.scrap(content, this.setting);
       this.eventEmitter.emit(ScrapeEvents.SuccessScraping, {
         url,
@@ -54,7 +61,10 @@ export class IndexManagerService {
   async manage(setting: ISetting, jobId: string) {
     this.setting = setting;
     this.jobId = jobId;
-    this.looper = new IndexPaging[this.setting.scrapIndexPaging](this);
+    this.looper =
+      this.setting.scrapIndexPaging === 'single'
+        ? new SingleLooper(this)
+        : new PagingLooper(this);
     await this.looper.run();
   }
 }

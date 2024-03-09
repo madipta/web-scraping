@@ -1,5 +1,4 @@
-import React from "react";
-import { ReactComponent as NoPhoto } from "../../icons/no-photo.svg";
+import NoPhoto from '../../icons/no-photo.svg';
 
 export interface ISearchResult {
   id: number;
@@ -36,7 +35,9 @@ export function SearchResult(props: SearchResultProps) {
             <div className="bg-gray-300 h-48 sm:h-64 overflow-hidden">
               <a href={d.url} rel="nofollow noreferrer" target="_blank">
                 {!d.image_html && (
-                  <NoPhoto className="object-contain h-16 my-16 sm:my-24 mx-auto"></NoPhoto>
+                  <span className="object-contain h-16 my-16 sm:my-24 mx-auto">
+                    <NoPhoto></NoPhoto>
+                  </span>
                 )}
                 {d.image_html && (
                   <img

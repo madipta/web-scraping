@@ -5,13 +5,13 @@ import {
   ObjectType,
   Query,
   Resolver,
-} from "@nestjs/graphql";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Role } from "@web-scraping/auth";
-import { RefineSortParam, ScrapeJob, ScrapeJobStatus } from "@web-scraping/orm";
-import { Repository } from "typeorm";
-import { PageListInput } from "../core/page-list-input";
-import { PageListResult } from "../core/page-list-result";
+} from '@nestjs/graphql';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Role } from '@web-scraping/auth';
+import { ScrapeJob, ScrapeJobStatus } from '@web-scraping/orm';
+import { Repository } from 'typeorm';
+import { PageListInput } from '../core/page-list-input';
+import { PageListResult } from '../core/page-list-result';
 
 @InputType()
 export class ScrapeJobPageListInput extends PageListInput {
@@ -38,21 +38,20 @@ export class ScrapeJobResolver {
     private readonly scrapJobRepo: Repository<ScrapeJob>
   ) {}
 
-  @Role("any")
+  @Role('any')
   @Query(() => ScrapeJobPageListResult)
   async scrapeJobPagelist(
-    @Args("input") dto: ScrapeJobPageListInput
+    @Args('input') dto: ScrapeJobPageListInput
   ): Promise<ScrapeJobPageListResult> {
     const { status, pageIndex, pageSize, search, sortBy, sortOrder } = dto;
-    const orderBy = RefineSortParam(sortBy ?? "created_at", sortOrder);
     const queryBuilder = () => {
       const builder = this.scrapJobRepo
-        .createQueryBuilder("ScrapeJob")
-        .select("ScrapeJob.id", "id")
-        .addSelect("ScrapeJob.url", "url")
-        .where("status=:status", { status });
+        .createQueryBuilder('ScrapeJob')
+        .select('ScrapeJob.id', 'id')
+        .addSelect('ScrapeJob.url', 'url')
+        .where('status=:status', { status });
       if (search) {
-        builder.andWhere("url ILIKE :search", {
+        builder.andWhere('url ILIKE :search', {
           search: `%${search}%`,
         });
       }
@@ -63,10 +62,10 @@ export class ScrapeJobResolver {
       const total = await totalBuilder.getCount();
       const resultBuilder = queryBuilder();
       resultBuilder
-        .addSelect("ScrapeJob.status", "status")
-        .addSelect("ScrapeJob.created_at", "createdAt")
-        .addSelect("ScrapeJob.finishedAt", "finishedAt")
-        .orderBy(orderBy)
+        .addSelect('ScrapeJob.status', 'status')
+        .addSelect('ScrapeJob.created_at', 'createdAt')
+        .addSelect('ScrapeJob.finishedAt', 'finishedAt')
+        .orderBy(sortBy ?? 'created_at', sortOrder)
         .offset((pageIndex - 1) * pageSize)
         .limit(pageSize);
       const result = await resultBuilder.getRawMany();
@@ -77,11 +76,11 @@ export class ScrapeJobResolver {
     }
   }
 
-  @Role("any")
+  @Role('any')
   @Query(() => Number)
   async getScrapeJobCount(
-    @Args("input") { status }: GetScrapeJobCountnput
+    @Args('input') { status }: GetScrapeJobCountnput
   ): Promise<number> {
-    return this.scrapJobRepo.count({ select: ["status"], where: { status } });
+    return this.scrapJobRepo.count({ select: ['status'], where: { status } });
   }
 }

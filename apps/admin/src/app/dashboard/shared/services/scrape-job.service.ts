@@ -1,16 +1,16 @@
-import { Injectable } from "@angular/core";
-import { Apollo } from "apollo-angular";
-import { map } from "rxjs/operators";
-import { pagelistResultMap } from "../gql/dto/base-result.dto";
-import { GqlScrapeJobPageListResult } from "../gql/dto/scrap-job.dto";
+import { Injectable } from '@angular/core';
+import { Apollo } from 'apollo-angular';
+import { map } from 'rxjs/operators';
+import { pagelistResultMap } from '../gql/dto/base-result.dto';
+import { GqlScrapeJobPageListResult } from '../gql/dto/scrap-job.dto';
 import {
   SCRAP_INIT_JOB_COUNT_SUBSCRIPTION,
   SCRAP_JOB_PAGE_LIST_QUERY,
-} from "../gql/scrap-job";
-import { Pager } from "./nz-table-paginator";
-import { WsService } from "./ws.service";
+} from '../gql/scrap-job';
+import { Pager } from './nz-table-paginator';
+import { WsService } from './ws.service';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class ScrapeJobService {
   jobCount$ = this.wsService.jobCount;
 
@@ -29,12 +29,12 @@ export class ScrapeJobService {
           sortOrder,
           search,
         },
-        fetchPolicy: "no-cache",
+        fetchPolicy: 'no-cache',
       })
       .pipe(
         map((res) =>
           pagelistResultMap<GqlScrapeJobPageListResult>(
-            "scrapeJobPagelist",
+            'scrapeJobPagelist',
             res
           )
         )
@@ -46,7 +46,7 @@ export class ScrapeJobService {
     this.apollo
       .query({
         query: SCRAP_INIT_JOB_COUNT_SUBSCRIPTION,
-        fetchPolicy: "no-cache",
+        fetchPolicy: 'no-cache',
       })
       .subscribe();
   }

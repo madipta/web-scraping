@@ -9,7 +9,7 @@ import { Component, Input, OnInit } from "@angular/core";
   ></i>`,
 })
 export class ChecklistComponent implements OnInit {
-  @Input() value: boolean = null;
+  @Input() value = false;
   @Input() trueColor = "green";
   @Input() falseColor = "red";
   @Input() trueIcon = "check";

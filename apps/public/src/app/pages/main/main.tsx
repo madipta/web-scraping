@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import SearchInput from "../../components/search-input/search-input";
 import SearchResult from "../../components/search-result/search-result";
-import { ReactComponent as UpIcon } from "../../icons/chevron-up.svg";
+import UpIcon from "../../icons/chevron-up.svg";
 import useSearch from "./search";
 
 export function Main() {

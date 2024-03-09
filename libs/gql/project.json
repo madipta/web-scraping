@@ -3,22 +3,6 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/gql/src",
   "projectType": "library",
-  "targets": {
-    "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["libs/gql/**/*.ts"]
-      },
-      "outputs": ["{options.outputFile}"]
-    },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/gql"],
-      "options": {
-        "jestConfig": "libs/gql/jest.config.ts",
-        "passWithNoTests": true
-      }
-    }
-  },
+  "targets": {},
   "tags": []
 }

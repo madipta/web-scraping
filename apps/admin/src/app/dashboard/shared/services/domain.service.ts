@@ -1,23 +1,23 @@
-import { Injectable } from "@angular/core";
-import { Apollo } from "apollo-angular";
-import { map } from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import { Apollo } from 'apollo-angular';
+import { map } from 'rxjs/operators';
 import {
   CREATE_DOMAIN_MUTATION,
   DELETE_DOMAIN_MUTATION,
   DOMAIN_PAGE_LIST_QUERY,
   GET_DOMAIN_QUERY,
   UPDATE_DOMAIN_MUTATION,
-} from "../gql/domain";
-import { pagelistResultMap, resultMap } from "../gql/dto/base-result.dto";
+} from '../gql/domain';
+import { pagelistResultMap, resultMap } from '../gql/dto/base-result.dto';
 import {
   GqlCreateDomainInput,
   GqlDomainPageListResult,
   GqlGetDomainResult,
   GqlUpdateDomainInput,
-} from "../gql/dto/domain.dto";
-import { Pager } from "./nz-table-paginator";
+} from '../gql/dto/domain.dto';
+import { Pager } from './nz-table-paginator';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class DomainService {
   constructor(private apollo: Apollo) {}
 
@@ -27,13 +27,13 @@ export class DomainService {
       .query({
         query: DOMAIN_PAGE_LIST_QUERY,
         variables: { pageIndex, pageSize, sortBy, sortOrder, search },
-        fetchPolicy: "no-cache",
+        fetchPolicy: 'no-cache',
       })
       .pipe(
         map((res) =>
-          pagelistResultMap<GqlDomainPageListResult>("domainPagelist", res)
+          pagelistResultMap<GqlDomainPageListResult>('domainPagelist', res)
         )
-      )
+      );
   }
 
   async fetchList(pager: Pager) {
@@ -42,11 +42,11 @@ export class DomainService {
       .query({
         query: DOMAIN_PAGE_LIST_QUERY,
         variables: { pageIndex, pageSize, sortBy, sortOrder, search },
-        fetchPolicy: "no-cache",
+        fetchPolicy: 'no-cache',
       })
       .pipe(
         map((res) =>
-          pagelistResultMap<GqlDomainPageListResult>("domainPagelist", res)
+          pagelistResultMap<GqlDomainPageListResult>('domainPagelist', res)
         )
       )
       .toPromise();
@@ -57,9 +57,9 @@ export class DomainService {
       .query({
         query: GET_DOMAIN_QUERY,
         variables: { ...dto },
-        fetchPolicy: "no-cache",
+        fetchPolicy: 'no-cache',
       })
-      .pipe(map((res) => resultMap<GqlGetDomainResult>("getDomainById", res)))
+      .pipe(map((res) => resultMap<GqlGetDomainResult>('getDomainById', res)))
       .toPromise();
   }
 
@@ -69,7 +69,7 @@ export class DomainService {
         mutation: CREATE_DOMAIN_MUTATION,
         variables: { ...dto },
       })
-      .pipe(map((res) => resultMap<GqlGetDomainResult>("createDomain", res)))
+      .pipe(map((res) => resultMap<GqlGetDomainResult>('createDomain', res)))
       .toPromise();
   }
 
@@ -79,7 +79,7 @@ export class DomainService {
         mutation: UPDATE_DOMAIN_MUTATION,
         variables: { ...dto },
       })
-      .pipe(map((res) => resultMap<GqlGetDomainResult>("updateDomain", res)))
+      .pipe(map((res) => resultMap<GqlGetDomainResult>('updateDomain', res)))
       .toPromise();
   }
 
@@ -96,7 +96,7 @@ export class DomainService {
         mutation: DELETE_DOMAIN_MUTATION,
         variables: { ...dto },
       })
-      .pipe(map((res) => resultMap<GqlGetDomainResult>("deleteDomain", res)))
+      .pipe(map((res) => resultMap<GqlGetDomainResult>('deleteDomain', res)))
       .toPromise();
   }
 }

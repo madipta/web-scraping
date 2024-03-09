@@ -1,7 +1,7 @@
 export type BaseResultType<T = unknown> = {
   ok: boolean;
   error?: string;
-  result?: T;
+  result?: T | null;
 };
 
 export type BasePagingResult<T = unknown> = {

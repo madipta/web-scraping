@@ -1,13 +1,13 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   get token() {
-    return localStorage.getItem("token");
+    return localStorage.getItem('token');
   }
 
-  set token(value) {
-    localStorage.setItem("token", value);
+  set token(value: string | null | undefined) {
+    localStorage.setItem('token', value || '');
   }
 
   get isAuthenticated() {
@@ -15,14 +15,15 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem("token");
+    localStorage.removeItem('token');
   }
 
-  getUserNameFromToken(): string {
+  getUserNameFromToken(): string | undefined {
     const decoded = this.parseToken();
     if (decoded) {
-      return decoded["userName"];
+      return decoded['userName'];
     }
+    return undefined;
   }
 
   parseToken() {
@@ -30,15 +31,15 @@ export class AuthService {
     if (!token) {
       return null;
     }
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(
       atob(base64)
-        .split("")
+        .split('')
         .map((c) => {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         })
-        .join("")
+        .join('')
     );
     return JSON.parse(jsonPayload);
   }

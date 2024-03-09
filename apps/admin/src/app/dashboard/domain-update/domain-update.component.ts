@@ -14,7 +14,6 @@ import { SharedModule } from "../shared/shared.module";
   imports: [SharedModule],
   selector: "web-scraping-domain-update",
   standalone: true,
-  styleUrls: ["./domain-update.component.scss"],
   templateUrl: "./domain-update.component.html",
 })
 export class DomainUpdateComponent implements OnInit {
@@ -31,8 +30,8 @@ export class DomainUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      if (params && params.id) {
-        this.selectedId = +params.id;
+      if (params && params["id"]) {
+        this.selectedId = +params["id"];
       } else {
         this.selectedId = 0;
       }

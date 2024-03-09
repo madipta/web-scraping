@@ -30,8 +30,8 @@ export class User implements IUser {
   @Column({ type: "char", length: 60 })
   password: string;
 
-  @Column({ type: 'enum', enum: UserRole })
   @Field(() => UserRole)
+  @Column({ type: 'enum', enum: UserRole })
   role: UserRole;
 
   @Field(() => Date)

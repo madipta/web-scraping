@@ -9,7 +9,7 @@ import {
 } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Role } from "@web-scraping/auth";
-import { Content, Domain, RefineSortParam } from "@web-scraping/orm";
+import { Content, Domain } from "@web-scraping/orm";
 import { Repository } from "typeorm";
 import { AutoNumberInput } from "../core/auto-number-input";
 import { BaseResult } from "../core/base-result";
@@ -77,7 +77,6 @@ export class ContentResolver {
     @Args("input") dto: PageListInput
   ): Promise<ContentPageListResult> {
     const { pageIndex, pageSize, search, sortBy, sortOrder } = dto;
-    const orderBy = RefineSortParam(sortBy ?? "Link.title", sortOrder);
     const queryBuilder = () => {
       const builder = this.contentRepo
         .createQueryBuilder("Content")
@@ -95,7 +94,7 @@ export class ContentResolver {
         .leftJoin("Content.link", "Link")
         .addSelect("Link.url", "linkUrl")
         .addSelect("Link.title", "linkTitle")
-        .orderBy(orderBy)
+        .orderBy(sortBy ?? "Link.title", sortOrder)
         .offset((pageIndex - 1) * pageSize)
         .limit(pageSize);
       const result = await resultBuilder.getRawMany();

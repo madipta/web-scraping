@@ -10,7 +10,6 @@ import { SharedModule } from "../shared/shared.module";
   imports: [SharedModule],
   selector: "web-scraping-domain-setting",
   standalone: true,
-  styleUrls: ["./domain-setting.component.scss"],
   templateUrl: "./domain-setting.component.html",
 })
 export class DomainSettingComponent implements OnInit {
@@ -29,11 +28,11 @@ export class DomainSettingComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      if (!params?.id) {
+      if (!params?.["id"]) {
         this.location.back();
         return;
       }
-      this.selectedId = +params.id;
+      this.selectedId = +params["id"];
       this.loadDomain();
     });
     this.form = this.fb.group({

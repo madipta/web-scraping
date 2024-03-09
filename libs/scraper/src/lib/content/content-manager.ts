@@ -1,21 +1,24 @@
-import { Injectable } from "@nestjs/common";
-import { EventEmitter2 } from "@nestjs/event-emitter";
-import { IContent } from "@web-scraping/orm";
-import { ContentLoaders, ContentScrapers } from "../common/constants";
-import { ISetting } from "../common/setting.interface";
-import { ScrapeEvents } from "../scraper.event";
+import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { IContent } from '@web-scraping/orm';
+import { ISetting } from '../common/setting.interface';
+import { ScrapeEvents } from '../scraper.event';
+import { SpaLoader } from '../loaders/spa-loader';
+import { WebLoader } from '../loaders/web-loader';
+import { HtmlScrap } from './scrapers/html-scrap';
 
 @Injectable()
 export class ContentManagerService {
   constructor(private eventEmitter: EventEmitter2) {}
 
   private async load(setting: ISetting) {
-    const loader = ContentLoaders[setting.scrapArticleMethod];
+    const loader =
+      setting.scrapArticleMethod === 'spa' ? new SpaLoader() : new WebLoader();
     return loader.load(setting.url);
   }
 
   private async scrap(setting: ISetting, text: string) {
-    const scraper = new ContentScrapers[setting.scrapArticleFormat]();
+    const scraper = new HtmlScrap();
     return scraper.scrap(text, setting);
   }
 
@@ -31,7 +34,7 @@ export class ContentManagerService {
     let content: IContent;
     try {
       content = await this.scrap(setting, responseText);
-    } catch(e) {
+    } catch (e) {
       console.error(url, e);
       this.eventEmitter.emit(ScrapeEvents.ErrorScraping, { url, jobId });
       return;

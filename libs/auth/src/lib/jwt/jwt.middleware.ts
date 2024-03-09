@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, NestMiddleware } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -13,7 +14,7 @@ export class JwtMiddleware implements NestMiddleware {
     @InjectRepository(User)
     private readonly userRepo: Repository<User>
   ) {}
-  async use(req, res, next) {
+  async use(req: any, res: any, next: any) {
     const headerKey = this.config.get("jwt_header_key");
     if (headerKey in req.headers) {
       const token = req.headers[headerKey];

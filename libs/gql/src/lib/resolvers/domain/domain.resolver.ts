@@ -13,25 +13,20 @@ import {
   Query,
   ResolveField,
   Resolver,
-} from "@nestjs/graphql";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Role } from "@web-scraping/auth";
-import {
-  Content,
-  Domain,
-  DomainSetting,
-  RefineSortParam,
-} from "@web-scraping/orm";
-import { Repository } from "typeorm";
-import { AutoNumberInput } from "../core/auto-number-input";
-import { BaseResult } from "../core/base-result";
-import { PageListInput } from "../core/page-list-input";
-import { PageListResult } from "../core/page-list-result";
+} from '@nestjs/graphql';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Role } from '@web-scraping/auth';
+import { Content, Domain, DomainSetting } from '@web-scraping/orm';
+import { Repository } from 'typeorm';
+import { AutoNumberInput } from '../core/auto-number-input';
+import { BaseResult } from '../core/base-result';
+import { PageListInput } from '../core/page-list-input';
+import { PageListResult } from '../core/page-list-result';
 
 @ObjectType()
 export class DomainResult extends BaseResult {
   @Field(() => Domain, { nullable: true })
-  result?: Domain;
+  result?: Domain | null;
 }
 
 @ObjectType()
@@ -48,9 +43,9 @@ export class DomainPageListResult extends PageListResult {
 
 @InputType()
 export class DomainCreateInput extends IntersectionType(
-  PickType(Domain, ["home"]),
+  PickType(Domain, ['home']),
   PartialType(
-    OmitType(Domain, ["id", "createdAt", "updatedAt", "links", "setting"])
+    OmitType(Domain, ['id', 'createdAt', 'updatedAt', 'links', 'setting'])
   )
 ) {}
 
@@ -71,10 +66,10 @@ export class DomainResolver {
     private readonly contentRepo: Repository<Content>
   ) {}
 
-  @Role("admin")
+  @Role('admin')
   @Mutation(() => DomainResult)
   async createDomain(
-    @Args("input") dto: DomainCreateInput
+    @Args('input') dto: DomainCreateInput
   ): Promise<DomainResult> {
     try {
       let { home } = dto;
@@ -85,14 +80,14 @@ export class DomainResolver {
       return { ok: true, result };
     } catch (e) {
       console.error(e);
-      return { ok: false, error: "Create domain failed!" };
+      return { ok: false, error: 'Create domain failed!' };
     }
   }
 
-  @Role("admin")
+  @Role('admin')
   @Mutation(() => DomainResult)
   async updateDomain(
-    @Args("input") dto: DomainUpdateInput
+    @Args('input') dto: DomainUpdateInput
   ): Promise<DomainResult> {
     try {
       const { id, home } = dto;
@@ -103,56 +98,55 @@ export class DomainResolver {
       return { ok: result.affected === 1 };
     } catch (e) {
       console.error(e);
-      return { ok: false, error: "Create domain failed!" };
+      return { ok: false, error: 'Create domain failed!' };
     }
   }
 
-  @Role("admin")
+  @Role('admin')
   @Mutation(() => DomainResult)
   async deleteDomain(
-    @Args("input") dto: AutoNumberInput
+    @Args('input') dto: AutoNumberInput
   ): Promise<DomainResult> {
     try {
       const { id } = dto;
       await this.settingRepo.delete({ id });
       const result = await this.domainRepo.delete({ id });
       if (result.affected !== 1) {
-        throw "not found!";
+        throw 'not found!';
       }
       return { ok: true };
     } catch (e) {
       console.error(e);
-      return { ok: false, error: "Delete domain failed!" };
+      return { ok: false, error: 'Delete domain failed!' };
     }
   }
 
-  @Role("any")
+  @Role('any')
   @Query(() => DomainResult)
   async getDomainById(
-    @Args("input") dto: AutoNumberInput
+    @Args('input') dto: AutoNumberInput
   ): Promise<DomainResult> {
     try {
       const result = await this.domainRepo.findOne({ where: { id: dto.id } });
       return { ok: true, result };
     } catch (e) {
       console.error(e);
-      return { ok: false, error: "Get Domain failed!" };
+      return { ok: false, error: 'Get Domain failed!' };
     }
   }
 
-  @Role("any")
+  @Role('any')
   @Query(() => DomainPageListResult)
   async domainPagelist(
-    @Args("input") dto: PageListInput
+    @Args('input') dto: PageListInput
   ): Promise<DomainPageListResult> {
     const { pageIndex, pageSize, search, sortBy, sortOrder } = dto;
-    const orderBy = RefineSortParam(sortBy ?? "home", sortOrder);
     const queryBuilder = () => {
       const builder = this.domainRepo
-        .createQueryBuilder("Domain")
-        .select("Domain.id", "id");
+        .createQueryBuilder('Domain')
+        .select('Domain.id', 'id');
       if (search) {
-        builder.where("home ILIKE :search", { search: `%${search}%` });
+        builder.where('home ILIKE :search', { search: `%${search}%` });
       }
       return builder;
     };
@@ -161,13 +155,13 @@ export class DomainResolver {
       const total = await totalBuilder.getCount();
       const resultBuilder = queryBuilder();
       resultBuilder
-        .leftJoin("Domain.links", "Link")
-        .addSelect("Domain.home", "home")
-        .addSelect("Domain.admin_email", "adminEmail")
-        .addSelect("Domain.active", "active")
-        .addSelect("COUNT(Link.id)", "linksCount")
-        .groupBy("Domain.id")
-        .orderBy(orderBy)
+        .leftJoin('Domain.links', 'Link')
+        .addSelect('Domain.home', 'home')
+        .addSelect('Domain.admin_email', 'adminEmail')
+        .addSelect('Domain.active', 'active')
+        .addSelect('COUNT(Link.id)', 'linksCount')
+        .groupBy('Domain.id')
+        .orderBy(sortBy ?? 'home', sortOrder)
         .offset((pageIndex - 1) * pageSize)
         .limit(pageSize);
       const result = await resultBuilder.getRawMany();
@@ -178,10 +172,10 @@ export class DomainResolver {
     }
   }
 
-  @Role("any")
+  @Role('any')
   @Query(() => Number)
   async getDomainCount(): Promise<number> {
-    return this.domainRepo.count({ select: ["id"] });
+    return this.domainRepo.count({ select: ['id'] });
   }
 
   @ResolveField()

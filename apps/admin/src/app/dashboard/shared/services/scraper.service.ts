@@ -1,11 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { map, take } from 'rxjs/operators';
-import { GqlScrapContentByDomainResult, GqlScrapContentResult, GqlScrapIndexResult } from '../gql/dto/scraper.dto';
-import { SCRAP_CONTENT, SCRAP_CONTENT_BY_DOMAIN, SCRAP_INDEX } from '../gql/scraper';
+import {
+  GqlScrapContentByDomainResult,
+  GqlScrapContentResult,
+  GqlScrapIndexResult,
+} from '../gql/dto/scraper.dto';
+import {
+  SCRAP_CONTENT,
+  SCRAP_CONTENT_BY_DOMAIN,
+  SCRAP_INDEX,
+} from '../gql/scraper';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ScraperService {
   constructor(private apollo: Apollo) {}
@@ -18,7 +26,7 @@ export class ScraperService {
       })
       .pipe(
         take(1),
-        map((obj) => obj.data["scrapeIndex"])
+        map((obj) => obj.data['scrapeIndex'])
       )
       .toPromise();
   }
@@ -31,12 +39,14 @@ export class ScraperService {
       })
       .pipe(
         take(1),
-        map((obj) => obj.data["scrapeContent"])
+        map((obj) => obj.data['scrapeContent'])
       )
       .toPromise();
   }
 
-  async scrapeContentByDomain(id: number): Promise<GqlScrapContentByDomainResult> {
+  async scrapeContentByDomain(
+    id: number
+  ): Promise<GqlScrapContentByDomainResult> {
     return this.apollo
       .mutate({
         mutation: SCRAP_CONTENT_BY_DOMAIN,
@@ -44,7 +54,7 @@ export class ScraperService {
       })
       .pipe(
         take(1),
-        map((obj) => obj.data["scrapeContentByDomain"])
+        map((obj) => obj.data['scrapeContentByDomain'])
       )
       .toPromise();
   }

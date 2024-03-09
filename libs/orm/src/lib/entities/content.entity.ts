@@ -31,7 +31,7 @@ export class Content implements IContent {
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true, type: "text" })
-  text?: string | null;
+  text?: string | undefined;
 
   @Column({
     name: "search_vector",

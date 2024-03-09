@@ -1,26 +1,31 @@
-import { IndexManagerService } from "../index-manager";
-import { ILooper } from "./looper.interface";
+import { IndexManagerService } from '../index-manager';
+import { IIndexScrapResult } from '../scrapers/index-scrap.interface';
+import { ILooper } from './looper.interface';
 
-const ctag = "[PagingLooper]";
+const ctag = '[PagingLooper]';
 
 export class PagingLooper implements ILooper {
   constructor(public manager: IndexManagerService) {}
 
   async run() {
     let page = 1;
-    let links = [];
+    let links: IIndexScrapResult[];
     let errorCount = 0;
     let totalErrorCount = 0;
     const errorWaitInMs = 3000;
     const maxPage = 1000;
     const maxErrorCount = 3;
     const maxTotalErrorCount = 100;
+    const domainHome = this.manager.setting.domainHome;
+    const pageUrl = this.manager.setting.url;
+    if (!domainHome) {
+      console.log(`${ctag} domainHome not set!`);
+      throw `Domain not set!`;
+    }
     do {
       links = [];
       const url =
-        page === 1
-          ? this.manager.setting.domainHome
-          : this.manager.setting.url.replace("{{PAGE_NUMBER}}", `${page}`);
+        page === 1 ? domainHome : pageUrl.replace('{{PAGE_NUMBER}}', `${page}`);
       page++;
       try {
         const res = await this.manager.load(url);

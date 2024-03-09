@@ -1,17 +1,17 @@
-import { Injectable } from "@nestjs/common";
-import { OnEvent } from "@nestjs/event-emitter";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Link, Content, ScrapeJob, ScrapeJobStatus } from "@web-scraping/orm";
-import { ScrapeJobCountService } from "@web-scraping/pubsub";
-import { Repository } from "typeorm";
-import { IIndexScrapResult } from "./index/scrapers/index-scrap.interface";
+import { Injectable } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Link, Content, ScrapeJob, ScrapeJobStatus } from '@web-scraping/orm';
+import { ScrapeJobCountService } from '@web-scraping/pubsub';
+import { Repository } from 'typeorm';
+import { IIndexScrapResult } from './index/scrapers/index-scrap.interface';
 
 export enum ScrapeEvents {
-  ErrorLoading = "error.loading",
-  SuccessLoading = "success.loading",
-  ErrorScraping = "error.scraping",
-  SuccessScraping = "success.scraping",
-  SuccessIndexScraping = "success.index.scraping",
+  ErrorLoading = 'error.loading',
+  SuccessLoading = 'success.loading',
+  ErrorScraping = 'error.scraping',
+  SuccessScraping = 'success.scraping',
+  SuccessIndexScraping = 'success.index.scraping',
 }
 
 @Injectable()
@@ -30,7 +30,7 @@ export class ScraperEvent {
   async onSSuccessIndexScraping(links: IIndexScrapResult[]) {
     await Promise.all(
       links.map(async (link) => {
-        const count = await this.linkRepo.count({ where: { url: link.url }});
+        const count = await this.linkRepo.count({ where: { url: link.url } });
         if (!count) {
           this.linkRepo.save({ ...link });
         }
@@ -39,7 +39,7 @@ export class ScraperEvent {
   }
 
   @OnEvent(ScrapeEvents.ErrorLoading)
-  async onErrorLoading({ url, jobId }) {
+  async onErrorLoading({ url, jobId }: { url: string; jobId: string }) {
     this.linkRepo.update({ url }, { scraped: false, broken: true });
     await this.scrapeJobRepo.update(
       { id: jobId },
@@ -49,12 +49,12 @@ export class ScraperEvent {
   }
 
   @OnEvent(ScrapeEvents.SuccessLoading)
-  async onSuccessLoading({ url }) {
+  async onSuccessLoading({ url }: { url: string }) {
     await this.linkRepo.update({ url }, { scraped: true, broken: false });
   }
 
   @OnEvent(ScrapeEvents.ErrorScraping)
-  async onErrorScraping({ url, jobId }) {
+  async onErrorScraping({ url, jobId }: { url: string; jobId: string }) {
     this.linkRepo.update({ url }, { scraped: false, broken: false });
     await this.scrapeJobRepo.update(
       { id: jobId },
@@ -64,12 +64,20 @@ export class ScraperEvent {
   }
 
   @OnEvent(ScrapeEvents.SuccessScraping)
-  async onSuccessScraping({ url, jobId, content }) {
-    const link = await this.linkRepo.findOne({ where: { url }});
+  async onSuccessScraping({
+    url,
+    jobId,
+    content,
+  }: {
+    url: string;
+    jobId: string;
+    content: any;
+  }) {
+    const link = await this.linkRepo.findOne({ where: { url } });
     if (link) {
       const { id: linkId, title } = link;
       content = { ...content, title };
-      if (await this.contentRepo.count({ where: { id: linkId }})) {
+      if (await this.contentRepo.count({ where: { id: linkId } })) {
         await this.contentRepo.update({ id: linkId }, content);
       } else {
         await this.contentRepo.save({ ...content, id: linkId });
@@ -80,7 +88,7 @@ export class ScraperEvent {
       .update()
       .set({
         status: ScrapeJobStatus.success,
-        finishedAt: () => "Now()",
+        finishedAt: () => 'Now()',
       })
       .where(`id=:id`, { id: jobId })
       .execute();

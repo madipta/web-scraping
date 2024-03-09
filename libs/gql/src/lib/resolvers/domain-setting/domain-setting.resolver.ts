@@ -28,7 +28,7 @@ export class DomainSettingUpdateInput extends IntersectionType(
 @ObjectType()
 export class DomainSettingResult extends BaseResult {
   @Field(() => DomainSetting, { nullable: true })
-  result?: DomainSetting;
+  result?: DomainSetting | null;
 }
 
 @Resolver(() => DomainSetting)

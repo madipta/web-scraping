@@ -59,7 +59,7 @@ export class DomainSetting implements IDomainSetting {
     type: "character varying",
     length: 2048,
   })
-  indexUrl?: string | null;
+  indexUrl?: string | undefined;
 
   @Field(() => String, { nullable: true })
   @Column({
@@ -68,7 +68,7 @@ export class DomainSetting implements IDomainSetting {
     type: "character varying",
     length: 2048,
   })
-  indexFeedUrl?: string | null;
+  indexFeedUrl?: string | undefined;
 
   @Field(() => String, { nullable: true })
   @Column({
@@ -77,7 +77,7 @@ export class DomainSetting implements IDomainSetting {
     type: "character varying",
     length: 250,
   })
-  indexPath?: string | null;
+  indexPath?: string | undefined;
 
   @Field(() => String, { nullable: true })
   @Column({
@@ -86,7 +86,7 @@ export class DomainSetting implements IDomainSetting {
     type: "character varying",
     length: 250,
   })
-  nextPath?: string | null;
+  nextPath?: string | undefined;
 
   @Field(() => String)
   @Column({
@@ -113,7 +113,7 @@ export class DomainSetting implements IDomainSetting {
     type: "character varying",
     length: 250,
   })
-  articlePath?: string | null;
+  articlePath?: string | undefined;
 
   @Field(() => String, { nullable: true })
   @Column({
@@ -122,7 +122,7 @@ export class DomainSetting implements IDomainSetting {
     type: "character varying",
     length: 250,
   })
-  headerPath?: string | null;
+  headerPath?: string | undefined;
 
   @Field(() => String, { nullable: true })
   @Column({
@@ -131,7 +131,7 @@ export class DomainSetting implements IDomainSetting {
     type: "character varying",
     length: 250,
   })
-  categoryPath?: string | null;
+  categoryPath?: string | undefined;
 
   @Field(() => String, { nullable: true })
   @Column({

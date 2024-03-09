@@ -1,12 +1,15 @@
-import { Injectable } from "@angular/core";
-import { Apollo } from "apollo-angular";
-import { map } from "rxjs/operators";
-import { pagelistResultMap, resultMap } from "../gql/dto/base-result.dto";
-import { GqlDeleteLinkResult, GqlLinkPageListResult } from "../gql/dto/link.dto";
-import { DELETE_LINK_MUTATION, LINK_PAGE_LIST_QUERY } from "../gql/link";
-import { Pager } from "./nz-table-paginator";
+import { Injectable } from '@angular/core';
+import { Apollo } from 'apollo-angular';
+import { map } from 'rxjs/operators';
+import { pagelistResultMap, resultMap } from '../gql/dto/base-result.dto';
+import {
+  GqlDeleteLinkResult,
+  GqlLinkPageListResult,
+} from '../gql/dto/link.dto';
+import { DELETE_LINK_MUTATION, LINK_PAGE_LIST_QUERY } from '../gql/link';
+import { Pager } from './nz-table-paginator';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class LinkService {
   constructor(private apollo: Apollo) {}
 
@@ -23,11 +26,11 @@ export class LinkService {
           sortOrder,
           search,
         },
-        fetchPolicy: "no-cache",
+        fetchPolicy: 'no-cache',
       })
       .pipe(
         map((res) =>
-          pagelistResultMap<GqlLinkPageListResult>("linkPagelist", res)
+          pagelistResultMap<GqlLinkPageListResult>('linkPagelist', res)
         )
       )
       .toPromise();
@@ -39,7 +42,7 @@ export class LinkService {
         mutation: DELETE_LINK_MUTATION,
         variables: { id },
       })
-      .pipe(map((res) => resultMap<GqlDeleteLinkResult>("deleteLink", res)))
+      .pipe(map((res) => resultMap<GqlDeleteLinkResult>('deleteLink', res)))
       .toPromise();
   }
 }
